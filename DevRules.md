@@ -9,12 +9,14 @@ Develop 브랜치에 올라간 이슈에 관련한 모든 자료는 깃헙에서
 데이터 셋이나 발표자료는 구글드라이브에서 공유   
 
 ### 2) 라이브러리
-
-차후 추가 예정   
-
+<pre><code>import pygame
+import operator</code></pre>
+  
 ### 3) 개발환경
 
-차후 추가 예정   
+<pre><code>Anaconda 4.8.2
+Python 3.7.4     
+Ubuntu18.04</code></pre>
 
 
 ___
