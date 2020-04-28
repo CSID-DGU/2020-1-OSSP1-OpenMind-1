@@ -41,6 +41,7 @@ class ui_variables:
     h5_i = pygame.font.Font(font_path_i, 13)
 
     # Sounds
+    battle_sound = pygame.mixer.Sound("assets/sounds/SFX_BattleMusic.wav")
     click_sound = pygame.mixer.Sound("assets/sounds/SFX_ButtonUp.wav")
     move_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceMoveLR.wav")
     drop_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceHardDrop.wav")
@@ -348,6 +349,8 @@ while not done:
 
     # Game screen
     elif start:
+        if not game_over :
+            ui_variables.battle_sound.play()
         for event in pygame.event.get():
             if event.type == QUIT:
                 done = True
