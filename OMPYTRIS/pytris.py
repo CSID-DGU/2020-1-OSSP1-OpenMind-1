@@ -38,8 +38,8 @@ class ui_variables:
     h5_i = pygame.font.Font(font_path_i, 13)
 
     # Sounds
-    #fall_sound = pygame.mixer.Sound("assets/sounds/SFX_Fall.wav")
-    #break_sound = pygame.mixer.Sound("assets/sounds/SFX_Break.wav")
+    fall_sound = pygame.mixer.Sound("assets/sounds/SFX_Fall.wav")
+    break_sound = pygame.mixer.Sound("assets/sounds/SFX_Break.wav")
     battle_sound = pygame.mixer.Sound("assets/sounds/SFX_BattleMusic.wav")
     click_sound = pygame.mixer.Sound("assets/sounds/SFX_ButtonUp.wav")
     move_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceMoveLR.wav")
@@ -317,6 +317,7 @@ matrix = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
 ###########################################################
 # Loop Start
 ###########################################################
+ui_variables.battle_sound.play()
 
 while not done:
     # Pause screen
@@ -347,8 +348,6 @@ while not done:
 
     # Game screen
     elif start:
-        if not game_over :
-            ui_variables.battle_sound.play()
         for event in pygame.event.get():
             if event.type == QUIT:
                 done = True
@@ -409,6 +408,7 @@ while not done:
                                 matrix[i][k] = matrix[i][k - 1]
                             k -= 1
                 if erase_count == 1:
+                    ui_variables.break_sound.play()
                     ui_variables.single_sound.play()
                     score += 50 * level
                 elif erase_count == 2:
@@ -435,6 +435,7 @@ while not done:
                     pause = True
                 # Hard drop
                 elif event.key == K_SPACE:
+                    ui_variables.fall_sound.play()
                     ui_variables.drop_sound.play()
                     while not is_bottom(dx, dy, mino, rotation):
                         dy += 1
