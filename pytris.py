@@ -17,19 +17,22 @@ pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((300, 374))
 pygame.time.set_timer(pygame.USEREVENT, framerate * 10)
-pygame.display.set_caption("PYTRIS™")
+pygame.display.set_caption("OM_TETRIS™")
 
 class ui_variables:
     # Fonts
-    font_path = "./assets/fonts/OpenSans-Light.ttf"
+    font_path = "./assets/fonts/Maplestory_Light.ttf"
     font_path_b = "./assets/fonts/OpenSans-Bold.ttf"
     font_path_i = "./assets/fonts/Inconsolata/Inconsolata.otf"
+    #font_path = "./assets/fonts/OpenSans-Light.ttf"
+     #font_path_b = "./assets/fonts/OpenSans-Bold.ttf"
+    #font_path_i = "./assets/fonts/Inconsolata/Inconsolata.otf"
 
-    h1 = pygame.font.Font(font_path, 50)
+    h1 = pygame.font.Font(font_path, 33)
     h2 = pygame.font.Font(font_path, 30)
     h4 = pygame.font.Font(font_path, 20)
-    h5 = pygame.font.Font(font_path, 13)
-    h6 = pygame.font.Font(font_path, 10)
+    h5 = pygame.font.Font(font_path, 12)   # press space
+    h6 = pygame.font.Font(font_path, 10)  # copyright
 
     h1_b = pygame.font.Font(font_path_b, 50)
     h2_b = pygame.font.Font(font_path_b, 30)
@@ -49,10 +52,10 @@ class ui_variables:
     # Background colors
     black = (10, 10, 10) #rgb(10, 10, 10)
     #yellow = (10, 10, 10)
-    white = (255, 250, 250) #rgb(255, 255, 255) 오른쪽 바
-    grey_1 = (70, 130, 180) #rgb(26, 26, 26) 파란색
+    white = (255, 255, 240) #rgb(255, 255, 255) 오른쪽 바
+    grey_1 = (70, 130, 180) #rgb(26, 26, 26) 파란색(238,130,238)(70, 130, 180)
     #blue = (30,30,30)
-    grey_2 = (221, 221, 221) #rgb(35, 35, 35)테트리스 게임내 배경
+    grey_2 = (221, 221, 221) #rgb(35, 35, 35)테트리스 게임내 배경(221, 221, 221) (135,206,235)
     grey_3 = (000,000,139) #rgb(55, 55, 55) 블록 그림자 색
 
     # Tetrimino colors
@@ -88,7 +91,8 @@ def draw_board(next, hold, score, level, goal):
     pygame.draw.rect(
         screen,
         ui_variables.white,
-        Rect(204, 0, 96, 374)
+         Rect(204, 0, 96, 374)
+        #Rect(204, 0, 96, 374)
     )
 
     # Draw next mino
@@ -657,7 +661,7 @@ while not done:
             Rect(0, 187, 300, 187)
         )
 
-        title = ui_variables.h1.render("PYTRIS™", 1, ui_variables.grey_1)
+        title = ui_variables.h1.render("OM TETRIS", 1, ui_variables.grey_1)
         title_start = ui_variables.h5.render("Press space to start", 1, ui_variables.white)
         title_info = ui_variables.h6.render("Copyright (c) 2017 Jason Kim All Rights Reserved.", 1, ui_variables.white)
 
