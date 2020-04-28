@@ -38,9 +38,9 @@ class ui_variables:
     h5_i = pygame.font.Font(font_path_i, 13)
 
     # Sounds
+    pygame.mixer.music.load("assets/sounds/SFX_BattleMusic.wav")
     fall_sound = pygame.mixer.Sound("assets/sounds/SFX_Fall.wav")
     break_sound = pygame.mixer.Sound("assets/sounds/SFX_Break.wav")
-    battle_sound = pygame.mixer.Sound("assets/sounds/SFX_BattleMusic.wav")
     click_sound = pygame.mixer.Sound("assets/sounds/SFX_ButtonUp.wav")
     move_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceMoveLR.wav")
     drop_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceHardDrop.wav")
@@ -48,6 +48,7 @@ class ui_variables:
     double_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialLineClearDouble.wav")
     triple_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialLineClearTriple.wav")
     tetris_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialTetris.wav")
+    GameOver_sound = pygame.mixer.Sound("assets/sounds/SFX_GameOver.wav")
 
     # Background colors
     black = (10, 10, 10) #rgb(10, 10, 10)
@@ -317,11 +318,12 @@ matrix = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
 ###########################################################
 # Loop Start
 ###########################################################
-ui_variables.battle_sound.play()
+pygame.mixer.music.play(-1)
 
 while not done:
     # Pause screen
     if pause:
+        pygame.mixer.music.pause()
         for event in pygame.event.get():
             if event.type == QUIT:
                 done = True
@@ -345,6 +347,7 @@ while not done:
                     pause = False
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
+        pygame.mixer.music.unpause()
 
     # Game screen
     elif start:
@@ -387,6 +390,7 @@ while not done:
                             rotation = 0
                             hold = False
                         else: #더이상 쌓을 수 없으면 게임오버
+                            ui_variables.GameOver_sound.play()
                             start = False
                             game_over = True
                             pygame.time.set_timer(pygame.USEREVENT, 1)
