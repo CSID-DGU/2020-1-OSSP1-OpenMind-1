@@ -118,7 +118,7 @@ def draw_board(next, hold, score, level, goal):
                     #    ui_variables.t_color[grid_h[i][j]],
                     #    Rect(dx, dy, block_size, block_size)
                     #)
-                    draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]])
+                    draw_block(dx,dy,ui_variables.t_color[grid_h[i][j]])
 
     # Set max score
     if score > 999999:
