@@ -17,7 +17,7 @@ pygame.init() # pygame 모듈 생성
 clock = pygame.time.Clock() # 타임트렉커 생성 
 screen = pygame.display.set_mode((300, 374))  # 창크기 설정 300* 374 
 pygame.time.set_timer(pygame.USEREVENT, framerate * 10) # 유저이벤트 0.3초마다 입력
-pygame.display.set_caption("OPENMIND PYTRIS™")
+pygame.display.set_caption("OPENMIND TETRIS™")
 
 class ui_variables:
     # Fonts
@@ -39,6 +39,7 @@ class ui_variables:
 
     # Sounds
     pygame.mixer.music.load("assets/sounds/SFX_BattleMusic.wav")
+    intro_sound = pygame.mixer.Sound("assets/sounds/SFX_Intro.wav")
     fall_sound = pygame.mixer.Sound("assets/sounds/SFX_Fall.wav")
     break_sound = pygame.mixer.Sound("assets/sounds/SFX_Break.wav")
     click_sound = pygame.mixer.Sound("assets/sounds/SFX_ButtonUp.wav")
@@ -320,12 +321,12 @@ matrix = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
 ###########################################################
 # Loop Start
 ###########################################################
-pygame.mixer.music.play(-1)
+ui_variables.intro_sound.play()
 
 while not done:
     # Pause screen
     if pause:
-        pygame.mixer.music.pause()
+        pygame.mixer.music.pause()    # 게임 일시정지시 배경음악 pause
         for event in pygame.event.get():
             if event.type == QUIT:
                 done = True
@@ -349,7 +350,7 @@ while not done:
                     pause = False
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
-        pygame.mixer.music.unpause()
+        pygame.mixer.music.unpause() # 게임 일시정지 해제시 배경음악 unpause
 
     # Game screen
     elif start:
@@ -418,12 +419,21 @@ while not done:
                     ui_variables.single_sound.play()
                     score += 50 * level
                 elif erase_count == 2:
+                    ui_variables.break_sound.play()
+                    ui_variables.double_sound.play()
                     ui_variables.double_sound.play()
                     score += 150 * level
                 elif erase_count == 3:
+                    ui_variables.break_sound.play()
+                    ui_variables.triple_sound.play()
+                    ui_variables.triple_sound.play()
                     ui_variables.triple_sound.play()
                     score += 350 * level
                 elif erase_count == 4:
+                    ui_variables.break_sound.play()
+                    ui_variables.tetris_sound.play()
+                    ui_variables.tetris_sound.play()
+                    ui_variables.tetris_sound.play()
                     ui_variables.tetris_sound.play()
                     score += 1000 * level
 
@@ -554,6 +564,7 @@ while not done:
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
+                pygame.mixer.music.stop()
                 pygame.time.set_timer(pygame.USEREVENT, 300)
                 over_text_1 = ui_variables.h2_b.render("GAME", 1, ui_variables.white)
                 over_text_2 = ui_variables.h2_b.render("OVER", 1, ui_variables.white)
@@ -658,6 +669,7 @@ while not done:
                 done = True
             elif event.type == KEYDOWN:
                 if event.key == K_SPACE:
+                    pygame.mixer.music.play(-1)
                     ui_variables.click_sound.play()
                     start = True
 
