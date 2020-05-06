@@ -147,7 +147,7 @@ def draw_board(next, hold, score, level, goal):
     screen.blit(text_score, (215, 194))
     screen.blit(score_value, (220, 210))
     screen.blit(text_level, (215, 254))
-    screen.blit(level_value, (220, 270))
+    screen.blit(level_value, (220, 270)) 
     screen.blit(text_goal, (215, 314))
     screen.blit(goal_value, (220, 330))
 
@@ -350,7 +350,7 @@ while not done:
                     pause = False
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
-        pygame.mixer.music.unpause() # 게임 일시정지 해제시 배경음악 unpause
+                    pygame.mixer.music.unpause() # 게임 일시정지 해제시 배경음악 unpause
 
     # Game screen
     elif start:
