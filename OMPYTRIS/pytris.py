@@ -678,7 +678,12 @@ while not done:
         pygame.draw.rect(
             screen,
             ui_variables.grey_1,
-            Rect(0, 187, 300, 100)
+            Rect(0, 187, 300, 60)
+        )
+        pygame.draw.rect(
+            screen,
+            ui_variables.grey_1,
+            Rect(0, 320, 300, 60)
         )
 
         title = ui_variables.h1.render("OM TETRIS", 1, ui_variables.grey_1)
