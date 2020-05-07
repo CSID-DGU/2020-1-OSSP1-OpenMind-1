@@ -54,10 +54,10 @@ class ui_variables:
     # Background colors
     black = (10, 10, 10) #rgb(10, 10, 10)
     #yellow = (10, 10, 10)
-    white = (255, 255, 240) #rgb(255, 255, 255) 오른쪽 바
+    white = (255, 255, 240) #rgb(255, 255, 255) 오른쪽 바(아이보리)
     grey_1 = (70, 130, 180) #rgb(26, 26, 26) 파란색(238,130,238)(70, 130, 180)
     #blue = (30,30,30)
-    grey_2 = (221, 221, 221) #rgb(35, 35, 35)테트리스 게임내 배경(221, 221, 221) (135,206,235)
+    grey_2 = (221, 221, 221) #rgb(35, 35, 35)테트리스 게임내 배경(회색)(221, 221, 221) (135,206,235)
     grey_3 = (000,000,139) #rgb(55, 55, 55) 블록 그림자 색
 
     # Tetrimino colors
@@ -678,8 +678,41 @@ while not done:
         pygame.draw.rect(
             screen,
             ui_variables.grey_1,
-            Rect(0, 187, 300, 187)
+            Rect(0, 187, 300, 60)
         )
+        pygame.draw.rect(
+            screen,
+            ui_variables.grey_1,
+            Rect(0, 320, 300, 60)
+        )
+        Competition = pygame.image.load('assets/images/Competition.png')
+        Competition2 = pygame.transform.scale(Competition, (170, 120)) # 사진크기 조절
+
+        Benedict = pygame.image.load('assets/images/Benedict.png')
+        Benedict2 = pygame.transform.scale(Benedict, (100, 140)) # 사진크기 조절
+
+
+        Bubble = pygame.image.load('assets/images/Bubble1.png')
+        Bubble2 = pygame.transform.scale(Bubble, (100, 140))
+        
+        Benedict3 = pygame.image.load('assets/images/Benedict3.png')
+        Benedict4 = pygame.transform.scale(Benedict3, (100, 140)) # 사진크기 조절
+
+        intro_screen = pygame.image.load('assets/images/intro_screen.jpg')
+        intro_screen2 = pygame.transform.scale(intro_screen, (50, 50)) # 사진크기 조절
+
+        tetris3 = pygame.image.load('assets/images/tetris3.png')
+        tetris4 = pygame.transform.scale(tetris3, (100, 50))
+
+
+        tetris = pygame.image.load('assets/images/tetris3.png')
+        tetris3 = pygame.image.load('assets/images/tetris3.png')
+        
+        screen.blit(Competition2, (0, 0))
+        screen.blit(tetris4, (200, 0))
+        screen.blit(Benedict2, (0, 180))
+        screen.blit(Benedict4, (200, 180))
+        #screen.blit(Bubble2, (120, 120))
 
         title = ui_variables.h1.render("OM TETRIS", 1, ui_variables.grey_1)
         title_start = ui_variables.h5.render("Press space to start", 1, ui_variables.white)
@@ -698,9 +731,9 @@ while not done:
         screen.blit(title, (65, 120))
         screen.blit(title_info, (40, 335))
 
-        screen.blit(leader_1, (10, 10))
-        screen.blit(leader_2, (10, 23))
-        screen.blit(leader_3, (10, 36))
+        screen.blit(leader_1, (108, 260))
+        screen.blit(leader_2, (108, 270))
+        screen.blit(leader_3, (108, 280))
 
         if not start:
             pygame.display.update()
