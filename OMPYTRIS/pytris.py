@@ -688,6 +688,9 @@ while not done:
         Competition = pygame.image.load('assets/images/Competition.png')
         Competition2 = pygame.transform.scale(Competition, (170, 120)) # 사진크기 조절
 
+        Benedict = pygame.image.load('assets/images/Benedict.png')
+        Benedict2 = pygame.transform.scale(Benedict, (100, 140)) # 사진크기 조절
+
         intro_screen = pygame.image.load('assets/images/intro_screen.jpg')
         intro_screen2 = pygame.transform.scale(intro_screen, (50, 50)) # 사진크기 조절
 
@@ -697,7 +700,7 @@ while not done:
         
         screen.blit(Competition2, (0, 0))
         screen.blit(tetris3, (220, 0))
-        #screen.blit(Square_Background2, (0, 0))
+        screen.blit(Benedict2, (3, 180))
 
         title = ui_variables.h1.render("OM TETRIS", 1, ui_variables.grey_1)
         title_start = ui_variables.h5.render("Press space to start", 1, ui_variables.white)
