@@ -7,15 +7,15 @@ from random import *
 from pygame.locals import *
 
 # Define
-block_size = 17 # Height, width of single block
+block_size = 35 # Height, width of single block
 width = 10 # Board width
 height = 20 # Board height
 framerate = 30 # Bigger -> Slower
 
 pygame.init() # pygame 모듈 생성 
 
-clock = pygame.time.Clock() # 타임트렉커 생성 
-screen = pygame.display.set_mode((300, 374))  # 창크기 설정 300* 374 
+clock = pygame.time.Clock() # 타임트렉커 생성
+screen = pygame.display.set_mode((1200, 730))  # 창크기 설정 300* 374
 pygame.time.set_timer(pygame.USEREVENT, framerate * 10) # 유저이벤트 0.3초마다 입력
 pygame.display.set_caption("OPENMIND TETRIS™")
 
@@ -26,15 +26,15 @@ class ui_variables:
     font_path_i = "./assets/fonts/Inconsolata/Inconsolata.otf"
 
     h1 = pygame.font.Font(font_path, 33) ##
-    h2 = pygame.font.Font(font_path, 30)
-    h4 = pygame.font.Font(font_path, 20)
-    h5 = pygame.font.Font(font_path, 12)   # press space
+    h2 = pygame.font.Font(font_path, 42)
+    h4 = pygame.font.Font(font_path, 32)
+    h5 = pygame.font.Font(font_path, 20)   # press space
     h6 = pygame.font.Font(font_path, 10)  # copyright
 
     h1_b = pygame.font.Font(font_path_b, 50)
-    h2_b = pygame.font.Font(font_path_b, 30)
+    h2_b = pygame.font.Font(font_path_b, 40)
 
-    h2_i = pygame.font.Font(font_path_i, 30)
+    h2_i = pygame.font.Font(font_path_i, 35)
     h5_i = pygame.font.Font(font_path_i, 13)
 
     # Sounds
@@ -93,7 +93,7 @@ def draw_board(next, hold, score, level, goal):
     pygame.draw.rect(
         screen,
         ui_variables.white,
-        Rect(204, 0, 96, 374)
+        Rect(384, 0, 180, 730)
     )
 
     # Draw next mino
@@ -101,8 +101,8 @@ def draw_board(next, hold, score, level, goal):
 
     for i in range(4): # 16개의 그리드 칸에서 true인 값만 뽑아서 draw.rect
         for j in range(4):
-            dx = 220 + block_size * j
-            dy = 140 + block_size * i
+            dx = 415 + block_size * j
+            dy = 220 + block_size * i
             if grid_n[i][j] != 0:
                 draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]]) # 다음 블럭의 형상 가독성을 높임.
                 #pygame.draw.rect(
@@ -117,8 +117,8 @@ def draw_board(next, hold, score, level, goal):
     if hold_mino != -1:
         for i in range(4):
             for j in range(4):
-                dx = 220 + block_size * j
-                dy = 50 + block_size * i
+                dx = 415 + block_size * j
+                dy = 60 + block_size * i
                 if grid_h[i][j] != 0:
                     #pygame.draw.rect(
                     #    screen,
@@ -142,14 +142,14 @@ def draw_board(next, hold, score, level, goal):
     goal_value = ui_variables.h4.render(str(goal), 1, ui_variables.black)
 
     # Place texts
-    screen.blit(text_hold, (215, 14))
-    screen.blit(text_next, (215, 104))
-    screen.blit(text_score, (215, 194))
-    screen.blit(score_value, (220, 210))
-    screen.blit(text_level, (215, 254))
-    screen.blit(level_value, (220, 270))
-    screen.blit(text_goal, (215, 314))
-    screen.blit(goal_value, (220, 330))
+    screen.blit(text_hold, (415, 20))
+    screen.blit(text_next, (415, 170))
+    screen.blit(text_score, (415, 340))
+    screen.blit(score_value, (420, 370))
+    screen.blit(text_level, (415, 470))
+    screen.blit(level_value, (420, 500))
+    screen.blit(text_goal, (415, 600))
+    screen.blit(goal_value, (420, 630))
 
     # Draw board
     for x in range(width):
@@ -334,12 +334,12 @@ while not done:
                 pygame.time.set_timer(pygame.USEREVENT, 300)
                 draw_board(next_mino, hold_mino, score, level, goal)
 
-                pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.white)
-                pause_start = ui_variables.h5.render("Press esc to continue", 1, ui_variables.white)
+                pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.green)
+                pause_start = ui_variables.h5.render('Press "ESC" to continue', 1, ui_variables.green)
 
-                screen.blit(pause_text, (43, 100))
+                screen.blit(pause_text, (115, 250))
                 if blink:
-                    screen.blit(pause_start, (40, 160))
+                    screen.blit(pause_start, (75, 310))
                     blink = False
                 else:
                     blink = True
@@ -364,7 +364,7 @@ while not done:
                     if keys_pressed[K_DOWN]:
                         pygame.time.set_timer(pygame.USEREVENT, framerate * 1)
                     else:
-                        pygame.time.set_timer(pygame.USEREVENT, framerate * 10)
+                        pygame.time.set_timer(pygame.USEREVENT, framerate * 20)
 
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation)
@@ -566,36 +566,36 @@ while not done:
             elif event.type == USEREVENT:
                 pygame.mixer.music.stop()
                 pygame.time.set_timer(pygame.USEREVENT, 300)
-                over_text_1 = ui_variables.h2_b.render("GAME", 1, ui_variables.white)
-                over_text_2 = ui_variables.h2_b.render("OVER", 1, ui_variables.white)
-                over_start = ui_variables.h5.render("Press return to continue", 1, ui_variables.white)
+                over_text_1 = ui_variables.h2_b.render("GAME", 1, ui_variables.red)
+                over_text_2 = ui_variables.h2_b.render("OVER", 1, ui_variables.red)
+                over_start = ui_variables.h5.render("Press return to continue", 1, ui_variables.black)
 
                 draw_board(next_mino, hold_mino, score, level, goal)
-                screen.blit(over_text_1, (58, 75))
-                screen.blit(over_text_2, (62, 105))
+                screen.blit(over_text_1, (130, 250))
+                screen.blit(over_text_2, (135, 290))
 
-                name_1 = ui_variables.h2_i.render(chr(name[0]), 1, ui_variables.white)
-                name_2 = ui_variables.h2_i.render(chr(name[1]), 1, ui_variables.white)
-                name_3 = ui_variables.h2_i.render(chr(name[2]), 1, ui_variables.white)
+                name_1 = ui_variables.h2_i.render(chr(name[0]), 1, ui_variables.black)
+                name_2 = ui_variables.h2_i.render(chr(name[1]), 1, ui_variables.black)
+                name_3 = ui_variables.h2_i.render(chr(name[2]), 1, ui_variables.black)
 
-                underbar_1 = ui_variables.h2.render("_", 1, ui_variables.white)
-                underbar_2 = ui_variables.h2.render("_", 1, ui_variables.white)
-                underbar_3 = ui_variables.h2.render("_", 1, ui_variables.white)
+                underbar_1 = ui_variables.h2.render("_", 1, ui_variables.black)
+                underbar_2 = ui_variables.h2.render("_", 1, ui_variables.black)
+                underbar_3 = ui_variables.h2.render("_", 1, ui_variables.black)
 
-                screen.blit(name_1, (65, 147))
-                screen.blit(name_2, (95, 147))
-                screen.blit(name_3, (125, 147))
+                screen.blit(name_1, (155, 347))
+                screen.blit(name_2, (185, 347))
+                screen.blit(name_3, (215, 347))
 
                 if blink:
-                    screen.blit(over_start, (32, 195))
+                    screen.blit(over_start, (70, 400))
                     blink = False
                 else:
                     if name_location == 0:
-                        screen.blit(underbar_1, (65, 145))
+                        screen.blit(underbar_1, (155, 345))
                     elif name_location == 1:
-                        screen.blit(underbar_2, (95, 145))
+                        screen.blit(underbar_2, (185, 345))
                     elif name_location == 2:
-                        screen.blit(underbar_3, (125, 145))
+                        screen.blit(underbar_3, (215, 345))
                     blink = True
 
                 pygame.display.update()
