@@ -54,10 +54,10 @@ class ui_variables:
     # Background colors
     black = (10, 10, 10) #rgb(10, 10, 10)
     #yellow = (10, 10, 10)
-    white = (255, 255, 240) #rgb(255, 255, 255) 오른쪽 바
+    white = (255, 255, 240) #rgb(255, 255, 255) 오른쪽 바(아이보리)
     grey_1 = (70, 130, 180) #rgb(26, 26, 26) 파란색(238,130,238)(70, 130, 180)
     #blue = (30,30,30)
-    grey_2 = (221, 221, 221) #rgb(35, 35, 35)테트리스 게임내 배경(221, 221, 221) (135,206,235)
+    grey_2 = (221, 221, 221) #rgb(35, 35, 35)테트리스 게임내 배경(회색)(221, 221, 221) (135,206,235)
     grey_3 = (000,000,139) #rgb(55, 55, 55) 블록 그림자 색
 
     # Tetrimino colors
@@ -678,7 +678,7 @@ while not done:
         pygame.draw.rect(
             screen,
             ui_variables.grey_1,
-            Rect(0, 187, 300, 187)
+            Rect(0, 187, 300, 100)
         )
 
         title = ui_variables.h1.render("OM TETRIS", 1, ui_variables.grey_1)
