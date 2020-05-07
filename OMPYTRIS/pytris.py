@@ -691,16 +691,28 @@ while not done:
         Benedict = pygame.image.load('assets/images/Benedict.png')
         Benedict2 = pygame.transform.scale(Benedict, (100, 140)) # 사진크기 조절
 
+
+        Bubble = pygame.image.load('assets/images/Bubble1.png')
+        Bubble2 = pygame.transform.scale(Bubble, (100, 140))
+        
+        Benedict3 = pygame.image.load('assets/images/Benedict3.png')
+        Benedict4 = pygame.transform.scale(Benedict3, (100, 140)) # 사진크기 조절
+
         intro_screen = pygame.image.load('assets/images/intro_screen.jpg')
         intro_screen2 = pygame.transform.scale(intro_screen, (50, 50)) # 사진크기 조절
+
+        tetris3 = pygame.image.load('assets/images/tetris3.png')
+        tetris4 = pygame.transform.scale(tetris3, (100, 50))
 
 
         tetris = pygame.image.load('assets/images/tetris3.png')
         tetris3 = pygame.image.load('assets/images/tetris3.png')
         
         screen.blit(Competition2, (0, 0))
-        screen.blit(tetris3, (220, 0))
-        screen.blit(Benedict2, (3, 180))
+        screen.blit(tetris4, (200, 0))
+        screen.blit(Benedict2, (0, 180))
+        screen.blit(Benedict4, (200, 180))
+        #screen.blit(Bubble2, (120, 120))
 
         title = ui_variables.h1.render("OM TETRIS", 1, ui_variables.grey_1)
         title_start = ui_variables.h5.render("Press space to start", 1, ui_variables.white)
@@ -719,9 +731,9 @@ while not done:
         screen.blit(title, (65, 120))
         screen.blit(title_info, (40, 335))
 
-        screen.blit(leader_1, (10, 10))
-        screen.blit(leader_2, (10, 23))
-        screen.blit(leader_3, (10, 36))
+        screen.blit(leader_1, (108, 260))
+        screen.blit(leader_2, (108, 270))
+        screen.blit(leader_3, (108, 280))
 
         if not start:
             pygame.display.update()
