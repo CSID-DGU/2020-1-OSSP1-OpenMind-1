@@ -284,16 +284,19 @@ def is_stackable(mino):
 
 # Initial values
 blink = False
-start = False
-pause = False
-done = False
-game_over = False
-
+start = False # 게임 화면
+pause = False # 일시 정지
+done = False 
+game_over = False # 게임 종료
+menu = False # 메뉴화면
+leader_board = False # 점수판 목록
 score = 0
 level = 1
 goal = level * 5
 bottom_count = 0
 hard_drop = False
+
+
 
 dx, dy = 3, 0 # Minos location status
 rotation = 0 # Minos rotation status
