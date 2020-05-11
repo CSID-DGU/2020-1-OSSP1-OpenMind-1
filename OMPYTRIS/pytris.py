@@ -25,7 +25,7 @@ class ui_variables:
     font_path_b = "./assets/fonts/OpenSans-Bold.ttf"
     font_path_i = "./assets/fonts/Inconsolata/Inconsolata.otf"
 
-    h1 = pygame.font.Font(font_path, 33) ##
+    h1 = pygame.font.Font(font_path, 53) ##
     h2 = pygame.font.Font(font_path, 42)
     h4 = pygame.font.Font(font_path, 32)
     h5 = pygame.font.Font(font_path, 20)   # press space
@@ -663,34 +663,60 @@ while not done:
                     pygame.time.set_timer(pygame.USEREVENT, 1)
 
     # Start screen
+
     else:
+        vals = ["start", "help", "exit"]  # 3가지 버튼
+        button1 = Rect(520, 414, 146, 50)  # start 버튼
+        buttons = [Rect(525, b * 40 + 481, 135, 40) for b in range(3)]  # help, quit 버튼
+        start_button = pygame.image.load('assets/images/start.png')
+        help_button = pygame.image.load('assets/images/help.png')
+        quit_button = pygame.image.load('assets/images/quit.png')
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 done = True
-            elif event.type == KEYDOWN:
-                if event.key == K_SPACE:
-                    pygame.mixer.music.play(-1)
-                    ui_variables.click_sound.play()
-                    start = True
+            m_pos = pygame.mouse.get_pos()
+            m_pre = pygame.mouse.get_pressed()
+
+        for r,v in zip(buttons,vals):
+            if r.collidepoint(m_pos):
+                if m_pre[0]==1:
+                    v = True
+
+        if button1.collidepoint(m_pos):
+            screen.blit(start_button, (519, 417))
+            if m_pre[0] == 1:
+                start = True
+                pygame.mixer.music.play(-1)
+        elif buttons[1].collidepoint(m_pos):
+            screen.blit(help_button, (525, 517))
+        elif buttons[2].collidepoint(m_pos):
+            screen.blit(quit_button, (525, 557))
+            if m_pre[0] == 1:
+                done = True  # 게임 종료
+        else:
+            pygame.display.update()
+
+        clock.tick(50)
+        pygame.display.flip()
 
         # pygame.time.set_timer(pygame.USEREVENT, 300)
         screen.fill(ui_variables.white)
         pygame.draw.rect(
             screen,
             ui_variables.grey_1,
-            Rect(0, 187, 300, 60)
+            Rect(0, 400, 1200, 110)
         )
         pygame.draw.rect(
             screen,
             ui_variables.grey_1,
-            Rect(0, 320, 300, 60)
+            Rect(0, 620, 1200, 110)
         )
         Competition = pygame.image.load('assets/images/Competition.png')
         Competition2 = pygame.transform.scale(Competition, (170, 120)) # 사진크기 조절
 
         Benedict = pygame.image.load('assets/images/Benedict.png')
         Benedict2 = pygame.transform.scale(Benedict, (100, 140)) # 사진크기 조절
-
 
         Bubble = pygame.image.load('assets/images/Bubble1.png')
         Bubble2 = pygame.transform.scale(Bubble, (100, 140))
@@ -704,18 +730,24 @@ while not done:
         tetris3 = pygame.image.load('assets/images/tetris3.png')
         tetris4 = pygame.transform.scale(tetris3, (100, 50))
 
+        square_background = pygame.image.load('assets/images/Square_Background.png')
+        sbg = pygame.transform.scale(square_background, (1300, 810))
 
         tetris = pygame.image.load('assets/images/tetris3.png')
         tetris3 = pygame.image.load('assets/images/tetris3.png')
         
         screen.blit(Competition2, (0, 0))
-        screen.blit(tetris4, (200, 0))
-        screen.blit(Benedict2, (0, 180))
-        screen.blit(Benedict4, (200, 180))
+        screen.blit(sbg, (-50, -40))
+        screen.blit(start_button, (519, 417))
+        screen.blit(help_button, (525, 517))
+        screen.blit(quit_button, (525, 557))
+        #screen.blit(tetris4, (600, 300))
+        #screen.blit(Benedict2, (0, 180))
+        #screen.blit(Benedict4, (200, 180))
         #screen.blit(Bubble2, (120, 120))
 
         title = ui_variables.h1.render("OM TETRIS", 1, ui_variables.grey_1)
-        title_start = ui_variables.h5.render("Press space to start", 1, ui_variables.white)
+        title_start = ui_variables.h5.render('Press "Start" to play', 1, ui_variables.white)
         title_info = ui_variables.h6.render("Copyright (c) 2017 Jason Kim All Rights Reserved.", 1, ui_variables.white)
 
         leader_1 = ui_variables.h5_i.render('1st ' + leaders[0][0] + ' ' + str(leaders[0][1]), 1, ui_variables.grey_1)
@@ -723,17 +755,17 @@ while not done:
         leader_3 = ui_variables.h5_i.render('3rd ' + leaders[2][0] + ' ' + str(leaders[2][1]), 1, ui_variables.grey_1)
 
         if blink:
-            screen.blit(title_start, (92, 195))
+            screen.blit(title_start, (485, 470))
             blink = False
         else:
             blink = True
 
-        screen.blit(title, (65, 120))
-        screen.blit(title_info, (40, 335))
+        screen.blit(title, (445, 240))
+        screen.blit(title_info, (180, 80))
 
-        screen.blit(leader_1, (108, 260))
-        screen.blit(leader_2, (108, 270))
-        screen.blit(leader_3, (108, 280))
+        screen.blit(leader_1, (908, 100))
+        screen.blit(leader_2, (908, 110))
+        screen.blit(leader_3, (908, 120))
 
         if not start:
             pygame.display.update()
