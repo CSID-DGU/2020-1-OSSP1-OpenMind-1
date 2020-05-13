@@ -134,7 +134,10 @@ def draw_board(next, hold, score, level, goal):
     # Draw texts
     text_hold = ui_variables.h5.render("HOLD", 1, ui_variables.black)
     text_next = ui_variables.h5.render("NEXT", 1, ui_variables.black)
+    text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.black) # 콤보 
     text_score = ui_variables.h5.render("SCORE", 1, ui_variables.black)
+    combo_value = ui_variables.h4.render(str(combo_count), 1, ui_variables.black) # 콤보 값
+
     score_value = ui_variables.h4.render(str(score), 1, ui_variables.black)
     text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.black)
     level_value = ui_variables.h4.render(str(level), 1, ui_variables.black)
@@ -142,14 +145,27 @@ def draw_board(next, hold, score, level, goal):
     goal_value = ui_variables.h4.render(str(goal), 1, ui_variables.black)
 
     # Place texts
+### <<<<<<< HEAD
+    screen.blit(text_hold, (215, 14))
+    screen.blit(text_next, (215, 104))
+    screen.blit(text_score, (215, 194))
+    screen.blit(score_value, (220, 210))
+    screen.blit(text_level, (215, 254))
+    screen.blit(level_value, (220, 270)) 
+    screen.blit(text_goal, (215, 314))
+    screen.blit(goal_value, (220, 330))
+## =======
     screen.blit(text_hold, (415, 20))
     screen.blit(text_next, (415, 170))
     screen.blit(text_score, (415, 340))
     screen.blit(score_value, (420, 370))
     screen.blit(text_level, (415, 470))
     screen.blit(level_value, (420, 500))
-    screen.blit(text_goal, (415, 600))
-    screen.blit(goal_value, (420, 630))
+    #screen.blit(text_goal, (415, 600))
+    #screen.blit(goal_value, (420, 630))
+    screen.blit(text_combo,(415,600))
+    screen.blit(combo_value,(420,630))
+# >>>>>>> 9019b1371478d307091a004b6d22207004f8782c
 
     # Draw board
     for x in range(width):
@@ -284,16 +300,25 @@ def is_stackable(mino):
 
 # Initial values
 blink = False
-start = False
-pause = False
-done = False
-game_over = False
+start = False # 게임 화면
+pause = False # 일시 정지
+done = False 
+game_over = False # 게임 종료
+menu = False # 메뉴화면
+help = False # 도움 화면 
+over_screen = False
 
+leader_board = False # 점수판 목록
+combo_count = 0
 score = 0
 level = 1
 goal = level * 5
 bottom_count = 0
 hard_drop = False
+
+current_button = 0 # 선택 버튼 
+
+
 
 dx, dy = 3, 0 # Minos location status
 rotation = 0 # Minos rotation status
@@ -336,10 +361,12 @@ while not done:
 
                 pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.green)
                 pause_start = ui_variables.h5.render('Press "ESC" to continue', 1, ui_variables.green)
+                menu_start = ui_variables.h5.render('Press M to Menu Screen', 1, ui_variables.green)
 
                 screen.blit(pause_text, (115, 250))
                 if blink:
                     screen.blit(pause_start, (75, 310))
+                    screen.blit(menu_start,(60,360))
                     blink = False
                 else:
                     blink = True
@@ -348,12 +375,20 @@ while not done:
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
                     pause = False
+                    start = True
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
-        pygame.mixer.music.unpause() # 게임 일시정지 해제시 배경음악 unpause
+                    pygame.mixer.music.unpause() # 게임 일시정지 해제시 배경음악 unpause
+                elif event.key == K_m :
+                    pause = False
+                    menu = True
+                    ui_variables.click_sound.play()
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
 
     # Game screen
     elif start:
+        # 콤보 카운트 
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 done = True
@@ -401,7 +436,9 @@ while not done:
                         bottom_count += 1
 
                 # Erase line
+                # 콤보 카운트 
                 erase_count = 0
+                combo_stack = 0
                 for j in range(21):
                     is_full = True
                     for i in range(10):
@@ -410,24 +447,29 @@ while not done:
                     if is_full:
                         erase_count += 1
                         k = j
+                        combo_stack += 1
                         while k > 0:
                             for i in range(10):
                                 matrix[i][k] = matrix[i][k - 1]
                             k -= 1
+                    
                 if erase_count == 1:
                     ui_variables.break_sound.play()
                     ui_variables.single_sound.play()
+                    combo_count +=1
                     score += 50 * level
                 elif erase_count == 2:
                     ui_variables.break_sound.play()
                     ui_variables.double_sound.play()
                     ui_variables.double_sound.play()
+                    combo_count +=2
                     score += 150 * level
                 elif erase_count == 3:
                     ui_variables.break_sound.play()
                     ui_variables.triple_sound.play()
                     ui_variables.triple_sound.play()
                     ui_variables.triple_sound.play()
+                    combo_count +=3
                     score += 350 * level
                 elif erase_count == 4:
                     ui_variables.break_sound.play()
@@ -436,7 +478,7 @@ while not done:
                     ui_variables.tetris_sound.play()
                     ui_variables.tetris_sound.play()
                     score += 1000 * level
-
+                    combo_count +=4
                 # Increase level
                 goal -= erase_count
                 if goal < 1 and level < 15:
@@ -448,6 +490,7 @@ while not done:
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
                     ui_variables.click_sound.play()
+                    start = False
                     pause = True
                 # Hard drop
                 elif event.key == K_SPACE:
@@ -661,6 +704,99 @@ while not done:
                     else:
                         name[name_location] = 90
                     pygame.time.set_timer(pygame.USEREVENT, 1)
+                elif event.key == K_m:
+                    ui_variables.click_sound.play()
+                    game_over = False
+                    menu = True
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
+                    
+    elif menu:
+         for event in pygame.event.get():
+            if event.type == QUIT:
+                done = True
+            elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, 300)
+                screen.fill(ui_variables.white)
+                menu_text = ui_variables.h2_b.render("MENU", 1, ui_variables.cyan)
+                screen.blit(menu_text, (130, 50))
+                # 게임 모드 선택 버튼 
+
+                # 게임 종료 선택 버튼
+
+                # 점수판 목록 선택 버튼 
+
+                # 시작 화면으로 돌아가기
+                pygame.display.flip()
+        
+            elif event.type == KEYDOWN:
+                if event.key == K_RETURN:
+                    ui_variables.click_sound.play()
+
+                    outfile = open('leaderboard.txt','a')
+                    outfile.write(chr(name[0]) + chr(name[1]) + chr(name[2]) + ' ' + str(score) + '\n')
+                    outfile.close()
+
+                    menu = False
+                    hold = False
+                    dx, dy = 3, 0
+                    rotation = 0
+                    mino = randint(1, 7)
+                    next_mino = randint(1, 7)
+                    hold_mino = -1
+                    framerate = 30
+                    score = 0
+                    score = 0
+                    level = 1
+                    goal = level * 5
+                    bottom_count = 0
+                    hard_drop = False
+                    name_location = 0
+                    name = [65, 65, 65]
+                    matrix = [[0 for y in range(height + 1)] for x in range(width)]
+
+                    with open('leaderboard.txt') as f:
+                        lines = f.readlines()
+                    lines = [line.rstrip('\n') for line in open('leaderboard.txt')]
+
+                    leaders = {'AAA': 0, 'BBB': 0, 'CCC': 0}
+                    for i in lines:
+                        leaders[i.split(' ')[0]] = int(i.split(' ')[1])
+                    leaders = sorted(leaders.items(), key=operator.itemgetter(1), reverse=True)
+
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
+                elif event.key == K_RIGHT:
+                    if name_location != 2:
+                        name_location += 1
+                    else:
+                        name_location = 0
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
+                elif event.key == K_LEFT:
+                    if name_location != 0:
+                        name_location -= 1
+                    else:
+                        name_location = 2
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
+                elif event.key == K_UP:
+                    ui_variables.click_sound.play()
+                    if name[name_location] != 90:
+                        name[name_location] += 1
+                    else:
+                        name[name_location] = 65
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
+                elif event.key == K_DOWN:
+                    ui_variables.click_sound.play()
+                    if name[name_location] != 65:
+                        name[name_location] -= 1
+                    else:
+                        name[name_location] = 90
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
+                elif event.key == K_m:
+                    ui_variables.click_sound.play()
+                    menu = True
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
+
+
+
 
     # Start screen
 
@@ -669,12 +805,50 @@ while not done:
         button1 = Rect(520, 414, 146, 50)  # start 버튼
         buttons = [Rect(525, b * 40 + 481, 135, 40) for b in range(3)]  # help, quit 버튼
         start_button = pygame.image.load('assets/images/start.png')
+        
         help_button = pygame.image.load('assets/images/help.png')
         quit_button = pygame.image.load('assets/images/quit.png')
 
         for event in pygame.event.get():
             if event.type == QUIT:
                 done = True
+            elif event.type == USEREVENT  : 
+                pygame.time.set_timer(pygame.USEREVENT, 300)
+                
+
+            elif event.type == pygame.KEYDOWN :
+                if event.key == K_RETURN:
+                    ui_variables.click_sound.play()
+                    
+                    if current_button ==0 :
+                        start = True
+                    elif current_button == 1:
+                        help = True
+                    elif current_button == 2:
+                        done = True
+                    
+                elif event.key == K_UP:
+                    ui_variables.click_sound.play()
+                    if current_button == 0 :
+                        current_button = 2
+                        pygame.time.set_timer(pygame.USEREVENT, 1)
+                        print(current_button)
+                    else :
+                        current_button = current_button - 1 
+                        pygame.time.set_timer(pygame.USEREVENT, 1)
+                        print(current_button)
+                      
+                elif event.key == K_DOWN:
+                    ui_variables.click_sound.play()
+                    if current_button == 2 :
+                        current_button = 0
+                        pygame.time.set_timer(pygame.USEREVENT, 1)
+                        print(current_button)
+                    else :
+                        current_button = current_button + 1 
+                        pygame.time.set_timer(pygame.USEREVENT, 1)
+                        print(current_button)
+
             m_pos = pygame.mouse.get_pos()
             m_pre = pygame.mouse.get_pressed()
 
@@ -697,6 +871,7 @@ while not done:
         else:
             pygame.display.update()
 
+        pygame.display.update()
         clock.tick(50)
         pygame.display.flip()
 
