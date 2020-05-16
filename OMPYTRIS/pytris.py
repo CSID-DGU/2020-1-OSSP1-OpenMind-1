@@ -371,7 +371,7 @@ while not done:
                 else:
                     blink = True
                 pygame.display.update()
-            elif event.type == KEYPRESS:                            ##
+            elif event.type == KEYUP:                            ##
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
                     pause = False
@@ -586,9 +586,11 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move left
-                elif event.key == K_LEFT:                    # key = pygame.key.get_pressed() 
+                elif keys_pressed[K_LEFT]:                     # key = pygame.key.get_pressed() 
                     if not is_leftedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
+                        keys_pressed = pygame.key.get_pressed()
+                        pygame.time.set_timer(pygame.KEYUP, framerate * 3)
                         dx -= 1
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
