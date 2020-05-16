@@ -94,7 +94,7 @@ def draw_board(next, hold, score, level, goal):
         screen,
         ui_variables.white,
         Rect(384, 0, 180, 730)
-    )
+    )   
 
     # Draw next mino
     grid_n = tetrimino.mino_map[next - 1][0]
@@ -371,7 +371,7 @@ while not done:
                 else:
                     blink = True
                 pygame.display.update()
-            elif event.type == KEYDOWN:
+            elif event.type == KEYUP:                            ##
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
                     pause = False
@@ -390,6 +390,7 @@ while not done:
         # 콤보 카운트 
 
         for event in pygame.event.get():
+            #event.key = pygame.key.get_pressed()
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
@@ -486,7 +487,7 @@ while not done:
                     goal += level * 5
                     framerate = int(framerate * 0.8)
 
-            elif event.type == KEYDOWN:
+            elif event.type == KEYUP:                                 ##중요
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
                     ui_variables.click_sound.play()
@@ -585,16 +586,25 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move left
-                elif event.key == K_LEFT:
+                elif keys_pressed[K_LEFT]:                     # key = pygame.key.get_pressed() 
                     if not is_leftedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
+                        keys_pressed = pygame.key.get_pressed()
+                        pygame.time.set_timer(pygame.KEYUP, framerate * 3)
                         dx -= 1
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move right
-                elif event.key == K_RIGHT:
+                elif keys_pressed[K_RIGHT]:          
                     if not is_rightedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
+                        keys_pressed = pygame.key.get_pressed()
+                        #if keys_pressed[K_RIGHT]:
+                          #  pygame.time.set_timer(pygame.USEREVENT, framerate * 1)
+                        #else:
+                           # pygame.time.set_timer(pygame.USEREVENT, framerate * 20)/*
+                        #if pressed[pygame.K_RIGHT]:   
+                        pygame.time.set_timer(pygame.KEYUP, framerate * 3)           
                         dx += 1
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
@@ -642,7 +652,7 @@ while not done:
                     blink = True
 
                 pygame.display.update()
-            elif event.type == KEYDOWN:
+            elif event.type == KEYUP:                                          ##
                 if event.key == K_RETURN:
                     ui_variables.click_sound.play()
 
@@ -802,7 +812,7 @@ while not done:
 
     else:
         vals = ["start", "help", "exit"]  # 3가지 버튼
-        button1 = Rect(520, 414, 146, 50)  # start 버튼
+        button1 = Rect(520, 414, 146, 50)    # start 버튼Rect(520, 414, 146, 50)  
         buttons = [Rect(525, b * 40 + 481, 135, 40) for b in range(3)]  # help, quit 버튼
         start_button = pygame.image.load('assets/images/start.png')
         
