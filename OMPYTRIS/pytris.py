@@ -71,6 +71,42 @@ class ui_variables:
 
     t_color = [grey_2, cyan, blue, orange, yellow, green, pink, red, grey_3]
 
+class button(): 
+    def __init__(self, color, x,y,width,height, text=''):
+        self.color = color
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+
+    def draw(self,win,outline=None):
+        #Call this method to draw the button on the screen
+        if outline:
+            pygame.draw.rect(win, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
+            
+        pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height),0)
+        
+        if self.text != '':
+            font = pygame.font.SysFont('comicsans', 60)
+            text = font.render(self.text, 1, (0,0,0))
+            win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
+
+    def isOver(self, pos):
+        #Pos is the mouse position or a tuple of (x,y) coordinates
+        if pos[0] > self.x and pos[0] < self.x + self.width:
+            if pos[1] > self.y and pos[1] < self.y + self.height:
+                return True
+            
+        return False
+
+# 버튼 클래스 
+    # 버튼 생성
+    # 버튼 이미지 경로
+    # 버튼 선택했을 때 이미지 경로
+    # 버튼 id 값
+    # 버튼 
+    
 # Draw block
 def draw_block(x, y, color): # 블럭 그리는 함수
     pygame.draw.rect(
@@ -721,7 +757,19 @@ while not done:
                     pygame.time.set_timer(pygame.USEREVENT, 1)
                     
     elif menu:
-         for event in pygame.event.get():
+        # 게임 모드 선택 버튼 
+        mode_button = button((0,255,0),130,100,250,80,'Game Mode')
+        
+        # 게임 종료 선택 버튼
+        exit_button = button((0,255,0),130,200,250,80,'Exit')
+        # 점수판 목록 선택 버튼 
+        leaderboard_button = button((0,255,0),130,300,250,80,'Leader Board')
+        
+        # 시작 화면으로 돌아가기
+        return_button = button((0,255,0),130,400,250,80,'Return')
+        pygame.display.update()
+        for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
@@ -729,13 +777,12 @@ while not done:
                 screen.fill(ui_variables.white)
                 menu_text = ui_variables.h2_b.render("MENU", 1, ui_variables.cyan)
                 screen.blit(menu_text, (130, 50))
-                # 게임 모드 선택 버튼 
+                
+                mode_button.draw(screen,(0,0,0))
+                exit_button.draw(screen,(0,0,0))
+                leaderboard_button.draw(screen,(0,0,0))
+                return_button.draw(screen,(0,0,0))
 
-                # 게임 종료 선택 버튼
-
-                # 점수판 목록 선택 버튼 
-
-                # 시작 화면으로 돌아가기
                 pygame.display.flip()
         
             elif event.type == KEYDOWN:
@@ -804,6 +851,50 @@ while not done:
                     ui_variables.click_sound.play()
                     menu = True
                     pygame.time.set_timer(pygame.USEREVENT, 1)
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                #  버튼 위로 마우스 올릴 시 색깔 변동 
+                # 모드 버튼 
+                if mode_button.isOver(pos):
+                    print("button clicked")
+                    
+                # 종료  버튼 
+
+                if exit_button.isOver(pos):
+                    print("button clicked")
+                # 점수판 목록 버튼 
+
+                if leaderboard_button.isOver(pos):
+                    print("button clicked")
+                # 돌아가기 버튼 
+                if return_button.isOver(pos):
+                    print("button clicked")
+
+            elif event.type == pygame.MOUSEMOTION:
+                #  버튼 위로 마우스 올릴 시 색깔 변동 
+                # 모드 버튼 
+                if mode_button.isOver(pos):
+                    mode_button.color = (255,0,0)
+                else : 
+                    mode_button.color = (0,255,0)
+                # 종료  버튼 
+
+                if exit_button.isOver(pos):
+                    exit_button.color = (255,0,0)
+                else : 
+                    exit_button.color = (0,255,0)
+                # 점수판 목록 버튼 
+
+                if leaderboard_button.isOver(pos):
+                    leaderboard_button.color = (255,0,0)
+                else : 
+                    leaderboard_button.color = (0,255,0)
+                # 돌아가기 버튼 
+                if return_button.isOver(pos):
+                    return_button.color = (255,0,0)
+                else : 
+                    return_button.color = (0,255,0)
+
 
 
 
