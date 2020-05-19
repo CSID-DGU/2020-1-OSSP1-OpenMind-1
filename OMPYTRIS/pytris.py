@@ -79,6 +79,7 @@ class button():
         self.width = width
         self.height = height
         self.text = text
+        
 
     def draw(self,win,outline=None):
         #Call this method to draw the button on the screen
@@ -353,6 +354,17 @@ bottom_count = 0
 hard_drop = False
 
 current_button = 0 # 선택 버튼 
+
+# 게임 모드 선택 버튼 
+mode_button = button((0,255,0),130,100,250,80,'Game Mode')
+        
+# 게임 종료 선택 버튼
+exit_button = button((0,255,0),130,200,250,80,'Exit')
+# 점수판 목록 선택 버튼 
+leaderboard_button = button((0,255,0),130,300,250,80,'Leader Board')
+        
+# 시작 화면으로 돌아가기
+return_button = button((0,255,0),130,400,250,80,'Return')
 
 
 
@@ -757,16 +769,7 @@ while not done:
                     pygame.time.set_timer(pygame.USEREVENT, 1)
                     
     elif menu:
-        # 게임 모드 선택 버튼 
-        mode_button = button((0,255,0),130,100,250,80,'Game Mode')
-        
-        # 게임 종료 선택 버튼
-        exit_button = button((0,255,0),130,200,250,80,'Exit')
-        # 점수판 목록 선택 버튼 
-        leaderboard_button = button((0,255,0),130,300,250,80,'Leader Board')
-        
-        # 시작 화면으로 돌아가기
-        return_button = button((0,255,0),130,400,250,80,'Return')
+       
         pygame.display.update()
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
@@ -875,8 +878,10 @@ while not done:
                 # 모드 버튼 
                 if mode_button.isOver(pos):
                     mode_button.color = (255,0,0)
+
                 else : 
                     mode_button.color = (0,255,0)
+
                 # 종료  버튼 
 
                 if exit_button.isOver(pos):
