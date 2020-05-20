@@ -2,6 +2,7 @@
 
 import pygame
 import operator
+from tkinter import *
 from mino import *
 from random import *
 from pygame.locals import *
@@ -22,7 +23,7 @@ clock = pygame.time.Clock() # 타임트렉커 생성
 screen = pygame.display.set_mode((1200, 730), FULLSCREEN | HWSURFACE | DOUBLEBUF)  # 창크기 설정 1200 * 730, 하드웨어 가속, 더블버퍼 모드
 pygame.time.set_timer(pygame.USEREVENT, framerate * 10) # 유저이벤트 0.3초마다 입력
 pygame.display.set_caption("OPENMIND TETRIS™")
-
+volume = 1.0
 class ui_variables:
     # Fonts
     font_path = "./assets/fonts/Maplestory_Light.ttf"
@@ -44,17 +45,29 @@ class ui_variables:
     # Sounds
     pygame.mixer.music.load("assets/sounds/SFX_BattleMusic.wav")
     intro_sound = pygame.mixer.Sound("assets/sounds/SFX_Intro.wav")
+    intro_sound.set_volume(volume)
     fall_sound = pygame.mixer.Sound("assets/sounds/SFX_Fall.wav")
+    fall_sound.set_volume(volume)
     break_sound = pygame.mixer.Sound("assets/sounds/SFX_Break.wav")
+    break_sound.set_volume(volume)
     click_sound = pygame.mixer.Sound("assets/sounds/SFX_ButtonUp.wav")
+    click_sound.set_volume(volume)
     move_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceMoveLR.wav")
+    move_sound.set_volume(volume)
     drop_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceHardDrop.wav")
+    drop_sound.set_volume(volume)
     single_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialLineClearSingle.wav")
+    single_sound.set_volume(volume)
     double_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialLineClearDouble.wav")
+    double_sound.set_volume(volume)
     triple_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialLineClearTriple.wav")
+    triple_sound.set_volume(volume)
     tetris_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialTetris.wav")
+    tetris_sound.set_volume(volume)
     GameOver_sound = pygame.mixer.Sound("assets/sounds/SFX_GameOver.wav")
+    GameOver_sound.set_volume(volume)
     LevelUp_sound = pygame.mixer.Sound("assets/sounds/SFX_LevelUp.wav")
+    LevelUp_sound.set_volume(volume)
 
     combos = [] # 콤보 그래픽
     large_combos = [] # 사이즈 조절한 콤보 그래픽
@@ -105,6 +118,7 @@ class button():
         self.width = width
         self.height = height
         self.text = text
+        
 
     def draw(self,win,outline=None):
         #Call this method to draw the button on the screen
@@ -134,6 +148,7 @@ class button():
     # 버튼 
     
 # Draw block
+
 def draw_block(x, y, color): # 블럭 그리는 함수
     pygame.draw.rect(
         screen,
@@ -370,6 +385,9 @@ game_over = False # 게임 종료
 menu = False # 메뉴화면
 help = False # 도움 화면 
 over_screen = False
+mode = False
+setting = False
+
 
 leader_board = False # 점수판 목록
 combo_count = 0
@@ -380,6 +398,23 @@ bottom_count = 0
 hard_drop = False
 
 current_button = 0 # 선택 버튼 
+
+
+text_mode = ui_variables.h5.render("Game Mode", 1, ui_variables.black)
+
+# 게임 모드 선택 버튼 
+mode_button = button((ui_variables.grey_1),130,100,270,80,"Mode")
+        
+# 게임 종료 선택 버튼
+exit_button = button((0,255,0),130,200,270,80,'Exit')
+# 점수판 목록 선택 버튼 
+leaderboard_button = button((0,255,0),130,300,270,80,'Leader Board')
+        
+# 시작 화면으로 돌아가기
+return_button = button((0,255,0),130,400,270,80,'Return')
+
+# 설정 버튼
+setting_button = button((0,255,0),130,500,270,80,'Setting')
 
 
 
@@ -406,6 +441,8 @@ leaders = sorted(leaders.items(), key=operator.itemgetter(1), reverse=True)
 
 matrix = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
 
+
+
 ###########################################################
 # Loop Start
 ###########################################################
@@ -413,6 +450,7 @@ ui_variables.intro_sound.play()
 
 while not done:
     # Pause screen
+    pygame.mixer.init()
     if pause:
         pygame.mixer.music.pause()    # 게임 일시정지시 배경음악 pause
         for event in pygame.event.get():
@@ -823,16 +861,7 @@ while not done:
                     pygame.time.set_timer(pygame.USEREVENT, 1)
                     
     elif menu:
-        # 게임 모드 선택 버튼 
-        mode_button = button((0,255,0),130,100,250,80,'Game Mode')
-        
-        # 게임 종료 선택 버튼
-        exit_button = button((0,255,0),130,200,250,80,'Exit')
-        # 점수판 목록 선택 버튼 
-        leaderboard_button = button((0,255,0),130,300,250,80,'Leader Board')
-        
-        # 시작 화면으로 돌아가기
-        return_button = button((0,255,0),130,400,250,80,'Return')
+       
         pygame.display.update()
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
@@ -842,12 +871,14 @@ while not done:
                 pygame.time.set_timer(pygame.USEREVENT, 300)
                 screen.fill(ui_variables.white)
                 menu_text = ui_variables.h2_b.render("MENU", 1, ui_variables.cyan)
-                screen.blit(menu_text, (130, 50))
+                screen.blit(menu_text, (200, 50))
                 
                 mode_button.draw(screen,(0,0,0))
                 exit_button.draw(screen,(0,0,0))
                 leaderboard_button.draw(screen,(0,0,0))
                 return_button.draw(screen,(0,0,0))
+                setting_button.draw(screen,(0,0,0))
+
 
                 pygame.display.flip()
         
@@ -924,25 +955,45 @@ while not done:
                 if mode_button.isOver(pos):
                     print("button clicked")
                     
+                    mode = True
+                    menu = False
                 # 종료  버튼 
 
                 if exit_button.isOver(pos):
                     print("button clicked")
+                   
+                    done = True
+                    menu = False
+
                 # 점수판 목록 버튼 
 
                 if leaderboard_button.isOver(pos):
                     print("button clicked")
+                    
+                    leader_board = True
+                    menu = False
+
                 # 돌아가기 버튼 
                 if return_button.isOver(pos):
                     print("button clicked")
+
+                    pause = True
+                    menu = False
+                if setting_button.isOver(pos):
+                    print("button clicked")
+
+                    setting = True
+                    menu = False
 
             elif event.type == pygame.MOUSEMOTION:
                 #  버튼 위로 마우스 올릴 시 색깔 변동 
                 # 모드 버튼 
                 if mode_button.isOver(pos):
                     mode_button.color = (255,0,0)
+
                 else : 
                     mode_button.color = (0,255,0)
+
                 # 종료  버튼 
 
                 if exit_button.isOver(pos):
@@ -960,12 +1011,33 @@ while not done:
                     return_button.color = (255,0,0)
                 else : 
                     return_button.color = (0,255,0)
-
+                if setting_button.isOver(pos):
+                    setting_button.color = (255,0,0)
+                else : 
+                    return_button.color = (0,255,0)
 
 
 
 
     # Start screen
+    elif setting :
+        root = Tk()
+
+
+        root.geometry('300x300')
+        root.title("Volume Setting")
+        text = Label(root,text='Setting Volume!')
+        text.pack()
+        def set_vol(val):
+            volume = int(val)/100
+    
+        scale = Scale(root, from_ =100, to =0, orient = VERTICAL , command = set_vol )
+        scale.set(50)
+        scale.pack()
+        root.mainloop()
+        print(volume)
+        menu = True
+        setting = False
 
     else:
         vals = ["start", "help", "exit"]  # 3가지 버튼
