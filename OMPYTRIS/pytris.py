@@ -12,10 +12,14 @@ width = 10 # Board width
 height = 20 # Board height
 framerate = 30 # Bigger -> Slower
 
+movement_keys = {'left': 0, 'right': 0}
+movement_keys_speed = 0.05
+movement_keys_timer = movement_keys_speed * 2
+
 pygame.init() # pygame 모듈 생성 
 
 clock = pygame.time.Clock() # 타임트렉커 생성
-screen = pygame.display.set_mode((1200, 730))  # 창크기 설정 300* 374
+screen = pygame.display.set_mode((1200, 730), FULLSCREEN | HWSURFACE | DOUBLEBUF)  # 창크기 설정 1200 * 730, 하드웨어 가속, 더블버퍼 모드
 pygame.time.set_timer(pygame.USEREVENT, framerate * 10) # 유저이벤트 0.3초마다 입력
 pygame.display.set_caption("OPENMIND TETRIS™")
 
@@ -50,6 +54,20 @@ class ui_variables:
     triple_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialLineClearTriple.wav")
     tetris_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialTetris.wav")
     GameOver_sound = pygame.mixer.Sound("assets/sounds/SFX_GameOver.wav")
+    LevelUp_sound = pygame.mixer.Sound("assets/sounds/SFX_LevelUp.wav")
+
+    combos = [] # 콤보 그래픽
+    large_combos = [] # 사이즈 조절한 콤보 그래픽
+    combo_ring = pygame.image.load("assets/Combo/4combo ring.png") # 4블록 제거용 그래픽
+    combo_4ring = pygame.transform.scale(combo_ring, (200, 100))
+    for i in range (1,11):
+        combos.append(pygame.image.load("assets/Combo/"+str(i)+"combo.png"))
+        large_combos.append(pygame.transform.scale(combos[i-1], (150, 200)))  # 사진크기 조절
+
+    combos_sound = []
+    for i in range(1, 10) :
+        combos_sound.append(pygame.mixer.Sound("assets/sounds/SFX_"+str(i+2)+"Combo.wav"))
+
 
     # Background colors
     black = (10, 10, 10) #rgb(10, 10, 10)
@@ -70,6 +88,14 @@ class ui_variables:
     red = (225, 13, 27) #rgb(225, 13, 27) # Z
 
     t_color = [grey_2, cyan, blue, orange, yellow, green, pink, red, grey_3]
+
+def checkCombo(combo_count,sent):
+    if combo_count > 0:
+        if combo_count <= 8:
+            sent += (combo_count+1)/2
+        else :
+            sent += 4
+    return sent
 
 class button(): 
     def __init__(self, color, x,y,width,height, text=''):
@@ -209,6 +235,7 @@ def draw_board(next, hold, score, level, goal):
             dx = 17 + block_size * x
             dy = 17 + block_size * y
             draw_block(dx, dy, ui_variables.t_color[matrix[x][y + 1]])
+
 
 # Draw a tetrimino
 def draw_mino(x, y, mino, r):
@@ -402,12 +429,12 @@ while not done:
                 screen.blit(pause_text, (115, 250))
                 if blink:
                     screen.blit(pause_start, (75, 310))
-                    screen.blit(menu_start,(60,360))
+                    screen.blit(menu_start,(75,360))
                     blink = False
                 else:
                     blink = True
                 pygame.display.update()
-            elif event.type == KEYUP:                            ##
+            elif event.type == KEYDOWN:                            ##
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
                     pause = False
@@ -423,7 +450,9 @@ while not done:
 
     # Game screen
     elif start:
-        # 콤보 카운트 
+        # 콤보 카운트
+        pressed = lambda key: event.type == pygame.KEYDOWN and event.key == key
+        unpressed = lambda key: event.type == pygame.KEYUP and event.key == key
 
         for event in pygame.event.get():
             #event.key = pygame.key.get_pressed()
@@ -475,7 +504,9 @@ while not done:
                 # Erase line
                 # 콤보 카운트 
                 erase_count = 0
-                combo_stack = 0
+                combo_value = 0
+                sent = 0
+
                 for j in range(21):
                     is_full = True
                     for i in range(10):
@@ -484,46 +515,73 @@ while not done:
                     if is_full:
                         erase_count += 1
                         k = j
-                        combo_stack += 1
+                        combo_value += 1
                         while k > 0:
                             for i in range(10):
                                 matrix[i][k] = matrix[i][k - 1]
                             k -= 1
-                    
-                if erase_count == 1:
-                    ui_variables.break_sound.play()
-                    ui_variables.single_sound.play()
-                    combo_count +=1
-                    score += 50 * level
-                elif erase_count == 2:
-                    ui_variables.break_sound.play()
-                    ui_variables.double_sound.play()
-                    ui_variables.double_sound.play()
-                    combo_count +=2
-                    score += 150 * level
-                elif erase_count == 3:
-                    ui_variables.break_sound.play()
-                    ui_variables.triple_sound.play()
-                    ui_variables.triple_sound.play()
-                    ui_variables.triple_sound.play()
-                    combo_count +=3
-                    score += 350 * level
-                elif erase_count == 4:
-                    ui_variables.break_sound.play()
-                    ui_variables.tetris_sound.play()
-                    ui_variables.tetris_sound.play()
-                    ui_variables.tetris_sound.play()
-                    ui_variables.tetris_sound.play()
-                    score += 1000 * level
-                    combo_count +=4
+
+                # 지운 블록이 없으면 콤보 -1
+                #if erase_count == 0 :
+                    #combo_count -= 1
+                    #if combo_count < 0:
+                        #combo_count = 0
+
+                if erase_count >= 1:
+                    combo_count += 1
+                    if erase_count == 1:
+                        ui_variables.break_sound.play()
+                        ui_variables.single_sound.play()
+                        score += 50 * level * erase_count + combo_count
+                        sent += 1
+                    elif erase_count == 2:
+                        ui_variables.break_sound.play()
+                        ui_variables.double_sound.play()
+                        ui_variables.double_sound.play()
+                        score += 150 * level * erase_count + 2 * combo_count
+                        sent += 2
+                    elif erase_count == 3:
+                        ui_variables.break_sound.play()
+                        ui_variables.triple_sound.play()
+                        ui_variables.triple_sound.play()
+                        ui_variables.triple_sound.play()
+                        score += 350 * level * erase_count + 3 * combo_count
+                        sent += 3
+                    elif erase_count == 4:
+                        ui_variables.break_sound.play()
+                        ui_variables.tetris_sound.play()
+                        ui_variables.tetris_sound.play()
+                        ui_variables.tetris_sound.play()
+                        ui_variables.tetris_sound.play()
+                        score += 1000 * level * erase_count + 4 * combo_count
+                        screen.blit(ui_variables.combo_4ring, (250, 160))
+                        sent += 4
+
+                    for i in range(1, 11) :
+                        if combo_count == i :  # 1 ~ 10 콤보 이미지
+                            screen.blit(ui_variables.large_combos[i-1], (124, 190))  # blits the combo number
+                        elif combo_count > 10 : # 11 이상 콤보 이미지
+                            screen.blit(tetris4, (100, 190))  # blits the combo number
+
+                    for i in range(1, 10) :
+                        if combo_count == i+2 : # 3 ~ 11 콤보 사운드
+                            ui_variables.combos_sound[i-1].play()
+
+
+                sent = checkCombo(combo_count, sent)  # 콤보 증가
+
                 # Increase level
                 goal -= erase_count
                 if goal < 1 and level < 15:
                     level += 1
+                    ui_variables.LevelUp_sound.play()
+                    ui_variables.LevelUp_sound.play()
+                    ui_variables.LevelUp_sound.play()
+                    ui_variables.LevelUp_sound.play()
                     goal += level * 5
                     framerate = int(framerate * 0.8)
 
-            elif event.type == KEYUP:                                 ##중요
+            elif event.type == KEYDOWN:                                 ##중요
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
                     ui_variables.click_sound.play()
@@ -622,28 +680,31 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move left
-                elif keys_pressed[K_LEFT]:                     # key = pygame.key.get_pressed() 
+                elif pressed(pygame.K_LEFT) :                     # key = pygame.key.get_pressed()
                     if not is_leftedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
-                        keys_pressed = pygame.key.get_pressed()
-                        pygame.time.set_timer(pygame.KEYUP, framerate * 3)
                         dx -= 1
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move right
-                elif keys_pressed[K_RIGHT]:          
+                elif pressed(pygame.K_RIGHT) :
                     if not is_rightedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
-                        keys_pressed = pygame.key.get_pressed()
-                        #if keys_pressed[K_RIGHT]:
-                          #  pygame.time.set_timer(pygame.USEREVENT, framerate * 1)
-                        #else:
-                           # pygame.time.set_timer(pygame.USEREVENT, framerate * 20)/*
-                        #if pressed[pygame.K_RIGHT]:   
-                        pygame.time.set_timer(pygame.KEYUP, framerate * 3)           
                         dx += 1
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
+
+                elif unpressed(pygame.K_LEFT) :
+                    movement_keys_timer = movement_keys_speed * 2
+                elif unpressed(pygame.K_RIGHT) :
+                    movement_keys_timer = movement_keys_speed * 2
+
+        if any(movement_keys.values()):
+            movement_keys_timer += clock.tick(50)
+        if movement_keys_timer > movement_keys_speed:
+            pressed(pygame.K_LEFT)
+            pressed(pygame.K_RIGHT)
+            movement_keys_timer %= movement_keys_speed
 
         pygame.display.update()
 
@@ -688,7 +749,7 @@ while not done:
                     blink = True
 
                 pygame.display.update()
-            elif event.type == KEYUP:                                          ##
+            elif event.type == KEYDOWN:                                          ##
                 if event.key == K_RETURN:
                     ui_variables.click_sound.play()
 
@@ -707,6 +768,7 @@ while not done:
                     score = 0
                     score = 0
                     level = 1
+                    combo_count = 0
                     goal = level * 5
                     bottom_count = 0
                     hard_drop = False
@@ -921,8 +983,9 @@ while not done:
                 if event.key == K_RETURN:
                     ui_variables.click_sound.play()
                     
-                    if current_button ==0 :
+                    if current_button == 0:
                         start = True
+                        pygame.mixer.music.play(-1)
                     elif current_button == 1:
                         help = True
                     elif current_button == 2:
@@ -1004,7 +1067,7 @@ while not done:
         intro_screen2 = pygame.transform.scale(intro_screen, (50, 50)) # 사진크기 조절
 
         tetris3 = pygame.image.load('assets/images/tetris3.png')
-        tetris4 = pygame.transform.scale(tetris3, (100, 50))
+        tetris4 = pygame.transform.scale(tetris3, (200, 150))
 
         square_background = pygame.image.load('assets/images/Square_Background.png')
         sbg = pygame.transform.scale(square_background, (1300, 810))
