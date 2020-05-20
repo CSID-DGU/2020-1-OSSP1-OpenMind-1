@@ -434,7 +434,7 @@ while not done:
                 else:
                     blink = True
                 pygame.display.update()
-            elif event.type == KEYDOWN:                            ##
+            elif event.type == KEYUP:                            ##
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
                     pause = False
@@ -451,8 +451,8 @@ while not done:
     # Game screen
     elif start:
         # 콤보 카운트
-        pressed = lambda key: event.type == pygame.KEYDOWN and event.key == key
-        unpressed = lambda key: event.type == pygame.KEYUP and event.key == key
+        #pressed = lambda key: event.type == pygame.KEYDOWN and event.key == key
+        #unpressed = lambda key: event.type == pygame.KEYUP and event.key == key
 
         for event in pygame.event.get():
             #event.key = pygame.key.get_pressed()
@@ -581,7 +581,7 @@ while not done:
                     goal += level * 5
                     framerate = int(framerate * 0.8)
 
-            elif event.type == KEYDOWN:                                 ##중요
+            elif event.type == KEYUP:                                 ##중요
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
                     ui_variables.click_sound.play()
@@ -680,31 +680,35 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move left
-                elif pressed(pygame.K_LEFT) :                     # key = pygame.key.get_pressed()
+                elif keys_pressed[K_LEFT] :                     # key = pygame.key.get_pressed()
                     if not is_leftedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
+                        keys_pressed = pygame.key.get_pressed()
+                        pygame.time.set_timer(pygame.KEYUP, framerate * 3)
                         dx -= 1
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move right
-                elif pressed(pygame.K_RIGHT) :
+                elif keys_pressed[K_RIGHT] :
                     if not is_rightedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
+                        keys_pressed = pygame.key.get_pressed()
+                        pygame.time.set_timer(pygame.KEYUP, framerate * 3)
                         dx += 1
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
 
-                elif unpressed(pygame.K_LEFT) :
-                    movement_keys_timer = movement_keys_speed * 2
-                elif unpressed(pygame.K_RIGHT) :
-                    movement_keys_timer = movement_keys_speed * 2
+                #elif unpressed(pygame.K_LEFT) :
+                #   movement_keys_timer = movement_keys_speed * 2
+                #elif unpressed(pygame.K_RIGHT) :
+                #    movement_keys_timer = movement_keys_speed * 2
 
         if any(movement_keys.values()):
             movement_keys_timer += clock.tick(50)
-        if movement_keys_timer > movement_keys_speed:
-            pressed(pygame.K_LEFT)
-            pressed(pygame.K_RIGHT)
-            movement_keys_timer %= movement_keys_speed
+        #if movement_keys_timer > movement_keys_speed:
+        #    pressed(pygame.K_LEFT)
+        #    pressed(pygame.K_RIGHT)
+        #    movement_keys_timer %= movement_keys_speed
 
         pygame.display.update()
 
@@ -979,7 +983,7 @@ while not done:
                 pygame.time.set_timer(pygame.USEREVENT, 300)
                 
 
-            elif event.type == pygame.KEYDOWN :
+            elif event.type == pygame.KEYUP :
                 if event.key == K_RETURN:
                     ui_variables.click_sound.play()
                     
