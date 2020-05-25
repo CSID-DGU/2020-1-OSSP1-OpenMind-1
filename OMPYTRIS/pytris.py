@@ -6,6 +6,7 @@ from tkinter import *
 from mino import *
 from random import *
 from pygame.locals import *
+import ctypes 
 
 # Define
 block_size = 35 # Height, width of single block
@@ -20,7 +21,25 @@ movement_keys_timer = movement_keys_speed * 2
 pygame.init() # pygame 모듈 생성 
 
 clock = pygame.time.Clock() # 타임트렉커 생성
-screen = pygame.display.set_mode((1200, 730), FULLSCREEN | HWSURFACE | DOUBLEBUF)  # 창크기 설정 1200 * 730, 하드웨어 가속, 더블버퍼 모드
+screen = pygame.display.set_mode((1200, 730))
+
+def toggle_fullscreen(screen):
+    if event.key == K_LEFT:
+        screen = pygame.display.set_mode((1200, 730), FULLSCREEN | HWSURFACE | DOUBLEBUF)
+    else :
+        screen = pygame.display.set_mode((1200, 730))
+        toggle_fullscreen.full = not toggle_fullscreen.full
+    return screen
+toggle_fullscreen.full = False
+
+
+
+
+            
+#screen = pygame.display.set_mode((1200, 730), FULLSCREEN | HWSURFACE | DOUBLEBUF)  # 창크기 설정 1200 * 730, 하드웨어 가속, 더블버퍼 모드
+#screen = pygame.display.set_mode((1200, 730))
+
+ 
 pygame.time.set_timer(pygame.USEREVENT, framerate * 10) # 유저이벤트 0.3초마다 입력
 pygame.display.set_caption("OPENMIND TETRIS™")
 volume = 1.0
@@ -485,6 +504,8 @@ while not done:
                     menu = True
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
+                elif event.key == K_LSHIFT:                     ###############################################
+                    pygame.display.toggle_fullscreen()    
 
     # Game screen
     elif start:
@@ -718,7 +739,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move left
-                elif keys_pressed[K_LEFT] :                     # key = pygame.key.get_pressed()
+                elif event.key == K_LEFT:                   # key = pygame.key.get_pressed()
                     if not is_leftedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
                         keys_pressed = pygame.key.get_pressed()
@@ -727,7 +748,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move right
-                elif keys_pressed[K_RIGHT] :
+                elif event.key == K_RIGHT: #        keys_pressed[K_RIGHT] :
                     if not is_rightedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
                         keys_pressed = pygame.key.get_pressed()
