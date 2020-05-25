@@ -21,13 +21,23 @@ movement_keys_timer = movement_keys_speed * 2
 pygame.init() # pygame 모듈 생성 
 
 clock = pygame.time.Clock() # 타임트렉커 생성
+screen = pygame.display.set_mode((1200, 730))
+
+def toggle_fullscreen(screen):
+    if event.key == K_LEFT:
+        screen = pygame.display.set_mode((1200, 730), FULLSCREEN | HWSURFACE | DOUBLEBUF)
+    else :
+        screen = pygame.display.set_mode((1200, 730))
+        toggle_fullscreen.full = not toggle_fullscreen.full
+    return screen
+toggle_fullscreen.full = False
 
 
 
 
             
 #screen = pygame.display.set_mode((1200, 730), FULLSCREEN | HWSURFACE | DOUBLEBUF)  # 창크기 설정 1200 * 730, 하드웨어 가속, 더블버퍼 모드
-screen = pygame.display.set_mode((1200, 730))
+#screen = pygame.display.set_mode((1200, 730))
 
  
 pygame.time.set_timer(pygame.USEREVENT, framerate * 10) # 유저이벤트 0.3초마다 입력
@@ -494,6 +504,8 @@ while not done:
                     menu = True
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
+                elif event.key == K_LSHIFT:                     ###############################################
+                    pygame.display.toggle_fullscreen()    
 
     # Game screen
     elif start:
