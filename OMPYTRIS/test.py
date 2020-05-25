@@ -1,7 +1,7 @@
 while running :
    if pause : 
 
-   elif start:
+   elif multiplay_start:
         # ÄÞº¸ Ä«¿îÆ®
         #pressed = lambda key: event.type == pygame.KEYDOWN and event.key == key
         #unpressed = lambda key: event.type == pygame.KEYUP and event.key == key
@@ -268,7 +268,7 @@ while running :
         pygame.display.update()
 
     # Game over screen
-def draw_2board(next, hold, score, level, goal):
+def draw_2Pboard(next, hold, score, level, goal):
     screen.fill(ui_variables.grey_1)
 
     # Draw sidebar
@@ -340,6 +340,6 @@ def draw_2board(next, hold, score, level, goal):
     # Draw board
     for x in range(width):
         for y in range(height):
-            dx = 581 + block_size * x
-            dy = 581 + block_size * y
+            dx = 17 + block_size * x
+            dy = 17 + block_size * y
             draw_block(dx, dy, ui_variables.t_color[matrix[x][y + 1]])
