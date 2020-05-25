@@ -727,7 +727,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move left
-                elif keys_pressed[K_LEFT] :                     # key = pygame.key.get_pressed()
+                elif event.key == K_LEFT:                   # key = pygame.key.get_pressed()
                     if not is_leftedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
                         keys_pressed = pygame.key.get_pressed()
@@ -736,7 +736,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move right
-                elif keys_pressed[K_RIGHT] :
+                elif event.key == K_RIGHT: #        keys_pressed[K_RIGHT] :
                     if not is_rightedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
                         keys_pressed = pygame.key.get_pressed()
