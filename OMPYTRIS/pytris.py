@@ -6,6 +6,7 @@ from tkinter import *
 from mino import *
 from random import *
 from pygame.locals import *
+import ctypes 
 
 # Define
 block_size = 35 # Height, width of single block
@@ -20,7 +21,15 @@ movement_keys_timer = movement_keys_speed * 2
 pygame.init() # pygame 모듈 생성 
 
 clock = pygame.time.Clock() # 타임트렉커 생성
-screen = pygame.display.set_mode((1200, 730), FULLSCREEN | HWSURFACE | DOUBLEBUF)  # 창크기 설정 1200 * 730, 하드웨어 가속, 더블버퍼 모드
+
+
+
+
+            
+#screen = pygame.display.set_mode((1200, 730), FULLSCREEN | HWSURFACE | DOUBLEBUF)  # 창크기 설정 1200 * 730, 하드웨어 가속, 더블버퍼 모드
+screen = pygame.display.set_mode((1200, 730))
+
+ 
 pygame.time.set_timer(pygame.USEREVENT, framerate * 10) # 유저이벤트 0.3초마다 입력
 pygame.display.set_caption("OPENMIND TETRIS™")
 volume = 1.0
