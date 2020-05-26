@@ -164,7 +164,7 @@ def draw_block(x, y, color): # 블럭 그리는 함수
 
 # Draw game screen
 def draw_board(next, hold, score, level, goal):
-    screen.fill(ui_variables.grey_1)
+    
 
     # Draw sidebar
     pygame.draw.rect(
@@ -715,6 +715,9 @@ while not done:
                         score += 10 * level
                         draw_mino(dx, dy, mino, rotation)
                         draw_board(next_mino, hold_mino, score, level, goal)
+                        
+                        draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
+                        draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
                         if is_stackable(next_mino):
                             mino = next_mino
                             next_mino = randint(1, 7)
@@ -741,7 +744,10 @@ while not done:
                         bottom_count_2P = 0
                         score += 10 * level
                         draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
-                        draw_board_2P(next_mino_2P, hold_mino_2P, score, level, goal)
+                        draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
+                        
+                        draw_mino(dx, dy, mino, rotation)
+                        draw_board(next_mino, hold_mino, score, level, goal)
                         if is_stackable_2P(next_mino_2P):
                             mino_2P = next_mino_2P
                             next_mino_2P = randint(1, 7)
@@ -754,11 +760,12 @@ while not done:
                             game_over = True
                             pygame.time.set_timer(pygame.USEREVENT, 1)
                     else:
-                        bottom_count += 1
+                        bottom_count_2P += 1
 
                 # Erase line
                 # 콤보 카운트 
                 erase_count = 0
+                erase_count_2P = 0
                 combo_value = 0
                 sent = 0
 
@@ -781,7 +788,7 @@ while not done:
                         if matrix_2P[i][j] == 0:
                             is_full = False
                     if is_full:
-                        erase_count += 1
+                        erase_count_2P += 1
                         k = j
                         combo_value += 1
                         while k > 0:
@@ -868,6 +875,9 @@ while not done:
                     pygame.time.set_timer(pygame.USEREVENT, 1)
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
+                    draw_mino_2P(dx_2P,dy_2P,mino_2P,rotation_2P)
+                    draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
+
                 elif event.key == K_f:
                     ui_variables.fall_sound.play()
                     ui_variables.drop_sound.play()
@@ -877,6 +887,8 @@ while not done:
                     pygame.time.set_timer(pygame.USEREVENT, 1)
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
                     draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
+                    draw_mino(dx, dy, mino, rotation)
+                    draw_board(next_mino, hold_mino, score, level, goal)
                 # Hold
                 elif event.key == K_LSHIFT :
                     if hold == False:
@@ -892,6 +904,8 @@ while not done:
                         hold = True
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
+                    draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
+                    draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
                 elif event.key == K_c :
                     if hold_2P == False:
                         ui_variables.move_sound.play()
@@ -905,7 +919,9 @@ while not done:
                         rotation_2P = 0
                         hold_2P = True
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
-                    draw_board_2P(next_mino_2P, hold_mino_2P, score, level, goal)
+                    draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
+                    draw_mino(dx, dy, mino, rotation)
+                    draw_board(next_mino, hold_mino, score, level, goal)
                 # Turn right
                 elif event.key == K_UP :
                     if is_turnable_r(dx, dy, mino, rotation):
@@ -940,6 +956,8 @@ while not done:
                         rotation = 0
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
+                    draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
+                    draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
                 elif event.key == K_x:
                     if is_turnable_r(dx_2P, dy_2P, mino_2P, rotation_2P):
                         ui_variables.move_sound.play()
@@ -971,8 +989,10 @@ while not done:
                         rotation_2P += 1
                     if rotation_2P == 4:
                         rotation_2P = 0
-                    draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P)
-                    draw_board(next_mino_2P, hold_mino_2P, score, level, goal)
+                    draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
+                    draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
+                    draw_mino(dx, dy, mino, rotation)
+                    draw_board(next_mino, hold_mino, score, level, goal)
                 # Turn left
                 elif event.key == K_z or event.key == K_LCTRL:
                     if is_turnable_l(dx, dy, mino, rotation):
@@ -1006,8 +1026,10 @@ while not done:
                         rotation = 3
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
+                    draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
+                    draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
                 # Move left
-                elif keys_pressed[K_LEFT] :                     # key = pygame.key.get_pressed()
+                elif event.key == K_LEFT :                     # key = pygame.key.get_pressed()
                     if not is_leftedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
                         keys_pressed = pygame.key.get_pressed()
@@ -1015,8 +1037,10 @@ while not done:
                         dx -= 1
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
+                    draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
+                    draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
                 # Move right
-                elif keys_pressed[K_RIGHT] :
+                elif event.key == K_RIGHT :
                     if not is_rightedge(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
                         keys_pressed = pygame.key.get_pressed()
@@ -1024,23 +1048,29 @@ while not done:
                         dx += 1
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
-                elif keys_pressed[K_a] :                     # key = pygame.key.get_pressed()
+                    draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
+                    draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
+                elif event.key == K_a :                     # key = pygame.key.get_pressed()
                     if not is_leftedge_2P(dx_2P, dy_2P, mino_2P, rotation_2P):
                         ui_variables.move_sound.play()
                         keys_pressed = pygame.key.get_pressed()
                         pygame.time.set_timer(pygame.KEYUP, framerate * 3)
                         dx_2P -= 1
-                    draw_mino(dx_2P, dy_2P, mino_2P, rotation_2P)
+                    draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
+                    draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
+                    draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Move right
-                elif keys_pressed[K_d] :
+                elif event.key == K_d :
                     if not is_rightedge_2P(dx_2P, dy_2P, mino_2P, rotation_2P):
                         ui_variables.move_sound.play()
                         keys_pressed = pygame.key.get_pressed()
                         pygame.time.set_timer(pygame.KEYUP, framerate * 3)
                         dx_2P += 1
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
-                    draw_board_2P(next_mino_2P, hold_mino_2P, score, level, goal)
+                    draw_2Pboard(next_mino_2P, hold_mino_2P, score, level, goal)
+                    draw_mino(dx, dy, mino, rotation)
+                    draw_board(next_mino, hold_mino, score, level, goal)
 
                 #elif unpressed(pygame.K_LEFT) :
                 #   movement_keys_timer = movement_keys_speed * 2
