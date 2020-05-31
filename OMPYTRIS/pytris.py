@@ -109,25 +109,28 @@ def checkCombo(combo_count,sent):
         else :
             sent += 4
     return sent
-def draw_image(img_path, x,y,width,height):
+def draw_image(window,img_path, x,y,width,height):
 
     image= pygame.image.load(img_path)
     image = pygame.transform.scale(image,(width,height))
     window.blit(image,(x,y))
 class button(): 
-    def __init__(self, color, x,y,width,height, text=''):
+    def __init__(self, color, x,y,width,height, text='',img='', img_clicked=''):
         self.color = color
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.text = text
-        
+        self.image = img
+        self.image = img_clicked
 
     def draw(self,win,outline=None):
         #Call this method to draw the button on the screen
         if outline:
-            pygame.draw.rect(win, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
+            # pygame.draw.rect(win, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
+            draw_image(screen, self.image ,self.x, self.y, self.width, self.height )
+
             
         pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height),0)
         
@@ -135,6 +138,7 @@ class button():
             font = pygame.font.SysFont('comicsans', 60)
             text = font.render(self.text, 1, (0,0,0))
             win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
+        
 
     def isOver(self, pos):
         #Pos is the mouse position or a tuple of (x,y) coordinates
@@ -586,20 +590,24 @@ current_button = 0 # 선택 버튼
 text_mode = ui_variables.h5.render("Game Mode", 1, ui_variables.black)
 
 # 게임 모드 선택 버튼 
-mode_button = button((ui_variables.grey_1),130,100,270,80,"Mode")
+#mode_button = button((ui_variables.grey_1),130,100,270,80,"Mode")
         
-# 게임 종료 선택 버튼
-exit_button = button((0,255,0),130,200,270,80,'Exit')
-# 점수판 목록 선택 버튼 
-leaderboard_button = button((0,255,0),130,300,270,80,'Leader Board')
+## 게임 종료 선택 버튼
+#exit_button = button((0,255,0),130,200,270,80,'Exit')
+## 점수판 목록 선택 버튼 
+#leaderboard_button = button((0,255,0),130,300,270,80,'Leader Board')
         
-# 시작 화면으로 돌아가기
-return_button = button((0,255,0),130,400,270,80,'Return')
+## 시작 화면으로 돌아가기
+#return_button = button((0,255,0),130,400,270,80,'Return')
 
-# 설정 버튼
-setting_button = button((0,255,0),130,500,270,80,'Setting')
+## 설정 버튼
+#setting_button = button((0,255,0),130,500,270,80,'Setting')
 
+start_button = 'assets/images/start.png'     
+help_button = 'assets/images/help.png'
+quit_button = 'assets/images/quit.png'
 
+start_iamge_button = button((0,255,0),130,200,270,80,'',start_button,help_button)
 
 dx, dy = 3, 0 # Minos location status
 dx_2P , dy_2P = 3, 0
@@ -1206,11 +1214,11 @@ while not done:
                 menu_text = ui_variables.h2_b.render("MENU", 1, ui_variables.cyan)
                 screen.blit(menu_text, (200, 50))
                 
-                mode_button.draw(screen,(0,0,0))
-                exit_button.draw(screen,(0,0,0))
-                leaderboard_button.draw(screen,(0,0,0))
-                return_button.draw(screen,(0,0,0))
-                setting_button.draw(screen,(0,0,0))
+                #mode_button.draw(screen,(0,0,0))
+                #exit_button.draw(screen,(0,0,0))
+                #leaderboard_button.draw(screen,(0,0,0))
+                #return_button.draw(screen,(0,0,0))
+                #setting_button.draw(screen,(0,0,0))
 
 
                 pygame.display.flip()
@@ -1376,10 +1384,7 @@ while not done:
         vals = ["start", "help", "exit"]  # 3가지 버튼
         button1 = Rect(520, 414, 146, 50)    # start 버튼Rect(520, 414, 146, 50)  
         buttons = [Rect(525, b * 40 + 481, 135, 40) for b in range(3)]  # help, quit 버튼
-        start_button = pygame.image.load('assets/images/start.png')
         
-        help_button = pygame.image.load('assets/images/help.png')
-        quit_button = pygame.image.load('assets/images/quit.png')
 
         for event in pygame.event.get():
             if event.type == QUIT:
