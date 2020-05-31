@@ -1453,7 +1453,7 @@ while not done:
         clock.tick(50)
         pygame.display.flip()
 
-        # pygame.time.set_timer(pygame.USEREVENT, 300)
+        # pygame.time.set_timer(pygame.USEREVENT, 300)kbc
         screen.fill(ui_variables.white)
         pygame.draw.rect(
             screen,

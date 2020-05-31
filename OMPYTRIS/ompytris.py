@@ -11,9 +11,9 @@ block_size = 17 # Height, width of single block
 width = 10 # Board width
 height = 20 # Board height
 
-board_width = 300
-board_height = 374
-block_size = int(board_width*0.056)
+board_width = 800
+board_height = 450
+block_size = int(board_height*0.045)
 
 framerate = 30 # Bigger -> Slower
 
@@ -30,11 +30,11 @@ class ui_variables:
     font_path_b = "./assets/fonts/OpenSans-Bold.ttf"
     font_path_i = "./assets/fonts/Inconsolata/Inconsolata.otf"
 
-    h1 = pygame.font.Font(font_path, 50)
-    h2 = pygame.font.Font(font_path, 30)
-    h4 = pygame.font.Font(font_path, 20)
-    h5 = pygame.font.Font(font_path, 13)
-    h6 = pygame.font.Font(font_path, 10)
+    h1 = pygame.font.Font(font_path_b, 50)
+    h2 = pygame.font.Font(font_path_b, 30)
+    h4 = pygame.font.Font(font_path_b, 20)
+    h5 = pygame.font.Font(font_path_b, 13)
+    h6 = pygame.font.Font(font_path_b, 10)
 
     h1_b = pygame.font.Font(font_path_b, 50)
     h2_b = pygame.font.Font(font_path_b, 30)
@@ -53,10 +53,13 @@ class ui_variables:
 
     # Background colors
     black = (10, 10, 10) #rgb(10, 10, 10)
-    white = (255, 255, 255) #rgb(255, 255, 255)
-    grey_1 = (26, 26, 26) #rgb(26, 26, 26)
+    white = (0, 153, 153) #rgb(255, 255, 255) # 청록색으로 변경
+    real_white = (255, 255, 255) #rgb(255, 255, 255) # 청록색으로 변경
+
+    grey_1 = (26, 26, 26) #rgb(26, 26, 26) 
     grey_2 = (35, 35, 35) #rgb(35, 35, 35)
     grey_3 = (55, 55, 55) #rgb(55, 55, 55)
+    bright_yellow = (255,217,102) # 밝은 노랑
 
     # Tetrimino colors
     cyan = (69, 206, 204) #rgb(69, 206, 204) # I
@@ -68,6 +71,74 @@ class ui_variables:
     red = (225, 13, 27) #rgb(225, 13, 27) # Z
 
     t_color = [grey_2, cyan, blue, orange, yellow, green, pink, red, grey_3]
+
+class button():
+    def __init__(self, x, y, width, height, id, img = ''):
+        self.x = x
+        self.y = y
+        self.width =width
+        self.height = height
+        self.id = id
+        self.image = img
+
+    def draw(self, win , outline = None):
+        if outline:
+            draw_image(screen, self.image, self.x, self.y, self.width, self.height)
+    def isOver(self,pos):
+        if pos[0] > self.x and pos[0] < self.x + self.width:
+            if pos[1] > self.y and pos[1] < self.y + self.height:
+                return True
+        return False
+start_image = 'assets/images/start.png'
+help_image = 'assets/images/help.png'
+start_button = button(board_width*0.5, board_height*0.5,146,43,1,start_image)
+
+background_image = 'assets/vector/Background.png'
+
+single_button_image = 'assets/vector/single_button.png'
+clicked_single_button_image = 'assets/vector/clicked_single_button.png'
+
+pvp_button_image = 'assets/vector/pvp_button.png'
+clicked_pvp_button_image = 'assets/vector/clicked_pvp_button.png'
+
+
+
+help_button_image = 'assets/vector/help_button.png'
+clicked_help_button_image = 'assets/vector/clicked_help_button.png'
+
+
+quit_button_image = 'assets/vector/quit_button.png'
+clicked_quit_button_image = 'assets/vector/clicked_quit_button.png'
+
+leaderboard_vector = 'assets/vector/leaderboard_vector.png'
+clicked_leaderboard_vector = 'assets/vector/clicked_leader_vector.png'
+
+setting_vector = 'assets/vector/setting_vector.png'
+clicked_setting_vector = 'assets/vector/clicked_setting_vector.png'
+
+pause_board_image= 'assets/vector/pause_board.png'
+
+
+
+single_button = button(board_width*0.6, board_height*0.15,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
+
+pvp_button = button(board_width*0.6, board_height*0.35,int(board_width*0.3734), int(board_height*0.1777),2,pvp_button_image)
+
+help_button = button(board_width*0.6, board_height*0.55,int(board_width*0.3734), int(board_height*0.1777),3,help_button_image)
+
+quit_button = button(board_width*0.6, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),4,quit_button_image)
+
+setting_icon = button(board_width*0.02, board_height*0.75,int(board_height*0.23), int(board_height*0.23),5,setting_vector)
+
+leaderboard_icon = button(board_width*0.02, board_height*0.5,int(board_height*0.23), int(board_height*0.23),6,leaderboard_vector)
+
+
+
+def draw_image(window,img_path, x,y,width,height):
+
+    image= pygame.image.load(img_path)
+    image = pygame.transform.scale(image,(width,height))
+    window.blit(image,(x,y))
 
 # Draw block
 def draw_block(x, y, color):
@@ -85,15 +156,15 @@ def draw_block(x, y, color):
 
 # Draw game screen
 def draw_board(next, hold, score, level, goal):
-    screen.fill(ui_variables.grey_1)
-    sidebar_width = int(board_width*0.68)
+    screen.fill(ui_variables.white)
+    sidebar_width = int(board_width*0.5312)
     
 
     # Draw sidebar
     pygame.draw.rect(
         screen,
-        ui_variables.white,
-        Rect(sidebar_width, 0, board_width-sidebar_width, board_height)
+        ui_variables.bright_yellow,
+        Rect(sidebar_width, 0, int(board_width*0.1875), board_height)
     )
 
     # Draw next mino
@@ -101,7 +172,7 @@ def draw_board(next, hold, score, level, goal):
 
     for i in range(4):
         for j in range(4):
-            dx = int(board_width*0.733) + block_size * j
+            dx = int(board_width*0.045)+sidebar_width + block_size * j
             dy = int(board_height*0.3743) + block_size * i
             if grid_n[i][j] != 0:
                 draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]])
@@ -113,7 +184,7 @@ def draw_board(next, hold, score, level, goal):
     if hold_mino != -1:
         for i in range(4):
             for j in range(4):
-                dx = int(board_width*0.733) + block_size * j
+                dx = int(board_width*0.045) + sidebar_width + block_size * j
                 dy = int(board_height*0.1336) + block_size * i
                 if grid_h[i][j] != 0:
                     draw_block(dx,dy,ui_variables.t_color[grid_h[i][j]])
@@ -123,30 +194,30 @@ def draw_board(next, hold, score, level, goal):
         score = 999999
 
     # Draw texts
-    text_hold = ui_variables.h5.render("HOLD", 1, ui_variables.black)
-    text_next = ui_variables.h5.render("NEXT", 1, ui_variables.black)
-    text_score = ui_variables.h5.render("SCORE", 1, ui_variables.black)
-    score_value = ui_variables.h4.render(str(score), 1, ui_variables.black)
-    text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.black)
-    level_value = ui_variables.h4.render(str(level), 1, ui_variables.black)
-    text_goal = ui_variables.h5.render("GOAL", 1, ui_variables.black)
-    goal_value = ui_variables.h4.render(str(goal), 1, ui_variables.black)
+    text_hold = ui_variables.h5.render("HOLD", 1, ui_variables.real_white)
+    text_next = ui_variables.h5.render("NEXT", 1, ui_variables.real_white)
+    text_score = ui_variables.h5.render("SCORE", 1, ui_variables.real_white)
+    score_value = ui_variables.h4.render(str(score), 1, ui_variables.real_white)
+    text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.real_white)
+    level_value = ui_variables.h4.render(str(level), 1, ui_variables.real_white)
+    text_goal = ui_variables.h5.render("GOAL", 1, ui_variables.real_white)
+    goal_value = ui_variables.h4.render(str(goal), 1, ui_variables.real_white)
 
     # Place texts
-    screen.blit(text_hold, (int(board_width*0.7166), int(board_height*0.0374)))
-    screen.blit(text_next, (int(board_width*0.7166), int(board_height*0.2780)))
-    screen.blit(text_score, (int(board_width*0.7166), int(board_height*0.5187)))
-    screen.blit(score_value, (int(board_width*0.7333), int(board_height*0.5614)))
-    screen.blit(text_level, (int(board_width*0.7166), int(board_height*0.6791)))
-    screen.blit(level_value, (int(board_width*0.7333), int(board_height*0.7219)))
-    screen.blit(text_goal, (int(board_width*0.7166), int(board_height*0.8395)))
-    screen.blit(goal_value, (int(board_width*0.7333), int(board_height*0.8823)))
+    screen.blit(text_hold, (int(board_width*0.045)+sidebar_width, int(board_height*0.0374)))
+    screen.blit(text_next, (int(board_width*0.045)+sidebar_width , int(board_height*0.2780)))
+    screen.blit(text_score, (int(board_width*0.045) + sidebar_width, int(board_height*0.5187)))
+    screen.blit(score_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.5614)))
+    screen.blit(text_level, (int(board_width*0.045) + sidebar_width, int(board_height*0.6791)))
+    screen.blit(level_value, (int(board_width*0.055) + sidebar_width , int(board_height*0.7219)))
+    screen.blit(text_goal, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
+    screen.blit(goal_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
 
     # Draw board
     for x in range(width):
         for y in range(height):
-            dx = int(board_width*0.0566) + block_size * x
-            dy = int(board_height*0.0454) + block_size * y
+            dx = int(board_width*0.25) + block_size * x
+            dy = int(board_height*0.055) + block_size * y
             draw_block(dx, dy, ui_variables.t_color[matrix[x][y + 1]])
 
 # Draw a tetrimino
@@ -322,16 +393,18 @@ while not done:
             elif event.type == USEREVENT:
                 pygame.time.set_timer(pygame.USEREVENT, 300)
                 draw_board(next_mino, hold_mino, score, level, goal)
+                draw_image(screen ,pause_board_image, board_width*0.3, 0, int(board_height*0.7428), board_height)
 
-                pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.white)
-                pause_start = ui_variables.h5.render("Press esc to continue", 1, ui_variables.white)
+                pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.real_white)
+                pause_start = ui_variables.h5.render("Press esc to continue", 1, ui_variables.real_white)
 
-                screen.blit(pause_text, (int(board_width*0.1433), int(board_height*0.2673)))
-                if blink:
-                    screen.blit(pause_start, (int(board_width*0.1333), int(board_height*0.4278)))
-                    blink = False
-                else:
-                    blink = True
+                #screen.blit(pause_text, (int(board_width*0.1433), int(board_height*0.2673)))
+                #if blink:
+                #    screen.blit(pause_start, (int(board_width*0.1333), int(board_height*0.4278)))
+                #    blink = False
+                #else:
+                #    blink = True
+
                 pygame.display.update()
             elif event.type == KEYDOWN:
                 erase_mino(dx, dy, mino, rotation)
@@ -640,42 +713,91 @@ while not done:
     # Start screen
     else:
         for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
             if event.type == QUIT:
                 done = True
+            elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, 300)
+
             elif event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     ui_variables.click_sound.play()
                     start = True
+            elif event.type == pygame.MOUSEMOTION:
+                if single_button.isOver(pos):
+                    single_button.image = clicked_single_button_image
+                else :
+                    single_button.image = single_button_image
+
+
+                if pvp_button.isOver(pos):
+                    pvp_button.image = clicked_pvp_button_image
+                else :
+                    pvp_button.image = pvp_button_image
+
+                if help_button.isOver(pos):
+                    help_button.image = clicked_help_button_image
+                else :
+                    help_button.image = help_button_image
+
+                if quit_button.isOver(pos):
+                    quit_button.image = clicked_quit_button_image
+                else :
+                    quit_button.image = quit_button_image
+
+                if setting_icon.isOver(pos):
+                    setting_icon.image = clicked_setting_vector
+                else :
+                    setting_icon.image = setting_vector
+
+                if leaderboard_icon.isOver(pos):
+                    leaderboard_icon.image = clicked_leaderboard_vector
+                else :
+                    leaderboard_icon.image = leaderboard_vector
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if single_button.isOver(pos):
+                    start = True
 
         # pygame.time.set_timer(pygame.USEREVENT, 300)
         screen.fill(ui_variables.white)
-        pygame.draw.rect(
-            screen,
-            ui_variables.grey_1,
-            Rect(0, int(board_height*0.5), board_width, board_height-int(board_height*0.5))
-        )
+        #pygame.draw.rect(
+        #    screen,
+        #    ui_variables.grey_1,
+        #    Rect(0, int(board_height*0.5), board_width, board_height-int(board_height*0.5))
+        #)
 
-        title = ui_variables.h1.render("PYTRIS", 1, ui_variables.grey_1)
-        title_start = ui_variables.h5.render("Press space to start", 1, ui_variables.white)
-        title_info = ui_variables.h6.render("Copyright (c) 2017 Jason Kim All Rights Reserved.", 1, ui_variables.white)
+        #title = ui_variables.h1.render("PYTRIS", 1, ui_variables.grey_1)
+        #title_start = ui_variables.h5.render("Press space to start", 1, ui_variables.white)
+        #title_info = ui_variables.h6.render("Copyright (c) 2017 Jason Kim All Rights Reserved.", 1, ui_variables.white)
 
-        leader_1 = ui_variables.h5_i.render('1st ' + leaders[0][0] + ' ' + str(leaders[0][1]), 1, ui_variables.grey_1)
-        leader_2 = ui_variables.h5_i.render('2nd ' + leaders[1][0] + ' ' + str(leaders[1][1]), 1, ui_variables.grey_1)
-        leader_3 = ui_variables.h5_i.render('3rd ' + leaders[2][0] + ' ' + str(leaders[2][1]), 1, ui_variables.grey_1)
+        #leader_1 = ui_variables.h5_i.render('1st ' + leaders[0][0] + ' ' + str(leaders[0][1]), 1, ui_variables.grey_1)
+        #leader_2 = ui_variables.h5_i.render('2nd ' + leaders[1][0] + ' ' + str(leaders[1][1]), 1, ui_variables.grey_1)
+        #leader_3 = ui_variables.h5_i.render('3rd ' + leaders[2][0] + ' ' + str(leaders[2][1]), 1, ui_variables.grey_1)
 
-        if blink:
-            screen.blit(title_start, (92, 195))
-            blink = False
-        else:
-            blink = True
+        #if blink:
+        #    screen.blit(title_start, (92, 195))
+
+        #    blink = False
+        #else:
+        #    blink = True
+        draw_image(screen,background_image,0,0,board_width,board_height)
+        
+        single_button.draw(screen,(0,0,0))
+        pvp_button.draw(screen,(0,0,0))
+        help_button.draw(screen,(0,0,0))
+        quit_button.draw(screen,(0,0,0))
+
+        setting_icon.draw(screen,(0,0,0))
+        leaderboard_icon.draw(screen,(0,0,0))
+
+        #screen.blit(title, (int(board_width)*0.2166, int(board_height)*0.3208))
+        #screen.blit(title_info, (int(board_width)*0.1333, int(board_height)*0.8957))
 
 
-        screen.blit(title, (int(board_width)*0.2166, int(board_height)*0.3208))
-        screen.blit(title_info, (int(board_width)*0.1333, int(board_height)*0.8957))
 
-        screen.blit(leader_1, (int(board_width)*0.0333, int(board_height)*0.0333))
-        screen.blit(leader_2, (int(board_width)*0.0333, int(board_height)*0.0614))
-        screen.blit(leader_3, (int(board_width)*0.0333, int(board_height)*0.0962))
+        #screen.blit(leader_1, (int(board_width)*0.0333, int(board_height)*0.0333))
+        #screen.blit(leader_2, (int(board_width)*0.0333, int(board_height)*0.0614))
+        #screen.blit(leader_3, (int(board_width)*0.0333, int(board_height)*0.0962))
 
         if not start:
             pygame.display.update()
