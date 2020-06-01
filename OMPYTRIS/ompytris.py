@@ -117,7 +117,21 @@ setting_vector = 'assets/vector/setting_vector.png'
 clicked_setting_vector = 'assets/vector/clicked_setting_vector.png'
 
 pause_board_image= 'assets/vector/pause_board.png'
+leader_board_image= 'assets/vector/leader_board.png'
+setting_board_image = 'assets/vector/setting_board.png'
 
+
+resume_button_image = 'assets/vector/resume_button.png'
+clicked_resume_button_image = 'assets/vector/clicked_resume_button.png'
+
+restart_button_image = 'assets/vector/restart_button.png'
+clicked_restart_button_image = 'assets/vector/clicked_restart_button.png'
+
+setting_button_image = 'assets/vector/setting_button.png'
+clicked_setting_button_image = 'assets/vector/clicked_setting_button.png'
+
+back_button_image = 'assets/vector/back_button.png'
+clicked_back_button_image = 'assets/vector/clicked_back_button.png'
 
 
 single_button = button(board_width*0.6, board_height*0.15,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
@@ -131,6 +145,13 @@ quit_button = button(board_width*0.6, board_height*0.75,int(board_width*0.3734),
 setting_icon = button(board_width*0.02, board_height*0.75,int(board_height*0.23), int(board_height*0.23),5,setting_vector)
 
 leaderboard_icon = button(board_width*0.02, board_height*0.5,int(board_height*0.23), int(board_height*0.23),6,leaderboard_vector)
+
+resume_button    = button(board_width*0.324, board_height*0.15,int(board_width*0.3734), int(board_height*0.1777),1,resume_button_image)
+restart_button   = button(board_width*0.324, board_height*0.35,int(board_width*0.3734), int(board_height*0.1777),1,restart_button_image)
+setting_button   = button(board_width*0.324, board_height*0.55,int(board_width*0.3734), int(board_height*0.1777),1,setting_button_image)
+pause_quit_button= button(board_width*0.324, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
+
+back_button      = button(board_width*0.324, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
 
 
 
@@ -156,14 +177,14 @@ def draw_block(x, y, color):
 
 # Draw game screen
 def draw_board(next, hold, score, level, goal):
-    screen.fill(ui_variables.white)
+    screen.fill(ui_variables.real_white)
     sidebar_width = int(board_width*0.5312)
     
 
     # Draw sidebar
     pygame.draw.rect(
         screen,
-        ui_variables.bright_yellow,
+        ui_variables.white,
         Rect(sidebar_width, 0, int(board_width*0.1875), board_height)
     )
 
@@ -350,6 +371,8 @@ start = False
 pause = False
 done = False
 game_over = False
+leader_board = False
+setting = False
 
 score = 0
 level = 1
@@ -386,24 +409,70 @@ matrix = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
 
 while not done:
     # Pause screen
-    if pause:
+    if setting :
+        draw_image(screen,background_image,0,0,board_width,board_height)
+        single_button.draw(screen,(0,0,0))
+        pvp_button.draw(screen,(0,0,0))
+        help_button.draw(screen,(0,0,0))
+        quit_button.draw(screen,(0,0,0))
+        setting_icon.draw(screen,(0,0,0))
+        leaderboard_icon.draw(screen,(0,0,0))
+
+        if start:
+            draw_board(next_mino, hold_mino, score, level, goal)
+
+
+        draw_image(screen,setting_board_image, board_width*0.15, 0, int(board_height*1.3), board_height)
+        
+        back_button.draw(screen,(0,0,0))
+
+
+
+
         for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
+
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
                 pygame.time.set_timer(pygame.USEREVENT, 300)
-                draw_board(next_mino, hold_mino, score, level, goal)
-                draw_image(screen ,pause_board_image, board_width*0.3, 0, int(board_height*0.7428), board_height)
-
+                
                 pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.real_white)
                 pause_start = ui_variables.h5.render("Press esc to continue", 1, ui_variables.real_white)
 
-                #screen.blit(pause_text, (int(board_width*0.1433), int(board_height*0.2673)))
-                #if blink:
-                #    screen.blit(pause_start, (int(board_width*0.1333), int(board_height*0.4278)))
-                #    blink = False
-                #else:
-                #    blink = True
+              
+
+                pygame.display.update()
+            
+            elif event.type == pygame.MOUSEMOTION:
+                if back_button.isOver(pos):
+                    back_button.image = clicked_back_button_image
+                else :
+                    back_button.image = back_button_image
+                pygame.display.update()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    setting = False
+    elif pause:
+        draw_board(next_mino, hold_mino, score, level, goal)
+        draw_image(screen ,pause_board_image, board_width*0.3, 0, int(board_height*0.7428), board_height)
+        resume_button.draw(screen,(0,0,0))
+        restart_button.draw(screen,(0,0,0))
+        setting_button.draw(screen,(0,0,0))
+        pause_quit_button.draw(screen,(0,0,0))
+        for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
+
+            if event.type == QUIT:
+                done = True
+            elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, 300)
+                
+                pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.real_white)
+                pause_start = ui_variables.h5.render("Press esc to continue", 1, ui_variables.real_white)
+
+                
 
                 pygame.display.update()
             elif event.type == KEYDOWN:
@@ -412,8 +481,110 @@ while not done:
                     pause = False
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
+            elif event.type == pygame.MOUSEMOTION:
+                if resume_button.isOver(pos):
+                    resume_button.image = clicked_resume_button_image
+                else :
+                    resume_button.image = resume_button_image
+
+
+                if restart_button.isOver(pos):
+                    restart_button.image = clicked_restart_button_image
+                else :
+                    restart_button.image = restart_button_image
+
+                if setting_button.isOver(pos):
+                    setting_button.image = clicked_setting_button_image
+                else :
+                    setting_button.image = setting_button_image
+                if pause_quit_button.isOver(pos):
+                    pause_quit_button.image = clicked_quit_button_image
+                else :
+                    pause_quit_button.image = quit_button_image
+                pygame.display.update()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if pause_quit_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    done=True
+                if setting_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    setting = True
+                if restart_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    hold = False
+                    dx, dy = 3, 0
+                    rotation = 0
+                    mino = randint(1, 7)
+                    next_mino = randint(1, 7)
+                    hold_mino = -1
+                    framerate = 30
+                    score = 0
+                    score = 0
+                    level = 1
+                    goal = level * 5
+                    bottom_count = 0
+                    hard_drop = False
+                    name_location = 0
+                    name = [65, 65, 65]
+                    matrix = [[0 for y in range(height + 1)] for x in range(width)]
+
+                    pause = False
+                    start = False
+
+                if resume_button.isOver(pos):
+                    pause = False
+                    ui_variables.click_sound.play()
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
 
     # Game screen
+    elif leader_board :
+        draw_image(screen,background_image,0,0,board_width,board_height)
+        single_button.draw(screen,(0,0,0))
+        pvp_button.draw(screen,(0,0,0))
+        help_button.draw(screen,(0,0,0))
+        quit_button.draw(screen,(0,0,0))
+        setting_icon.draw(screen,(0,0,0))
+        leaderboard_icon.draw(screen,(0,0,0))
+        draw_image(screen,leader_board_image, board_width*0.15, 0, int(board_height*1.3), board_height)
+        
+        back_button.draw(screen,(0,0,0))
+
+
+
+
+        for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
+
+            if event.type == QUIT:
+                done = True
+            elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, 300)
+                
+                pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.real_white)
+                pause_start = ui_variables.h5.render("Press esc to continue", 1, ui_variables.real_white)
+
+              
+
+                pygame.display.update()
+            elif event.type == KEYDOWN:
+                erase_mino(dx, dy, mino, rotation)
+                if event.key == K_ESCAPE:
+                    pause = False
+                    ui_variables.click_sound.play()
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
+            elif event.type == pygame.MOUSEMOTION:
+                if back_button.isOver(pos):
+                    back_button.image = clicked_back_button_image
+                else :
+                    back_button.image = back_button_image
+                pygame.display.update()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    leader_board=False
+                
+    
+                
     elif start:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -756,7 +927,18 @@ while not done:
                     leaderboard_icon.image = leaderboard_vector
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if single_button.isOver(pos):
+                    ui_variables.click_sound.play()
                     start = True
+                if leaderboard_icon.isOver(pos):
+                    ui_variables.click_sound.play()
+                    leader_board = True
+                if setting_icon.isOver(pos):
+                    ui_variables.click_sound.play()
+                    setting = True
+                if quit_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    done = True
+
 
         # pygame.time.set_timer(pygame.USEREVENT, 300)
         screen.fill(ui_variables.white)
