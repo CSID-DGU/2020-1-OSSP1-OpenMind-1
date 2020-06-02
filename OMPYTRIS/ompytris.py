@@ -133,6 +133,16 @@ clicked_setting_button_image = 'assets/vector/clicked_setting_button.png'
 back_button_image = 'assets/vector/back_button.png'
 clicked_back_button_image = 'assets/vector/clicked_back_button.png'
 
+volume_vector = 'assets/vector/volume_vector.png'
+clicked_volume_vector = 'assets/vector/clicked_volume_vector.png'
+
+keyboard_vector = 'assets/vector/keyboard_vector.png'
+clicked_keyboard_vector = 'assets/vector/clicked_keyboard_vector.png'
+
+screen_vector = 'assets/vector/screen_vector.png'
+clicked_screen_vector = 'assets/vector/clicked_screen_vector.png'
+
+
 
 single_button = button(board_width*0.6, board_height*0.15,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
 
@@ -152,6 +162,13 @@ setting_button   = button(board_width*0.324, board_height*0.55,int(board_width*0
 pause_quit_button= button(board_width*0.324, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
 
 back_button      = button(board_width*0.324, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
+
+volume_icon = button(board_width*0.25, board_height*0.3,int(board_height*0.23), int(board_height*0.23),5,volume_vector)
+
+screen_icon = button(board_width*0.45, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,screen_vector)
+
+keyboard_icon = button(board_width*0.65, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,keyboard_vector)
+
 
 def checkCombo(combo_count,sent):
     if combo_count > 0:
@@ -615,6 +632,7 @@ game_over = False
 leader_board = False
 setting = False
 pvp = False
+help = False
 
 score = 0
 level = 1
@@ -690,6 +708,10 @@ while not done:
 
         draw_image(screen,setting_board_image, board_width*0.15, 0, int(board_height*1.3), board_height)
         
+        keyboard_icon.draw(screen,(0,0,0))
+        screen_icon.draw(screen,(0,0,0))
+        volume_icon.draw(screen,(0,0,0))
+
         back_button.draw(screen,(0,0,0))
 
 
@@ -715,11 +737,40 @@ while not done:
                     back_button.image = clicked_back_button_image
                 else :
                     back_button.image = back_button_image
+
+                if volume_icon.isOver(pos):
+                    volume_icon.image = clicked_volume_vector
+                else :
+                    volume_icon.image = volume_vector
+
+                if keyboard_icon.isOver(pos):
+                    keyboard_icon.image = clicked_keyboard_vector
+                else :
+                    keyboard_icon.image = keyboard_vector
+
+                if screen_icon.isOver(pos):
+                    screen_icon.image = clicked_screen_vector
+                else :
+                    screen_icon.image = screen_vector
+
+
+
                 pygame.display.update()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.isOver(pos):
                     ui_variables.click_sound.play()
                     setting = False
+
+                if volume_icon.isOver(pos):
+                    ui_variables.click_sound.play()
+
+
+                if keyboard_icon.isOver(pos):
+                    ui_variables.click_sound.play()
+                    
+                if screen_icon.isOver(pos):
+                    ui_variables.click_sound.play()
+                    
     elif pause:
         #screen.fill(ui_variables.real_white)
         #draw_board(next_mino, hold_mino, score, level, goal)
@@ -797,6 +848,8 @@ while not done:
 
                     pause = False
                     start = False
+                    if pvp :
+                        pvp=False
 
                 if resume_button.isOver(pos):
                     pause = False
@@ -816,6 +869,12 @@ while not done:
         
         back_button.draw(screen,(0,0,0))
 
+        leader_1 = ui_variables.h1_b.render('1st ' + leaders[0][0] + ' ' + str(leaders[0][1]), 1, ui_variables.grey_1)
+        leader_2 = ui_variables.h1_b.render('2nd ' + leaders[1][0] + ' ' + str(leaders[1][1]), 1, ui_variables.grey_1)
+        leader_3 = ui_variables.h1_b.render('3rd ' + leaders[2][0] + ' ' + str(leaders[2][1]), 1, ui_variables.grey_1)
+        screen.blit(leader_1, (board_width*0.3, board_height*0.15))
+        screen.blit(leader_2, (board_width*0.3, board_height*0.35))
+        screen.blit(leader_3, (board_width*0.3, board_height*0.55))
 
 
 
@@ -1599,6 +1658,11 @@ while not done:
                 if quit_button.isOver(pos):
                     ui_variables.click_sound.play()
                     done = True
+                if help_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    help = True
+
+
 
 
         screen.fill(ui_variables.white)
