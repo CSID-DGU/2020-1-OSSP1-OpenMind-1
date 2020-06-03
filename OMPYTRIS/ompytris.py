@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # PYTRIS Copyright (c) 2017 Jason Kim All Rights Reserved.
 
 import pygame
@@ -46,13 +46,10 @@ class ui_variables:
     h5_i = pygame.font.Font(font_path_i, 13)
 
     # Sounds
-<<<<<<< HEAD
+
     pygame.mixer.music.load("assets/sounds/SFX_BattleMusic.wav")
     pygame.mixer.music.set_volume(0.3)
 
-
-=======
->>>>>>> 72771ddcb70627416ee6b2f138e0b75661111a55
     click_sound = pygame.mixer.Sound("assets/sounds/SFX_ButtonUp.wav")
     move_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceMoveLR.wav")
     drop_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceHardDrop.wav")
@@ -81,6 +78,7 @@ class ui_variables:
     red = (225, 13, 27) #rgb(225, 13, 27) # Z
 
     t_color = [grey_2, cyan, blue, orange, yellow, green, pink, red, grey_3]
+
 
 class button():
     def __init__(self, x, y, width, height, id, img = ''):
@@ -726,14 +724,13 @@ matrix_2P = [[0 for y in range(height + 1)] for x in range(width)] # Board matri
 volume = 1.0
 
 ui_variables.click_sound.set_volume(volume)
-<<<<<<< HEAD
+
 pygame.mixer.init()
 ui_variables.intro_sound.set_volume(0.1)
 ui_variables.intro_sound.play()
 game_status = ''
 
-=======
->>>>>>> 72771ddcb70627416ee6b2f138e0b75661111a55
+
 
 while not done:
     # Pause screen
@@ -1455,11 +1452,10 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
                     draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
-<<<<<<< HEAD
+
+
                 elif event.key == K_x  or event.key == K_w:
-=======
-                elif event.key == K_w:
->>>>>>> 72771ddcb70627416ee6b2f138e0b75661111a55
+
                     if is_turnable_r(dx_2P, dy_2P, mino_2P, rotation_2P):
                         ui_variables.move_sound.play()
                         rotation_2P += 1
@@ -1893,5 +1889,4 @@ while not done:
             clock.tick(3)
 
 pygame.quit()
-=======
->>>>>>> 18af2342bd1281ef7b4f0c17f8eabe76d34f479d
+
