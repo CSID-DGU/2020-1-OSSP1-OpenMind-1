@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # PYTRIS Copyright (c) 2017 Jason Kim All Rights Reserved.
 
 import pygame
@@ -14,8 +14,8 @@ block_size = 17 # Height, width of single block
 width = 10 # Board width
 height = 20 # Board height
 
-board_width = 800
-board_height = 450
+board_width = 1600
+board_height = 900
 block_size = int(board_height*0.045)
 
 framerate = 30 # Bigger -> Slower
@@ -33,7 +33,7 @@ class ui_variables:
     font_path_b = "./assets/fonts/OpenSans-Bold.ttf"
     font_path_i = "./assets/fonts/Inconsolata/Inconsolata.otf"
 
-    h1 = pygame.font.Font(font_path_b, 50)
+    h1 = pygame.font.Font(font_path_b, 80)
     h2 = pygame.font.Font(font_path_b, 30)
     h4 = pygame.font.Font(font_path_b, 20)
     h5 = pygame.font.Font(font_path_b, 13)
@@ -46,6 +46,10 @@ class ui_variables:
     h5_i = pygame.font.Font(font_path_i, 13)
 
     # Sounds
+
+    pygame.mixer.music.load("assets/sounds/SFX_BattleMusic.wav")
+    pygame.mixer.music.set_volume(0.3)
+
     click_sound = pygame.mixer.Sound("assets/sounds/SFX_ButtonUp.wav")
     move_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceMoveLR.wav")
     drop_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceHardDrop.wav")
@@ -59,9 +63,9 @@ class ui_variables:
     white = (0, 153, 153) #rgb(255, 255, 255) # 청록색으로 변경
     real_white = (255, 255, 255) #rgb(255, 255, 255) # 청록색으로 변경
 
-    grey_1 = (26, 26, 26) #rgb(26, 26, 26) 
-    grey_2 = (35, 35, 35) #rgb(35, 35, 35)
-    grey_3 = (55, 55, 55) #rgb(55, 55, 55)
+    grey_1 = (70, 130, 180) #rgb(26, 26, 26) 테두리 파랑색  
+    grey_2 = (221, 221,221) #rgb(35, 35, 35)
+    grey_3 = (000, 000, 139) #rgb(55, 55, 55)
     bright_yellow = (255,217,102) # 밝은 노랑
 
     # Tetrimino colors
@@ -74,6 +78,7 @@ class ui_variables:
     red = (225, 13, 27) #rgb(225, 13, 27) # Z
 
     t_color = [grey_2, cyan, blue, orange, yellow, green, pink, red, grey_3]
+
 
 class button():
     def __init__(self, x, y, width, height, id, img = ''):
@@ -720,6 +725,13 @@ volume = 1.0
 
 ui_variables.click_sound.set_volume(volume)
 
+pygame.mixer.init()
+ui_variables.intro_sound.set_volume(0.1)
+ui_variables.intro_sound.play()
+game_status = ''
+
+
+
 while not done:
     # Pause screen
     ui_variables.click_sound.set_volume(volume)
@@ -737,6 +749,9 @@ while not done:
             screen.fill(ui_variables.real_white)
 
             draw_board(next_mino, hold_mino, score, level, goal)
+        if pvp: 
+            draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
+            
 
 
         draw_image(screen,setting_board_image, board_width*0.15, 0, int(board_height*1.3), board_height)
@@ -821,11 +836,18 @@ while not done:
     elif pause:
         #screen.fill(ui_variables.real_white)
         #draw_board(next_mino, hold_mino, score, level, goal)
+        if start:
+            screen.fill(ui_variables.real_white)
+
+            draw_board(next_mino, hold_mino, score, level, goal)
+        if pvp: 
+            draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
         draw_image(screen ,pause_board_image, board_width*0.3, 0, int(board_height*0.7428), board_height)
         resume_button.draw(screen,(0,0,0))
         restart_button.draw(screen,(0,0,0))
         setting_button.draw(screen,(0,0,0))
         pause_quit_button.draw(screen,(0,0,0))
+
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
 
@@ -895,6 +917,17 @@ while not done:
 
                     pause = False
                     start = False
+
+                    hold_mino_2P = -1 #
+                    bottom_count_2P = 0 #
+                    hard_drop_2P = False #
+                    hold_2P = False #
+                    next_mino_2P = randint(1,7) #
+                    mino_2P = randint(1,7) #
+                    rotation_2P = 0  #
+                    dx_2P , dy_2P = 3, 0 #
+                    matrix_2P = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
+
                     if pvp :
                         pvp=False
 
@@ -1002,6 +1035,7 @@ while not done:
                             hold = False
                         else:
                             start = False
+                            game_status = 'start'
                             game_over = True
                             pygame.time.set_timer(pygame.USEREVENT, 1)
                     else:
@@ -1207,6 +1241,7 @@ while not done:
                             hold = False
                         else: #더이상 쌓을 수 없으면 게임오버
                             pvp = False
+                            game_status= 'pvp'
                             game_over = True
                             pygame.time.set_timer(pygame.USEREVENT, 1)
                     else:
@@ -1233,6 +1268,7 @@ while not done:
                             hold_2P = False
                         else: #더이상 쌓을 수 없으면 게임오버
                             pvp = False
+                            gagame_status= 'pvp'
                             game_over = True
                             pygame.time.set_timer(pygame.USEREVENT, 1)
                     else:
@@ -1366,7 +1402,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
                     draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
-                elif event.key == K_c :
+                elif event.key == K_c or event.key == K_g :
                     if hold_2P == False:
                         ui_variables.move_sound.play()
                         if hold_mino_2P == -1:
@@ -1416,7 +1452,10 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
                     draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
-                elif event.key == K_w:
+
+
+                elif event.key == K_x  or event.key == K_w:
+
                     if is_turnable_r(dx_2P, dy_2P, mino_2P, rotation_2P):
                         ui_variables.move_sound.play()
                         rotation_2P += 1
@@ -1734,6 +1773,10 @@ while not done:
                     name = [65, 65, 65]
                     matrix = [[0 for y in range(height + 1)] for x in range(width)]
                 if restart_button.isOver(pos):
+                    if game_status == 'start':
+                        start = True
+                    if game_status == 'pvp':
+                        pvp = True
                     ui_variables.click_sound.play()
                     game_over = False
                     hold = False
@@ -1846,5 +1889,4 @@ while not done:
             clock.tick(3)
 
 pygame.quit()
-=======
->>>>>>> 18af2342bd1281ef7b4f0c17f8eabe76d34f479d
+
