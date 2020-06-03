@@ -45,6 +45,10 @@ class ui_variables:
     h5_i = pygame.font.Font(font_path_i, 13)
 
     # Sounds
+    pygame.mixer.music.load("assets/sounds/SFX_BattleMusic.wav")
+    pygame.mixer.music.set_volume(0.1)
+
+
     click_sound = pygame.mixer.Sound("assets/sounds/SFX_ButtonUp.wav")
     move_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceMoveLR.wav")
     drop_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceHardDrop.wav")
@@ -52,6 +56,31 @@ class ui_variables:
     double_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialLineClearDouble.wav")
     triple_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialLineClearTriple.wav")
     tetris_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialTetris.wav")
+
+    GameOver_sound = pygame.mixer.Sound("assets/sounds/SFX_GameOver.wav")
+    LevelUp_sound = pygame.mixer.Sound("assets/sounds/SFX_LevelUp.wav")
+    intro_sound = pygame.mixer.Sound("assets/sounds/SFX_Intro.wav")
+    fall_sound = pygame.mixer.Sound("assets/sounds/SFX_Fall.wav")
+    break_sound = pygame.mixer.Sound("assets/sounds/SFX_Break.wav")
+
+    # Combo graphics
+
+    combos = [] # 콤보 그래픽
+    large_combos = [] # 사이즈 조절한 콤보 그래픽
+    combo_ring = pygame.image.load("assets/Combo/4combo ring.png") # 4블록 제거용 그래픽
+    combo_4ring = pygame.transform.scale(combo_ring, (200, 100))
+    for i in range (1,11):
+        combos.append(pygame.image.load("assets/Combo/"+str(i)+"combo.png"))
+        large_combos.append(pygame.transform.scale(combos[i-1], (150, 200)))  # 사진크기 조절
+
+    combos_sound = []
+    for i in range(1, 10) :
+        combos_sound.append(pygame.mixer.Sound("assets/sounds/SFX_"+str(i+2)+"Combo.wav"))
+    for i in range(1,10) :
+        combos_sound[i-1].set_volume(0.08)
+    tetris3 = pygame.image.load('assets/images/tetris3.png')
+    tetris4 = pygame.transform.scale(tetris3, (200, 150))
+
 
     # Background colors
     black = (10, 10, 10) #rgb(10, 10, 10)
@@ -666,6 +695,9 @@ goal = level * 5
 bottom_count = 0
 hard_drop = False
 
+combo_count = 0
+
+
 
 
 
@@ -718,6 +750,11 @@ matrix_2P = [[0 for y in range(height + 1)] for x in range(width)] # Board matri
 volume = 1.0
 
 ui_variables.click_sound.set_volume(volume)
+pygame.mixer.init()
+ui_variables.intro_sound.set_volume(0.1)
+ui_variables.intro_sound.play()
+
+
 
 while not done:
     # Pause screen
@@ -818,6 +855,7 @@ while not done:
                     ui_variables.click_sound.play()
                     
     elif pause:
+        pygame.mixer.music.pause()
         #screen.fill(ui_variables.real_white)
         #draw_board(next_mino, hold_mino, score, level, goal)
         draw_image(screen ,pause_board_image, board_width*0.3, 0, int(board_height*0.7428), board_height)
@@ -842,6 +880,7 @@ while not done:
             elif event.type == KEYDOWN:
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
+                    pygame.mixer.music.unpause()
                     pause = False
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
@@ -891,7 +930,7 @@ while not done:
                     name_location = 0
                     name = [65, 65, 65]
                     matrix = [[0 for y in range(height + 1)] for x in range(width)]
-
+                    combo_count = 0
                     pause = False
                     start = False
                     if pvp :
@@ -900,6 +939,7 @@ while not done:
                 if resume_button.isOver(pos):
                     pause = False
                     ui_variables.click_sound.play()
+                    pygame.mixer.music.unpause()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
 
     # Game screen
@@ -1008,6 +1048,12 @@ while not done:
 
                 # Erase line
                 erase_count = 0
+
+                # combo_value
+
+                combo_value = 0
+                sent = 0
+
                 for j in range(21):
                     is_full = True
                     for i in range(10):
@@ -1016,26 +1062,48 @@ while not done:
                     if is_full:
                         erase_count += 1
                         k = j
+                        combo_value += 1
                         while k > 0:
                             for i in range(10):
                                 matrix[i][k] = matrix[i][k - 1]
                             k -= 1
-                if erase_count == 1:
-                    ui_variables.single_sound.play()
-                    score += 50 * level
-                elif erase_count == 2:
-                    ui_variables.double_sound.play()
-                    score += 150 * level
-                elif erase_count == 3:
-                    ui_variables.triple_sound.play()
-                    score += 350 * level
-                elif erase_count == 4:
-                    ui_variables.tetris_sound.play()
-                    score += 1000 * level
+                if erase_count >= 1 :
+                    if erase_count == 1:
+                        ui_variables.single_sound.play()
+                        ui_variables.break_sound.play()
+                        combo_count += 1
+                        score += 50 * level
+                    elif erase_count == 2:
+                        combo_count += 2
+
+                        ui_variables.double_sound.play()
+                        ui_variables.break_sound.play()
+                        score += 150 * level
+                    elif erase_count == 3:
+                        combo_count += 3
+                        ui_variables.triple_sound.play()
+                        ui_variables.break_sound.play()
+                        score += 350 * level
+                    elif erase_count == 4:
+                        combo_count += 4
+                        ui_variables.tetris_sound.play()
+                        ui_variables.break_sound.play()
+                        score += 1000 * level
+
+                    for i in range(1, 11) :
+                        if combo_count == i :  # 1 ~ 10 콤보 이미지
+                            screen.blit(ui_variables.large_combos[i-1], (board_width*0.324, board_height*0.35))  # blits the combo number
+                        elif combo_count > 10 : # 11 이상 콤보 이미지
+                            screen.blit(ui_variables.tetris4, (board_width*0.324, board_height*0.35))  # blits the combo number
+
+                    for i in range(1, 10) :
+                        if combo_count == i+2 : # 3 ~ 11 콤보 사운드
+                            ui_variables.combos_sound[i-1].play()
 
                 # Increase level
                 goal -= erase_count
                 if goal < 1 and level < 15:
+                    ui_variables.LevelUp_sound.play()
                     level += 1
                     goal += level * 5
                     framerate = int(framerate * 0.8)
@@ -1043,11 +1111,14 @@ while not done:
             elif event.type == KEYDOWN:
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
+
                     ui_variables.click_sound.play()
                     pause = True
                 # Hard drop
                 elif event.key == K_SPACE:
                     ui_variables.drop_sound.play()
+                    ui_variables.fall_sound.play()
+
                     while not is_bottom(dx, dy, mino, rotation):
                         dy += 1
                     hard_drop = True
@@ -1539,6 +1610,7 @@ while not done:
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
+                pygame.mixer.music.stop()
                 pygame.time.set_timer(pygame.USEREVENT, 300)
 
                 draw_image(screen ,gameover_board_image, board_width*0.3, 0, int(board_height*0.7428), board_height)
@@ -1596,6 +1668,8 @@ while not done:
                     name_location = 0
                     name = [65, 65, 65]
                     matrix = [[0 for y in range(height + 1)] for x in range(width)]
+                    combo_count = 0
+
 
                     hold_mino_2P = -1 #
                     bottom_count_2P = 0 #
@@ -1688,6 +1762,8 @@ while not done:
                     name_location = 0
                     name = [65, 65, 65]
                     matrix = [[0 for y in range(height + 1)] for x in range(width)]
+                    combo_count = 0
+
 
                     hold_mino_2P = -1 #
                     bottom_count_2P = 0 #
@@ -1728,10 +1804,21 @@ while not done:
                     level = 1
                     goal = level * 5
                     bottom_count = 0
+                    combo_count = 0
                     hard_drop = False
                     name_location = 0
                     name = [65, 65, 65]
                     matrix = [[0 for y in range(height + 1)] for x in range(width)]
+                    hold_mino_2P = -1
+
+                    bottom_count_2P = 0
+                    hard_drop_2P = False
+                    hold_2P = False
+                    next_mino_2P = randint(1,7)
+                    mino_2P = randint(1,7)
+                    rotation_2P = 0
+                    dx_2P , dy_2P = 3, 0
+                    matrix_2P = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
                 if restart_button.isOver(pos):
                     ui_variables.click_sound.play()
                     game_over = False
@@ -1741,6 +1828,7 @@ while not done:
                     mino = randint(1, 7)
                     next_mino = randint(1, 7)
                     hold_mino = -1
+                    combo_count = 0
                     framerate = 30
                     score = 0
                     score = 0
@@ -1749,9 +1837,17 @@ while not done:
                     bottom_count = 0
                     hard_drop = False
                     name_location = 0
+                    hold_mino_2P = -1
+                    bottom_count_2P = 0
+                    hard_drop_2P = False
+                    hold_2P = False
+                    next_mino_2P = randint(1,7)
+                    mino_2P = randint(1,7)
+                    rotation_2P = 0
+                    dx_2P , dy_2P = 3, 0
                     name = [65, 65, 65]
                     matrix = [[0 for y in range(height + 1)] for x in range(width)]
-
+                    matrix_2P = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
                     pause = False
                     
 
@@ -1807,6 +1903,7 @@ while not done:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if single_button.isOver(pos):
                     ui_variables.click_sound.play()
+                    pygame.mixer.music.play(-1)
                     start = True
                 if pvp_button.isOver(pos):
                     ui_variables.click_sound.play()
