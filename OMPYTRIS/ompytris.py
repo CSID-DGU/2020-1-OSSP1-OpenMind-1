@@ -32,7 +32,7 @@ class ui_variables:
     font_path_b = "./assets/fonts/OpenSans-Bold.ttf"
     font_path_i = "./assets/fonts/Inconsolata/Inconsolata.otf"
 
-    h1 = pygame.font.Font(font_path_b, 50)
+    h1 = pygame.font.Font(font_path_b, 80)
     h2 = pygame.font.Font(font_path_b, 30)
     h4 = pygame.font.Font(font_path_b, 20)
     h5 = pygame.font.Font(font_path_b, 13)
@@ -87,9 +87,9 @@ class ui_variables:
     white = (0, 153, 153) #rgb(255, 255, 255) # 청록색으로 변경
     real_white = (255, 255, 255) #rgb(255, 255, 255) # 청록색으로 변경
 
-    grey_1 = (26, 26, 26) #rgb(26, 26, 26) 
-    grey_2 = (35, 35, 35) #rgb(35, 35, 35)
-    grey_3 = (55, 55, 55) #rgb(55, 55, 55)
+    grey_1 = (70, 130, 180) #rgb(26, 26, 26) 테두리 파랑색  
+    grey_2 = (221, 221,221) #rgb(35, 35, 35)
+    grey_3 = (000, 000, 139) #rgb(55, 55, 55)
     bright_yellow = (255,217,102) # 밝은 노랑
 
     # Tetrimino colors
