@@ -2,7 +2,7 @@ while running :
    if pause : 
 
    elif multiplay_start:
-        # ÄÞº¸ Ä«¿îÆ®
+        # ï¿½Þºï¿½ Ä«ï¿½ï¿½Æ®
         #pressed = lambda key: event.type == pygame.KEYDOWN and event.key == key
         #unpressed = lambda key: event.type == pygame.KEYUP and event.key == key
 
@@ -24,7 +24,7 @@ while running :
                 # Draw player 2 mino
 
                 draw_board(next_mino, hold_mino, score, level, goal)
-                # Draw player 2 º¸µå
+                # Draw player 2 ï¿½ï¿½ï¿½ï¿½
 
                 # Erase a mino
                 if not game_over:
@@ -48,7 +48,7 @@ while running :
                             dx, dy = 3, 0
                             rotation = 0
                             hold = False
-                        else: #´õÀÌ»ó ½×À» ¼ö ¾øÀ¸¸é °ÔÀÓ¿À¹ö
+                        else: #ï¿½ï¿½ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½
                             ui_variables.GameOver_sound.play()
                             start = False
                             game_over = True
@@ -57,7 +57,7 @@ while running :
                         bottom_count += 1
 
                 # Erase line
-                # ÄÞº¸ Ä«¿îÆ® 
+                # ï¿½Þºï¿½ Ä«ï¿½ï¿½Æ® 
                 erase_count = 0
                 combo_value = 0
                 sent = 0
@@ -76,7 +76,7 @@ while running :
                                 matrix[i][k] = matrix[i][k - 1]
                             k -= 1
 
-                # Áö¿î ºí·ÏÀÌ ¾øÀ¸¸é ÄÞº¸ -1
+                # ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þºï¿½ -1
                 #if erase_count == 0 :
                     #combo_count -= 1
                     #if combo_count < 0:
@@ -113,17 +113,17 @@ while running :
                         sent += 4
 
                     for i in range(1, 11) :
-                        if combo_count == i :  # 1 ~ 10 ÄÞº¸ ÀÌ¹ÌÁö
+                        if combo_count == i :  # 1 ~ 10 ï¿½Þºï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½
                             screen.blit(ui_variables.large_combos[i-1], (124, 190))  # blits the combo number
-                        elif combo_count > 10 : # 11 ÀÌ»ó ÄÞº¸ ÀÌ¹ÌÁö
+                        elif combo_count > 10 : # 11 ï¿½Ì»ï¿½ ï¿½Þºï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½
                             screen.blit(tetris4, (100, 190))  # blits the combo number
 
                     for i in range(1, 10) :
-                        if combo_count == i+2 : # 3 ~ 11 ÄÞº¸ »ç¿îµå
+                        if combo_count == i+2 : # 3 ~ 11 ï¿½Þºï¿½ ï¿½ï¿½ï¿½ï¿½
                             ui_variables.combos_sound[i-1].play()
 
 
-                sent = checkCombo(combo_count, sent)  # ÄÞº¸ Áõ°¡
+                sent = checkCombo(combo_count, sent)  # ï¿½Þºï¿½ ï¿½ï¿½ï¿½ï¿½
 
                 # Increase level
                 goal -= erase_count
@@ -136,7 +136,7 @@ while running :
                     goal += level * 5
                     framerate = int(framerate * 0.8)
 
-            elif event.type == KEYUP:                                 ##Áß¿ä
+            elif event.type == KEYUP:                                 ##ï¿½ß¿ï¿½
                 erase_mino(dx, dy, mino, rotation)
                 if event.key == K_ESCAPE:
                     ui_variables.click_sound.play()
@@ -153,7 +153,7 @@ while running :
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Hold
-                elif event.key == K_LSHIFT or event.key == K_c:
+                elif event.key == K_LSHIFT or event.key == K_q:
                     if hold == False:
                         ui_variables.move_sound.play()
                         if hold_mino == -1:
@@ -168,7 +168,7 @@ while running :
                     draw_mino(dx, dy, mino, rotation)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Turn right
-                elif event.key == K_UP or event.key == K_x:
+                elif event.key == K_UP or event.key == K_w:
                     if is_turnable_r(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
                         rotation += 1
@@ -281,12 +281,12 @@ def draw_2Pboard(next, hold, score, level, goal):
     # Draw next mino
     grid_n = tetrimino.mino_map[next - 1][0]
 
-    for i in range(4): # 16°³ÀÇ ±×¸®µå Ä­¿¡¼­ trueÀÎ °ª¸¸ »Ì¾Æ¼­ draw.rect
+    for i in range(4): # 16ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ Ä­ï¿½ï¿½ï¿½ï¿½ trueï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¾Æ¼ï¿½ draw.rect
         for j in range(4):
             dx = 979 + block_size * j
             dy = 220 + block_size * i
             if grid_n[i][j] != 0:
-                draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]]) # ´ÙÀ½ ºí·°ÀÇ Çü»ó °¡µ¶¼ºÀ» ³ôÀÓ.
+                draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]]) # ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
                 
 
     # Draw hold mino
@@ -307,9 +307,9 @@ def draw_2Pboard(next, hold, score, level, goal):
     # Draw texts
     text_hold = ui_variables.h5.render("HOLD", 1, ui_variables.black)
     text_next = ui_variables.h5.render("NEXT", 1, ui_variables.black)
-    text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.black) # ÄÞº¸ 
+    text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.black) # ï¿½Þºï¿½ 
     text_score = ui_variables.h5.render("SCORE", 1, ui_variables.black)
-    combo_value = ui_variables.h4.render(str(combo_count), 1, ui_variables.black) # ÄÞº¸ °ª
+    combo_value = ui_variables.h4.render(str(combo_count), 1, ui_variables.black) # ï¿½Þºï¿½ ï¿½ï¿½
 
     score_value = ui_variables.h4.render(str(score), 1, ui_variables.black)
     text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.black)
