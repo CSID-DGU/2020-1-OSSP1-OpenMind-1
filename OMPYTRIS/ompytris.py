@@ -5,6 +5,8 @@ import operator
 from mino import *
 from random import *
 from pygame.locals import *
+from tkinter import *
+
 
 # Define
 block_size = 17 # Height, width of single block
@@ -119,6 +121,8 @@ clicked_setting_vector = 'assets/vector/clicked_setting_vector.png'
 pause_board_image= 'assets/vector/pause_board.png'
 leader_board_image= 'assets/vector/leader_board.png'
 setting_board_image = 'assets/vector/setting_board.png'
+gameover_board_image = 'assets/vector/gameover_board.png'
+
 
 
 resume_button_image = 'assets/vector/resume_button.png'
@@ -132,6 +136,21 @@ clicked_setting_button_image = 'assets/vector/clicked_setting_button.png'
 
 back_button_image = 'assets/vector/back_button.png'
 clicked_back_button_image = 'assets/vector/clicked_back_button.png'
+
+volume_vector = 'assets/vector/volume_vector.png'
+clicked_volume_vector = 'assets/vector/clicked_volume_vector.png'
+
+keyboard_vector = 'assets/vector/keyboard_vector.png'
+clicked_keyboard_vector = 'assets/vector/clicked_keyboard_vector.png'
+
+screen_vector = 'assets/vector/screen_vector.png'
+clicked_screen_vector = 'assets/vector/clicked_screen_vector.png'
+
+menu_button_image = 'assets/vector/menu_button.png'
+clicked_menu_button_image = 'assets/vector/clicked_menu_button.png'
+
+ok_button_image = 'assets/vector/ok_button.png'
+clicked_ok_button_image = 'assets/vector/clicked_ok_button.png'
 
 
 single_button = button(board_width*0.6, board_height*0.15,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
@@ -152,6 +171,24 @@ setting_button   = button(board_width*0.324, board_height*0.55,int(board_width*0
 pause_quit_button= button(board_width*0.324, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
 
 back_button      = button(board_width*0.324, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
+
+volume_icon = button(board_width*0.25, board_height*0.3,int(board_height*0.23), int(board_height*0.23),5,volume_vector)
+
+screen_icon = button(board_width*0.45, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,screen_vector)
+
+keyboard_icon = button(board_width*0.65, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,keyboard_vector)
+
+ok_button   = button(board_width*0.324, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),1,ok_button_image)
+
+
+
+menu_button         = button(board_width*0.324, board_height*0.15,int(board_width*0.3734), int(board_height*0.1777),1,menu_button_image)
+
+gameover_quit_button= button(board_width*0.324, board_height*0.35,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
+
+volume = 1.0
+
+
 
 def checkCombo(combo_count,sent):
     if combo_count > 0:
@@ -606,6 +643,12 @@ def draw_multiboard(next_1P,hold_1P,next_2P,hold_2P,score,level,goal):
     draw_2Pboard(next_2P,hold_2P,score,level,goal)
 
 
+def set_vol(val):
+    volume = int(val)/100
+    print(volume)
+    ui_variables.click_sound.set_volume(volume)
+
+
 # Initial values
 blink = False
 start = False
@@ -615,6 +658,7 @@ game_over = False
 leader_board = False
 setting = False
 pvp = False
+help = False
 
 score = 0
 level = 1
@@ -671,8 +715,14 @@ matrix_2P = [[0 for y in range(height + 1)] for x in range(width)] # Board matri
 # Loop Start
 ###########################################################
 
+volume = 1.0
+
+ui_variables.click_sound.set_volume(volume)
+
 while not done:
     # Pause screen
+    ui_variables.click_sound.set_volume(volume)
+
     if setting :
         draw_image(screen,background_image,0,0,board_width,board_height)
         single_button.draw(screen,(0,0,0))
@@ -690,6 +740,10 @@ while not done:
 
         draw_image(screen,setting_board_image, board_width*0.15, 0, int(board_height*1.3), board_height)
         
+        keyboard_icon.draw(screen,(0,0,0))
+        screen_icon.draw(screen,(0,0,0))
+        volume_icon.draw(screen,(0,0,0))
+
         back_button.draw(screen,(0,0,0))
 
 
@@ -715,11 +769,54 @@ while not done:
                     back_button.image = clicked_back_button_image
                 else :
                     back_button.image = back_button_image
+
+                if volume_icon.isOver(pos):
+                    volume_icon.image = clicked_volume_vector
+                else :
+                    volume_icon.image = volume_vector
+
+                if keyboard_icon.isOver(pos):
+                    keyboard_icon.image = clicked_keyboard_vector
+                else :
+                    keyboard_icon.image = keyboard_vector
+
+                if screen_icon.isOver(pos):
+                    screen_icon.image = clicked_screen_vector
+                else :
+                    screen_icon.image = screen_vector
+
+
+
                 pygame.display.update()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.isOver(pos):
                     ui_variables.click_sound.play()
                     setting = False
+
+                if volume_icon.isOver(pos):
+                    ui_variables.click_sound.play()
+                    root = Tk()
+
+
+                    root.geometry('300x300')
+                    root.title("Volume Setting")
+                    text = Label(root,text='Setting Volume!')
+                    text.pack()
+                    
+
+    
+                    scale = Scale(root, from_ =100, to =0, orient = VERTICAL , command = set_vol )
+                    scale.set(50)
+                    scale.pack()
+                    root.mainloop()
+
+
+                if keyboard_icon.isOver(pos):
+                    ui_variables.click_sound.play()
+                    
+                if screen_icon.isOver(pos):
+                    ui_variables.click_sound.play()
+                    
     elif pause:
         #screen.fill(ui_variables.real_white)
         #draw_board(next_mino, hold_mino, score, level, goal)
@@ -797,6 +894,8 @@ while not done:
 
                     pause = False
                     start = False
+                    if pvp :
+                        pvp=False
 
                 if resume_button.isOver(pos):
                     pause = False
@@ -816,6 +915,12 @@ while not done:
         
         back_button.draw(screen,(0,0,0))
 
+        leader_1 = ui_variables.h1_b.render('1st ' + leaders[0][0] + ' ' + str(leaders[0][1]), 1, ui_variables.grey_1)
+        leader_2 = ui_variables.h1_b.render('2nd ' + leaders[1][0] + ' ' + str(leaders[1][1]), 1, ui_variables.grey_1)
+        leader_3 = ui_variables.h1_b.render('3rd ' + leaders[2][0] + ' ' + str(leaders[2][1]), 1, ui_variables.grey_1)
+        screen.blit(leader_1, (board_width*0.3, board_height*0.15))
+        screen.blit(leader_2, (board_width*0.3, board_height*0.35))
+        screen.blit(leader_3, (board_width*0.3, board_height*0.55))
 
 
 
@@ -1429,39 +1534,40 @@ while not done:
     # Game over screen
     elif game_over:
         for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
+
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
                 pygame.time.set_timer(pygame.USEREVENT, 300)
-                over_text_1 = ui_variables.h2_b.render("GAME", 1, ui_variables.white)
-                over_text_2 = ui_variables.h2_b.render("OVER", 1, ui_variables.white)
-                over_start = ui_variables.h5.render("Press return to continue", 1, ui_variables.white)
-                
-                screen.blit(over_text_1, (int(board_width*0.1933), int(board_height*0.2005)))
-                screen.blit(over_text_2, (int(board_width*0.2066), int(board_height*0.2807)))
 
-                name_1 = ui_variables.h2_i.render(chr(name[0]), 1, ui_variables.white)
-                name_2 = ui_variables.h2_i.render(chr(name[1]), 1, ui_variables.white)
-                name_3 = ui_variables.h2_i.render(chr(name[2]), 1, ui_variables.white)
+                draw_image(screen ,gameover_board_image, board_width*0.3, 0, int(board_height*0.7428), board_height)
+                menu_button.draw(screen,(0,0,0))
+                restart_button.draw(screen,(0,0,0))
+                ok_button.draw(screen,(0,0,0))
 
-                underbar_1 = ui_variables.h2.render("_", 1, ui_variables.white)
-                underbar_2 = ui_variables.h2.render("_", 1, ui_variables.white)
-                underbar_3 = ui_variables.h2.render("_", 1, ui_variables.white)
+                name_1 = ui_variables.h1_b.render(chr(name[0]), 1, ui_variables.white)
+                name_2 = ui_variables.h1_b.render(chr(name[1]), 1, ui_variables.white)
+                name_3 = ui_variables.h1_b.render(chr(name[2]), 1, ui_variables.white)
 
-                screen.blit(name_1, (int(board_width*0.2166), int(board_height*0.3930)))
-                screen.blit(name_2, (int(board_width*0.3166), int(board_height*0.3930)))
-                screen.blit(name_3, (int(board_width*0.4166), int(board_height*0.3930)))
+                underbar_1 = ui_variables.h1_b.render("_", 1, ui_variables.white)
+                underbar_2 = ui_variables.h1_b.render("_", 1, ui_variables.white)
+                underbar_3 = ui_variables.h1_b.render("_", 1, ui_variables.white)
+
+                screen.blit(name_1, (int(board_width*0.434), int(board_height*0.55)))
+                screen.blit(name_2, (int(board_width*0.494), int(board_height*0.55)))
+                screen.blit(name_3, (int(board_width*0.545), int(board_height*0.55)))
 
                 if blink:
-                    screen.blit(over_start, (int(board_width*0.1066), int(board_height*0.5213)))
+                    
                     blink = False
                 else:
                     if name_location == 0:
-                        screen.blit(underbar_1, ((int(board_width*0.2166), int(board_height*0.3877))))
+                        screen.blit(underbar_1, ((int(board_width*0.437), int(board_height*0.56))))
                     elif name_location == 1:
-                        screen.blit(underbar_2, ((int(board_width*0.3166), int(board_height*0.3877))))
+                        screen.blit(underbar_2, ((int(board_width*0.497), int(board_height*0.56))))
                     elif name_location == 2:
-                        screen.blit(underbar_3, ((int(board_width*0.4166), int(board_height*0.3877))))
+                        screen.blit(underbar_3, ((int(board_width*0.557), int(board_height*0.56))))
                     blink = True
 
                 pygame.display.update()
@@ -1538,6 +1644,121 @@ while not done:
                     else:
                         name[name_location] = 90
                     pygame.time.set_timer(pygame.USEREVENT, 1)
+            elif event.type == pygame.MOUSEMOTION:
+                if resume_button.isOver(pos):
+                    menu_button.image = clicked_menu_button_image
+                else :
+                    menu_button.image = menu_button_image
+
+
+                if restart_button.isOver(pos):
+                    restart_button.image = clicked_restart_button_image
+                else :
+                    restart_button.image = restart_button_image
+
+                if ok_button.isOver(pos):
+                    ok_button.image = clicked_ok_button_image
+                else :
+                    ok_button.image = ok_button_image
+
+                pygame.display.update()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if ok_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    ui_variables.click_sound.play()
+
+                    outfile = open('leaderboard.txt','a')
+                    outfile.write(chr(name[0]) + chr(name[1]) + chr(name[2]) + ' ' + str(score) + '\n')
+                    outfile.close()
+
+                    game_over = False
+                    hold = False # 
+                    dx, dy = 3, 0 #
+                    rotation = 0 #
+                    mino = randint(1, 7) #
+                    next_mino = randint(1, 7) #
+                    hold_mino = -1 #
+                    framerate = 30
+                    score = 0
+                    score = 0
+                    level = 1
+                    goal = level * 5
+                    bottom_count = 0 #
+                    hard_drop = False #
+                    name_location = 0
+                    name = [65, 65, 65]
+                    matrix = [[0 for y in range(height + 1)] for x in range(width)]
+
+                    hold_mino_2P = -1 #
+                    bottom_count_2P = 0 #
+                    hard_drop_2P = False #
+                    hold_2P = False #
+                    next_mino_2P = randint(1,7) #
+                    mino_2P = randint(1,7) #
+                    rotation_2P = 0  #
+                    dx_2P , dy_2P = 3, 0 #
+                    matrix_2P = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
+
+
+                    with open('leaderboard.txt') as f:
+                        lines = f.readlines()
+                    lines = [line.rstrip('\n') for line in open('leaderboard.txt')]
+
+                    leaders = {'AAA': 0, 'BBB': 0, 'CCC': 0}
+                    for i in lines:
+                        leaders[i.split(' ')[0]] = int(i.split(' ')[1])
+                    leaders = sorted(leaders.items(), key=operator.itemgetter(1), reverse=True)
+
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
+
+                if menu_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    start = False
+                    pvp = False
+                    game_over = False
+                    hold = False
+                    dx, dy = 3, 0
+                    rotation = 0
+                    mino = randint(1, 7)
+                    next_mino = randint(1, 7)
+                    hold_mino = -1
+                    framerate = 30
+                    score = 0
+                    score = 0
+                    level = 1
+                    goal = level * 5
+                    bottom_count = 0
+                    hard_drop = False
+                    name_location = 0
+                    name = [65, 65, 65]
+                    matrix = [[0 for y in range(height + 1)] for x in range(width)]
+                if restart_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    game_over = False
+                    hold = False
+                    dx, dy = 3, 0
+                    rotation = 0
+                    mino = randint(1, 7)
+                    next_mino = randint(1, 7)
+                    hold_mino = -1
+                    framerate = 30
+                    score = 0
+                    score = 0
+                    level = 1
+                    goal = level * 5
+                    bottom_count = 0
+                    hard_drop = False
+                    name_location = 0
+                    name = [65, 65, 65]
+                    matrix = [[0 for y in range(height + 1)] for x in range(width)]
+
+                    pause = False
+                    
+
+                if resume_button.isOver(pos):
+                    pause = False
+                    ui_variables.click_sound.play()
+                    pygame.time.set_timer(pygame.USEREVENT, 1)
 
     # Start screen
     else:
@@ -1599,6 +1820,11 @@ while not done:
                 if quit_button.isOver(pos):
                     ui_variables.click_sound.play()
                     done = True
+                if help_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    help = True
+
+
 
 
         screen.fill(ui_variables.white)
