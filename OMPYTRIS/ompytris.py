@@ -1072,7 +1072,7 @@ while not done:
                     screen.fill(ui_variables.real_white)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Turn right
-                elif event.key == K_UP or event.key == K_x:
+                elif event.key == K_UP or event.key == K_w:
                     if is_turnable_r(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
                         rotation += 1
@@ -1415,7 +1415,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
                     draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
-                elif event.key == K_x:
+                elif event.key == K_w:
                     if is_turnable_r(dx_2P, dy_2P, mino_2P, rotation_2P):
                         ui_variables.move_sound.play()
                         rotation_2P += 1
