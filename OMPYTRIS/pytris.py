@@ -63,6 +63,7 @@ class ui_variables:
 
     # Sounds
     pygame.mixer.music.load("assets/sounds/SFX_BattleMusic.wav")
+    pygame.mixer.music.set_volume(0.1)
     intro_sound = pygame.mixer.Sound("assets/sounds/SFX_Intro.wav")
     intro_sound.set_volume(volume)
     fall_sound = pygame.mixer.Sound("assets/sounds/SFX_Fall.wav")
@@ -70,7 +71,6 @@ class ui_variables:
     break_sound = pygame.mixer.Sound("assets/sounds/SFX_Break.wav")
     break_sound.set_volume(volume)
     click_sound = pygame.mixer.Sound("assets/sounds/SFX_ButtonUp.wav")
-    click_sound.set_volume(volume)
     move_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceMoveLR.wav")
     move_sound.set_volume(volume)
     drop_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceHardDrop.wav")
