@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 55f7fb5deba172ede80cf3ec32cd092c67ea54f5
 # PYTRIS Copyright (c) 2017 Jason Kim All Rights Reserved.
 
 import pygame
@@ -17,8 +13,8 @@ block_size = 17 # Height, width of single block
 width = 10 # Board width
 height = 20 # Board height
 
-board_width = 1600
-board_height = 900
+board_width = 800
+board_height = 450
 block_size = int(board_height*0.045)
 
 framerate = 30 # Bigger -> Slower
@@ -1449,11 +1445,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
                     draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
-<<<<<<< HEAD
                 elif event.key == K_q :
-=======
-                elif event.key == K_c or event.key == K_g :
->>>>>>> 55f7fb5deba172ede80cf3ec32cd092c67ea54f5
                     if hold_2P == False:
                         ui_variables.move_sound.play()
                         if hold_mino_2P == -1:
