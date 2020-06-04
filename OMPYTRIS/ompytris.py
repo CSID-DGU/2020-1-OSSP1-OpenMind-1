@@ -50,6 +50,9 @@ class ui_variables:
     pygame.mixer.music.load("assets/sounds/SFX_BattleMusic.wav")
     pygame.mixer.music.set_volume(0.3)
 
+    intro_sound = pygame.mixer.Sound("assets/sounds/SFX_Intro.wav")
+    fall_sound = pygame.mixer.Sound("assets/sounds/SFX_Fall.wav")
+    break_sound = pygame.mixer.Sound("assets/sounds/SFX_Break.wav")
     click_sound = pygame.mixer.Sound("assets/sounds/SFX_ButtonUp.wav")
     move_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceMoveLR.wav")
     drop_sound = pygame.mixer.Sound("assets/sounds/SFX_PieceHardDrop.wav")
@@ -57,6 +60,8 @@ class ui_variables:
     double_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialLineClearDouble.wav")
     triple_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialLineClearTriple.wav")
     tetris_sound = pygame.mixer.Sound("assets/sounds/SFX_SpecialTetris.wav")
+    LevelUp_sound = pygame.mixer.Sound("assets/sounds/SFX_LevelUp.wav")
+    GameOver_sound = pygame.mixer.Sound("assets/sounds/SFX_GameOver.wav")
 
     # Background colors
     black = (10, 10, 10) #rgb(10, 10, 10)
@@ -160,15 +165,10 @@ clicked_ok_button_image = 'assets/vector/clicked_ok_button.png'
 
 
 single_button = button(board_width*0.6, board_height*0.15,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
-
 pvp_button = button(board_width*0.6, board_height*0.35,int(board_width*0.3734), int(board_height*0.1777),2,pvp_button_image)
-
 help_button = button(board_width*0.6, board_height*0.55,int(board_width*0.3734), int(board_height*0.1777),3,help_button_image)
-
 quit_button = button(board_width*0.6, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),4,quit_button_image)
-
 setting_icon = button(board_width*0.02, board_height*0.75,int(board_height*0.23), int(board_height*0.23),5,setting_vector)
-
 leaderboard_icon = button(board_width*0.02, board_height*0.5,int(board_height*0.23), int(board_height*0.23),6,leaderboard_vector)
 
 resume_button    = button(board_width*0.324, board_height*0.15,int(board_width*0.3734), int(board_height*0.1777),1,resume_button_image)
@@ -177,21 +177,15 @@ setting_button   = button(board_width*0.324, board_height*0.55,int(board_width*0
 pause_quit_button= button(board_width*0.324, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
 
 back_button      = button(board_width*0.324, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
-
 volume_icon = button(board_width*0.25, board_height*0.3,int(board_height*0.23), int(board_height*0.23),5,volume_vector)
-
 screen_icon = button(board_width*0.45, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,screen_vector)
-
 keyboard_icon = button(board_width*0.65, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,keyboard_vector)
-
 ok_button   = button(board_width*0.324, board_height*0.75,int(board_width*0.3734), int(board_height*0.1777),1,ok_button_image)
 
 
 
 menu_button         = button(board_width*0.324, board_height*0.15,int(board_width*0.3734), int(board_height*0.1777),1,menu_button_image)
-
 gameover_quit_button= button(board_width*0.324, board_height*0.35,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
-
 volume = 1.0
 
 
@@ -729,7 +723,7 @@ pygame.mixer.init()
 ui_variables.intro_sound.set_volume(0.1)
 ui_variables.intro_sound.play()
 game_status = ''
-
+ui_variables.break_sound.set_volume(0.2)
 
 
 while not done:
@@ -834,6 +828,7 @@ while not done:
                     ui_variables.click_sound.play()
                     
     elif pause:
+        pygame.mixer.music.pause() 
         #screen.fill(ui_variables.real_white)
         #draw_board(next_mino, hold_mino, score, level, goal)
         if start:
@@ -867,6 +862,7 @@ while not done:
                 if event.key == K_ESCAPE:
                     pause = False
                     ui_variables.click_sound.play()
+                    pygame.mixer.music.unpause()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
             elif event.type == pygame.MOUSEMOTION:
                 if resume_button.isOver(pos):
@@ -932,6 +928,7 @@ while not done:
                         pvp=False
 
                 if resume_button.isOver(pos):
+                    pygame.mixer.music.unpause() 
                     pause = False
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
@@ -1034,6 +1031,7 @@ while not done:
                             rotation = 0
                             hold = False
                         else:
+                            ui_variables.GameOver_sound.play()
                             start = False
                             game_status = 'start'
                             game_over = True
@@ -1056,15 +1054,19 @@ while not done:
                                 matrix[i][k] = matrix[i][k - 1]
                             k -= 1
                 if erase_count == 1:
+                    ui_variables.break_sound.play()
                     ui_variables.single_sound.play()
                     score += 50 * level
                 elif erase_count == 2:
+                    ui_variables.break_sound.play()
                     ui_variables.double_sound.play()
                     score += 150 * level
                 elif erase_count == 3:
+                    ui_variables.break_sound.play()
                     ui_variables.triple_sound.play()
                     score += 350 * level
                 elif erase_count == 4:
+                    ui_variables.break_sound.play()
                     ui_variables.tetris_sound.play()
                     score += 1000 * level
 
@@ -1082,6 +1084,7 @@ while not done:
                     pause = True
                 # Hard drop
                 elif event.key == K_SPACE:
+                    ui_variables.fall_sound.play()
                     ui_variables.drop_sound.play()
                     while not is_bottom(dx, dy, mino, rotation):
                         dy += 1
@@ -1579,6 +1582,7 @@ while not done:
             if event.type == QUIT:
                 done = True
             elif event.type == USEREVENT:
+                pygame.mixer.music.stop() 
                 pygame.time.set_timer(pygame.USEREVENT, 300)
 
                 draw_image(screen ,gameover_board_image, board_width*0.3, 0, int(board_height*0.7428), board_height)
@@ -1852,6 +1856,7 @@ while not done:
                 if single_button.isOver(pos):
                     ui_variables.click_sound.play()
                     start = True
+                    pygame.mixer.music.play(-1)
                 if pvp_button.isOver(pos):
                     ui_variables.click_sound.play()
                     pvp = True
