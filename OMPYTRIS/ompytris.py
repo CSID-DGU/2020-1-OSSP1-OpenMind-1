@@ -1870,6 +1870,7 @@ while not done:
                     ui_variables.click_sound.play()
                     done = True
                 if help_button.isOver(pos):
+
                     ui_variables.click_sound.play()
                     help = True
 
