@@ -1,4 +1,3 @@
-
 # PYTRIS Copyright (c) 2017 Jason Kim All Rights Reserved.
 
 import pygame
@@ -14,8 +13,8 @@ block_size = 17 # Height, width of single block
 width = 10 # Board width
 height = 20 # Board height
 
-board_width = 1600
-board_height = 900
+board_width = 800
+board_height = 450
 block_size = int(board_height*0.045)
 
 framerate = 30 # Bigger -> Slower
@@ -933,6 +932,47 @@ while not done:
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
 
+
+    if help :
+        draw_image(screen,background_image,0,0,board_width,board_height)
+        single_button.draw(screen,(0,0,0))
+        leaderboard_icon.draw(screen,(0,0,0))
+
+        if start:
+            screen.fill(ui_variables.real_white)
+
+        
+       
+        help_image = pygame.image.load('assets/images/help_image.png')
+        help_image2 = pygame.transform.scale(help_image, (780, 420))     
+        screen.blit(help_image2, (10, 10))
+
+        back_button.draw(screen,(0,0,0))               
+
+        for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
+
+            if event.type == QUIT:
+                done = True
+            elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, 300)
+                
+                pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.real_white)
+                pause_start = ui_variables.h5.render("Press esc to continue", 1, ui_variables.real_white)
+
+                pygame.display.update()
+           
+            elif event.type == pygame.MOUSEMOTION:
+                if back_button.isOver(pos):
+                    back_button.image = clicked_back_button_image
+                else :
+                    back_button.image = back_button_image
+                pygame.display.update()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    help=False                
+
     # Game screen
     elif leader_board :
         draw_image(screen,background_image,0,0,board_width,board_height)
@@ -1094,7 +1134,7 @@ while not done:
                     screen.fill(ui_variables.real_white)
                     draw_board(next_mino, hold_mino, score, level, goal)
                 # Hold
-                elif event.key == K_LSHIFT or event.key == K_c:
+                elif event.key == K_LSHIFT or event.key == K_q:
                     if hold == False:
                         ui_variables.move_sound.play()
                         if hold_mino == -1:
@@ -1405,7 +1445,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
                     draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
-                elif event.key == K_c or event.key == K_g :
+                elif event.key == K_q :
                     if hold_2P == False:
                         ui_variables.move_sound.play()
                         if hold_mino_2P == -1:
