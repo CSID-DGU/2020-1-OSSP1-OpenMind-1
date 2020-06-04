@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # PYTRIS Copyright (c) 2017 Jason Kim All Rights Reserved.
 
 import pygame
@@ -1846,5 +1845,4 @@ while not done:
             clock.tick(3)
 
 pygame.quit()
-=======
->>>>>>> 18af2342bd1281ef7b4f0c17f8eabe76d34f479d
+
