@@ -902,6 +902,47 @@ while not done:
                     ui_variables.click_sound.play()
                     pygame.time.set_timer(pygame.USEREVENT, 1)
 
+
+    if help :
+        draw_image(screen,background_image,0,0,board_width,board_height)
+        single_button.draw(screen,(0,0,0))
+        leaderboard_icon.draw(screen,(0,0,0))
+
+        if start:
+            screen.fill(ui_variables.real_white)
+
+        
+       
+        help_image = pygame.image.load('assets/images/help_image.png')
+        help_image2 = pygame.transform.scale(help_image, (780, 420))     
+        screen.blit(help_image2, (10, 10))
+
+        back_button.draw(screen,(0,0,0))               
+
+        for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
+
+            if event.type == QUIT:
+                done = True
+            elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, 300)
+                
+                pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.real_white)
+                pause_start = ui_variables.h5.render("Press esc to continue", 1, ui_variables.real_white)
+
+                pygame.display.update()
+           
+            elif event.type == pygame.MOUSEMOTION:
+                if back_button.isOver(pos):
+                    back_button.image = clicked_back_button_image
+                else :
+                    back_button.image = back_button_image
+                pygame.display.update()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    help=False                
+
     # Game screen
     elif leader_board :
         draw_image(screen,background_image,0,0,board_width,board_height)
