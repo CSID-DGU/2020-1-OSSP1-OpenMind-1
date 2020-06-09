@@ -24,7 +24,7 @@ pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((board_width, board_height),pygame.RESIZABLE)
 pygame.time.set_timer(pygame.USEREVENT, framerate * 10)
-pygame.display.set_caption("PYTRIS")
+pygame.display.set_caption("OM TETRIS")
 
 class ui_variables:
     # Fonts
@@ -62,6 +62,19 @@ class ui_variables:
     LevelUp_sound = pygame.mixer.Sound("assets/sounds/SFX_LevelUp.wav")
     GameOver_sound = pygame.mixer.Sound("assets/sounds/SFX_GameOver.wav")
 
+    # Combo graphic
+    combos = []
+    large_combos = []
+    combo_ring = pygame.image.load("assets/Combo/4combo ring.png") # 4블록 동시제거 그래픽
+    combo_4ring = pygame.transform.smoothscale(combo_ring, (200, 100))
+    for i in range(1, 11) :
+        combos.append(pygame.image.load("assets/Combo/"+str(i)+"combo.png"))
+        large_combos.append(pygame.transform.smoothscale(combos[i-1], (150, 200)))
+
+    combos_sound = []
+    for i in range(1, 10) :
+        combos_sound.append(pygame.mixer.Sound("assets/sounds/SFX_"+str(i+2)+"Combo.wav"))
+
     # Background colors
     black = (10, 10, 10) #rgb(10, 10, 10)
     white = (0, 153, 153) #rgb(255, 255, 255) # 청록색으로 변경
@@ -73,13 +86,13 @@ class ui_variables:
     bright_yellow = (255,217,102) # 밝은 노랑
 
     # Tetrimino colors
-    cyan = (69, 206, 204) #rgb(69, 206, 204) # I
-    blue = (64, 111, 249) #rgb(64, 111, 249) # J
-    orange = (253, 189, 53) #rgb(253, 189, 53) # L
-    yellow = (246, 227, 90) #rgb(246, 227, 90) # O
-    green = (98, 190, 68) #rgb(98, 190, 68) # S
-    pink = (242, 64, 235) #rgb(242, 64, 235) # T
-    red = (225, 13, 27) #rgb(225, 13, 27) # Z
+    cyan = (10, 255, 226) #rgb(69, 206, 204) # I
+    blue = (64, 105, 255) #rgb(64, 111, 249) # J
+    orange = (245, 144, 12) #rgb(253, 189, 53) # L
+    yellow = (225, 242, 41) #rgb(246, 227, 90) # O
+    green = (22, 181, 64) #rgb(98, 190, 68) # S
+    pink = (242, 41, 195) #rgb(242, 64, 235) # T
+    red = (204, 22, 22) #rgb(225, 13, 27) # Z
 
     t_color = [grey_2, cyan, blue, orange, yellow, green, pink, red, grey_3]
 
@@ -188,21 +201,14 @@ menu_button         = button(board_width*0.5, board_height*0.23,int(board_width*
 gameover_quit_button= button(board_width*0.5, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
 volume = 1.0
 
-
-
-def checkCombo(combo_count,sent):
-    if combo_count > 0:
-        if combo_count <= 8:
-            sent += (combo_count+1)/2
-        else :
-            sent += 4
-    return sent
+tetris3 = pygame.image.load("assets/images/tetris3.png")
+tetris4 = pygame.transform.smoothscale(tetris3, (200, 150))
 
 def draw_image(window,img_path, x,y,width,height):
     x= x-(width/2)
     y= y-(height/2)
     image= pygame.image.load(img_path)
-    image = pygame.transform.scale(image,(width,height))
+    image = pygame.transform.smoothscale(image,(width,height))
     window.blit(image,(x,y))
 
 # Draw block
@@ -264,8 +270,8 @@ def draw_board(next, hold, score, level, goal):
     score_value = ui_variables.h4.render(str(score), 1, ui_variables.real_white)
     text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.real_white)
     level_value = ui_variables.h4.render(str(level), 1, ui_variables.real_white)
-    text_goal = ui_variables.h5.render("GOAL", 1, ui_variables.real_white)
-    goal_value = ui_variables.h4.render(str(goal), 1, ui_variables.real_white)
+    text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.real_white)
+    combo_value = ui_variables.h4.render(str(combo_count), 1, ui_variables.real_white)
 
     # Place texts
     screen.blit(text_hold, (int(board_width*0.045)+sidebar_width, int(board_height*0.0374)))
@@ -274,8 +280,8 @@ def draw_board(next, hold, score, level, goal):
     screen.blit(score_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.5614)))
     screen.blit(text_level, (int(board_width*0.045) + sidebar_width, int(board_height*0.6791)))
     screen.blit(level_value, (int(board_width*0.055) + sidebar_width , int(board_height*0.7219)))
-    screen.blit(text_goal, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
-    screen.blit(goal_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
+    screen.blit(text_combo, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
+    screen.blit(combo_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
 
     # Draw board
     for x in range(width):
@@ -328,8 +334,8 @@ def draw_1Pboard(next, hold, score, level, goal):
     score_value = ui_variables.h4.render(str(score), 1, ui_variables.real_white)
     text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.real_white)
     level_value = ui_variables.h4.render(str(level), 1, ui_variables.real_white)
-    text_goal = ui_variables.h5.render("GOAL", 1, ui_variables.real_white)
-    goal_value = ui_variables.h4.render(str(goal), 1, ui_variables.real_white)
+    text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.real_white)
+    combo_value = ui_variables.h4.render(str(combo_count), 1, ui_variables.real_white)
 
     # Place texts
     screen.blit(text_hold, (int(board_width*0.045)+sidebar_width, int(board_height*0.0374)))
@@ -338,8 +344,8 @@ def draw_1Pboard(next, hold, score, level, goal):
     screen.blit(score_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.5614)))
     screen.blit(text_level, (int(board_width*0.045) + sidebar_width, int(board_height*0.6791)))
     screen.blit(level_value, (int(board_width*0.055) + sidebar_width , int(board_height*0.7219)))
-    screen.blit(text_goal, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
-    screen.blit(goal_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
+    screen.blit(text_combo, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
+    screen.blit(combo_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
 
     # Draw board
     for x in range(width):
@@ -392,8 +398,8 @@ def draw_2Pboard(next, hold, score, level, goal):
     score_value = ui_variables.h4.render(str(score), 1, ui_variables.real_white)
     text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.real_white)
     level_value = ui_variables.h4.render(str(level), 1, ui_variables.real_white)
-    text_goal = ui_variables.h5.render("GOAL", 1, ui_variables.real_white)
-    goal_value = ui_variables.h4.render(str(goal), 1, ui_variables.real_white)
+    text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.real_white)
+    combo_value = ui_variables.h4.render(str(combo_count), 1, ui_variables.real_white)
 
     # Place texts
     screen.blit(text_hold, (int(board_width*0.045)+sidebar_width, int(board_height*0.0374)))
@@ -402,8 +408,8 @@ def draw_2Pboard(next, hold, score, level, goal):
     screen.blit(score_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.5614)))
     screen.blit(text_level, (int(board_width*0.045) + sidebar_width, int(board_height*0.6791)))
     screen.blit(level_value, (int(board_width*0.055) + sidebar_width , int(board_height*0.7219)))
-    screen.blit(text_goal, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
-    screen.blit(goal_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
+    screen.blit(text_combo, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
+    screen.blit(combo_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
 
     # Draw board
     for x in range(width):
@@ -660,7 +666,7 @@ leader_board = False
 setting = False
 pvp = False
 help = False
-
+combo_count = 0
 score = 0
 level = 1
 goal = level * 5
@@ -935,6 +941,7 @@ while not done:
                     score = 0
                     score = 0
                     level = 1
+                    combo_count = 0
                     goal = level * 5
                     bottom_count = 0
                     hard_drop = False
@@ -1185,6 +1192,8 @@ while not done:
 
                 # Erase line
                 erase_count = 0
+                combo_value = 0
+
                 for j in range(21):
                     is_full = True
                     for i in range(10):
@@ -1193,31 +1202,60 @@ while not done:
                     if is_full:
                         erase_count += 1
                         k = j
+                        combo_value += 1
                         while k > 0:
                             for i in range(10):
                                 matrix[i][k] = matrix[i][k - 1]
                             k -= 1
-                if erase_count == 1:
-                    ui_variables.break_sound.play()
-                    ui_variables.single_sound.play()
-                    score += 50 * level
-                elif erase_count == 2:
-                    ui_variables.break_sound.play()
-                    ui_variables.double_sound.play()
-                    score += 150 * level
-                elif erase_count == 3:
-                    ui_variables.break_sound.play()
-                    ui_variables.triple_sound.play()
-                    score += 350 * level
-                elif erase_count == 4:
-                    ui_variables.break_sound.play()
-                    ui_variables.tetris_sound.play()
-                    score += 1000 * level
+                if erase_count >= 1 :
+                    combo_count += 1
+                    if erase_count == 1:
+                        ui_variables.break_sound.play()
+                        ui_variables.single_sound.play()
+                        score += 50 * level * erase_count + combo_count
+                    elif erase_count == 2:
+                        ui_variables.break_sound.play()
+                        ui_variables.double_sound.play()
+                        ui_variables.double_sound.play()
+                        score += 150 * level * erase_count + 2 * combo_count
+                    elif erase_count == 3:
+                        ui_variables.break_sound.play()
+                        ui_variables.triple_sound.play()
+                        ui_variables.triple_sound.play()
+                        ui_variables.triple_sound.play()
+                        score += 350 * level * erase_count + 3 * combo_count
+                    elif erase_count == 4:
+                        ui_variables.break_sound.play()
+                        ui_variables.tetris_sound.play()
+                        ui_variables.tetris_sound.play()
+                        ui_variables.tetris_sound.play()
+                        ui_variables.tetris_sound.play()
+                        score += 1000 * level * erase_count + 4 * combo_count
+                        screen.blit(ui_variables.combo_4ring, (250, 160))
+
+                    for i in range(1, 11) :
+                        if combo_count == i :  # 1 ~ 10 콤보 이미지
+                            screen.blit(ui_variables.large_combos[i-1], (124, 190))  # blits the combo number
+                        elif combo_count > 10 : # 11 이상 콤보 이미지
+                            screen.blit(tetris4, (100, 190))  # blits the combo number
+
+                    for i in range(1, 10) :
+                        if combo_count == i+2 : # 3 ~ 11 콤보 사운드
+                            ui_variables.combos_sound[i-1].play()
+
+                # 지운 블록이 없으면 콤보 -1
+ #               if is_bottom(dx, dy, mino, rotation) :
+ #                   if erase_count == 0 :
+ #                       combo_count -= 1
+ #                       if combo_count < 0:
+ #                           combo_count = 0
 
                 # Increase level
                 goal -= erase_count
                 if goal < 1 and level < 15:
                     level += 1
+                    ui_variables.LevelUp_sound.play()
+                    ui_variables.LevelUp_sound.play()
                     goal += level * 5
                     framerate = int(framerate * 0.8)
 
@@ -1415,6 +1453,7 @@ while not done:
                             rotation = 0
                             hold = False
                         else: #더이상 쌓을 수 없으면 게임오버
+                            ui_variables.GameOver_sound.play()
                             pvp = False
                             game_status= 'pvp'
                             game_over = True
@@ -1442,6 +1481,7 @@ while not done:
                             rotation_2P = 0
                             hold_2P = False
                         else: #더이상 쌓을 수 없으면 게임오버
+                            ui_variables.GameOver_sound.play()
                             pvp = False
                             gagame_status= 'pvp'
                             game_over = True
@@ -1493,44 +1533,53 @@ while not done:
                         #combo_count = 0
 
                 if erase_count >= 1:
-                    #combo_count += 1
+                    combo_count += 1
                     if erase_count == 1:
-                        #ui_variables.break_sound.play()
+                        ui_variables.break_sound.play()
                         ui_variables.single_sound.play()
-                        score += 50 * level * erase_count 
+                        score += 50 * level * erase_count + combo_count
+                        sent += 1
                     elif erase_count == 2:
-                        #ui_variables.break_sound.play()
+                        ui_variables.break_sound.play()
                         ui_variables.double_sound.play()
-                        score += 150 * level * erase_count + 2 
-                        
+                        ui_variables.double_sound.play()
+                        score += 150 * level * erase_count + 2 * combo_count
+                        sent += 2
                     elif erase_count == 3:
-                        #ui_variables.break_sound.play()
+                        ui_variables.break_sound.play()
                         ui_variables.triple_sound.play()
                         ui_variables.triple_sound.play()
-                        score += 350 * level * erase_count + 3 
+                        ui_variables.triple_sound.play()
+                        score += 350 * level * erase_count + 3 * combo_count
+                        sent += 3
                     elif erase_count == 4:
-                        #ui_variables.break_sound.play()
+                        ui_variables.break_sound.play()
                         ui_variables.tetris_sound.play()
                         ui_variables.tetris_sound.play()
-                        score += 1000 * level * erase_count + 4 
+                        ui_variables.tetris_sound.play()
+                        ui_variables.tetris_sound.play()
+                        score += 1000 * level * erase_count + 4 * combo_count
+                        sent += 4
+                        screen.blit(ui_variables.combo_4ring, (250,160))
 
-                #    for i in range(1, 11) :
-                #        if combo_count == i :  # 1 ~ 10 콤보 이미지
-                #            screen.blit(ui_variables.large_combos[i-1], (124, 190))  # blits the combo number
-                #        elif combo_count > 10 : # 11 이상 콤보 이미지
-                #            screen.blit(tetris4, (100, 190))  # blits the combo number
+                    for i in range(1, 11) :
+                        if combo_count == i :  # 1 ~ 10 콤보 이미지
+                            screen.blit(ui_variables.large_combos[i-1], (124, 190))  # blits the combo number
+                        elif combo_count > 10 : # 11 이상 콤보 이미지
+                            screen.blit(tetris4, (100, 190))  # blits the combo number
 
-                #    for i in range(1, 10) :
-                #        if combo_count == i+2 : # 3 ~ 11 콤보 사운드
-                #            ui_variables.combos_sound[i-1].play()
+                    for i in range(1, 10) :
+                        if combo_count == i+2 : # 3 ~ 11 콤보 사운드
+                            ui_variables.combos_sound[i-1].play()
 
 
-                #sent = checkCombo(combo_count, sent)  # 콤보 증가
 
                 # Increase level
                 goal -= erase_count
                 if goal < 1 and level < 15:
                     level += 1
+                    ui_variables.LevelUp_sound.play()
+                    ui_variables.LevelUp_sound.play()
                     
                     goal += level * 5
                     framerate = int(framerate * 0.8)
@@ -1545,8 +1594,8 @@ while not done:
                     pause = True
                 # Hard drop
                 elif event.key == K_SPACE: 
-                    #ui_variables.fall_sound.play()
-                    #ui_variables.drop_sound.play()
+                    ui_variables.fall_sound.play()
+                    ui_variables.drop_sound.play()
                     while not is_bottom(dx, dy, mino, rotation):
                         dy += 1
                     hard_drop = True
@@ -1555,8 +1604,8 @@ while not done:
                     #draw_mino_2P(dx_2P,dy_2P,mino_2P,rotation_2P)
                     #draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
                 elif event.key == K_f:
-                    #ui_variables.fall_sound.play()
-                    #ui_variables.drop_sound.play()
+                    ui_variables.fall_sound.play()
+                    ui_variables.drop_sound.play()
                     while not is_bottom_2P(dx_2P, dy_2P, mino_2P, rotation_2P):
                         dy_2P += 1
                     hard_drop_2P = True
@@ -1834,7 +1883,7 @@ while not done:
                     hold_mino = -1 #
                     framerate = 30
                     score = 0
-                    score = 0
+                    combo_count = 0
                     level = 1
                     goal = level * 5
                     bottom_count = 0 #
@@ -1926,7 +1975,7 @@ while not done:
                     hold_mino = -1 #
                     framerate = 30
                     score = 0
-                    score = 0
+                    combo_count = 0
                     level = 1
                     goal = level * 5
                     bottom_count = 0 #
@@ -1970,7 +2019,7 @@ while not done:
                     hold_mino = -1
                     framerate = 30
                     score = 0
-                    score = 0
+                    combo_count = 0
                     level = 1
                     goal = level * 5
                     bottom_count = 0
@@ -1981,8 +2030,10 @@ while not done:
                 if restart_button.isOver(pos):
                     if game_status == 'start':
                         start = True
+                        pygame.mixer.music.play(-1)
                     if game_status == 'pvp':
                         pvp = True
+                        pygame.mixer.music.play(-1)
                     ui_variables.click_sound.play()
                     game_over = False
                     hold = False
@@ -1993,7 +2044,7 @@ while not done:
                     hold_mino = -1
                     framerate = 30
                     score = 0
-                    score = 0
+                    combo_count = 0
                     level = 1
                     goal = level * 5
                     bottom_count = 0
@@ -2090,6 +2141,7 @@ while not done:
                 if pvp_button.isOver(pos):
                     ui_variables.click_sound.play()
                     pvp = True
+                    pygame.mixer.music.play(-1)
                 if leaderboard_icon.isOver(pos):
                     ui_variables.click_sound.play()
                     leader_board = True
@@ -2100,7 +2152,6 @@ while not done:
                     ui_variables.click_sound.play()
                     done = True
                 if help_button.isOver(pos):
-
                     ui_variables.click_sound.play()
                     help = True
             elif event.type == VIDEORESIZE:
