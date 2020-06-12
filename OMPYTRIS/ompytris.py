@@ -702,7 +702,9 @@ dx_2P , dy_2P = 3, 0
 
 name_location = 0
 name = [65, 65, 65]
-
+previous_time = pygame.time.get_ticks()
+current_time = pygame.time.get_ticks()
+pause_time = pygame.time.get_ticks()
 
 
 with open('leaderboard.txt') as f:
@@ -1157,7 +1159,7 @@ while not done:
                 screen.fill(ui_variables.real_white)
 
                 draw_board(next_mino, hold_mino, score, level, goal)
-
+                current_time = pygame.time.get_ticks()
                 # Erase a mino
                 if not game_over:
                     erase_mino(dx, dy, mino, rotation)
@@ -1208,6 +1210,7 @@ while not done:
                                 matrix[i][k] = matrix[i][k - 1]
                             k -= 1
                 if erase_count >= 1 :
+                    previous_time = current_time
                     combo_count += 1
                     if erase_count == 1:
                         ui_variables.break_sound.play()
@@ -1232,16 +1235,19 @@ while not done:
                         ui_variables.tetris_sound.play()
                         score += 1000 * level * erase_count + 4 * combo_count
                         screen.blit(ui_variables.combo_4ring, (250, 160))
-
+                    
                     for i in range(1, 11) :
                         if combo_count == i :  # 1 ~ 10 콤보 이미지
-                            screen.blit(ui_variables.large_combos[i-1], (124, 190))  # blits the combo number
+                            screen.blit(ui_variables.large_combos[i-1], (board_width*0.27, board_height*0.3))  # blits the combo number
                         elif combo_count > 10 : # 11 이상 콤보 이미지
-                            screen.blit(tetris4, (100, 190))  # blits the combo number
+                            screen.blit(tetris4, (board_width*0.27, board_height*0.3))  # blits the combo number
 
                     for i in range(1, 10) :
                         if combo_count == i+2 : # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i-1].play()
+                if current_time-previous_time > 5000:
+                    previous_time = current_time 
+                    combo_count = 0
 
                 # 지운 블록이 없으면 콤보 -1
  #               if is_bottom(dx, dy, mino, rotation) :
@@ -2136,6 +2142,7 @@ while not done:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if single_button.isOver(pos):
                     ui_variables.click_sound.play()
+                    previous_time = pygame.time.get_ticks()
                     start = True
                     pygame.mixer.music.play(-1)
                 if pvp_button.isOver(pos):
