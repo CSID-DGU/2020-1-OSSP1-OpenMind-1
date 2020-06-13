@@ -95,6 +95,16 @@ class ui_variables:
     red = (204, 22, 22) #rgb(225, 13, 27) # Z
 
     t_color = [grey_2, cyan, blue, orange, yellow, green, pink, red, grey_3]
+    cyan_image = 'assets/block_images/cyan.png'
+    blue_image = 'assets/block_images/blue.png'
+    orange_image = 'assets/block_images/orange.png'
+    yellow_image = 'assets/block_images/yellow.png'
+    green_image = 'assets/block_images/green.png'
+    pink_image = 'assets/block_images/purple.png'
+    red_image = 'assets/block_images/red.png'
+    ghost_image = 'assets/block_images/ghost.png'
+    table_image = 'assets/block_images/background.png'
+    t_block = [table_image,cyan_image,blue_image,orange_image,yellow_image,green_image,pink_image,red_image,ghost_image]
 
 
 class button():
@@ -224,6 +234,9 @@ def draw_block(x, y, color):
         Rect(x, y, block_size, block_size),
         1
     )
+def draw_block_image(x,y,image):
+    draw_image(screen,image,x,y,block_size,block_size)
+    
 
 # Draw game screen
 def draw_board(next, hold, score, level, goal):
@@ -245,8 +258,8 @@ def draw_board(next, hold, score, level, goal):
             dx = int(board_width*0.045)+sidebar_width + block_size * j
             dy = int(board_height*0.3743) + block_size * i
             if grid_n[i][j] != 0:
-                draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]])
-                
+                ##draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]])
+                draw_block_image(dx,dy,ui_variables.t_block[grid_n[i][j]])
 
     # Draw hold mino
     grid_h = tetrimino.mino_map[hold - 1][0]
@@ -257,7 +270,8 @@ def draw_board(next, hold, score, level, goal):
                 dx = int(board_width*0.045) + sidebar_width + block_size * j
                 dy = int(board_height*0.1336) + block_size * i
                 if grid_h[i][j] != 0:
-                    draw_block(dx,dy,ui_variables.t_color[grid_h[i][j]])
+                    ##draw_block(dx,dy,ui_variables.t_color[grid_h[i][j]])
+                    draw_block_image(dx,dy,ui_variables.t_block[grid_h[i][j]])
 
     # Set max score
     if score > 999999:
@@ -288,7 +302,8 @@ def draw_board(next, hold, score, level, goal):
         for y in range(height):
             dx = int(board_width*0.25) + block_size * x
             dy = int(board_height*0.055) + block_size * y
-            draw_block(dx, dy, ui_variables.t_color[matrix[x][y + 1]])
+            ## draw_block(dx, dy, ui_variables.t_color[matrix[x][y + 1]])
+            draw_block_image(dx,dy,ui_variables.t_block[matrix[x][y + 1]])
 def draw_1Pboard(next, hold, score, level, goal):
     sidebar_width = int(board_width*0.2867)
     
@@ -308,8 +323,8 @@ def draw_1Pboard(next, hold, score, level, goal):
             dx = int(board_width*0.045)+sidebar_width + block_size * j
             dy = int(board_height*0.3743) + block_size * i
             if grid_n[i][j] != 0:
-                draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]])
-                
+                ## draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]])
+                draw_block_image(dx,dy,ui_variables.t_block[grid_n[i][j]])
 
     # Draw hold mino
     grid_h = tetrimino.mino_map[hold - 1][0]
@@ -702,7 +717,9 @@ dx_2P , dy_2P = 3, 0
 
 name_location = 0
 name = [65, 65, 65]
-
+previous_time = pygame.time.get_ticks()
+current_time = pygame.time.get_ticks()
+pause_time = pygame.time.get_ticks()
 
 
 with open('leaderboard.txt') as f:
@@ -1157,7 +1174,7 @@ while not done:
                 screen.fill(ui_variables.real_white)
 
                 draw_board(next_mino, hold_mino, score, level, goal)
-
+                current_time = pygame.time.get_ticks()
                 # Erase a mino
                 if not game_over:
                     erase_mino(dx, dy, mino, rotation)
@@ -1208,6 +1225,7 @@ while not done:
                                 matrix[i][k] = matrix[i][k - 1]
                             k -= 1
                 if erase_count >= 1 :
+                    previous_time = current_time
                     combo_count += 1
                     if erase_count == 1:
                         ui_variables.break_sound.play()
@@ -1232,16 +1250,19 @@ while not done:
                         ui_variables.tetris_sound.play()
                         score += 1000 * level * erase_count + 4 * combo_count
                         screen.blit(ui_variables.combo_4ring, (250, 160))
-
+                    
                     for i in range(1, 11) :
                         if combo_count == i :  # 1 ~ 10 콤보 이미지
-                            screen.blit(ui_variables.large_combos[i-1], (124, 190))  # blits the combo number
+                            screen.blit(ui_variables.large_combos[i-1], (board_width*0.27, board_height*0.3))  # blits the combo number
                         elif combo_count > 10 : # 11 이상 콤보 이미지
-                            screen.blit(tetris4, (100, 190))  # blits the combo number
+                            screen.blit(tetris4, (board_width*0.27, board_height*0.3))  # blits the combo number
 
                     for i in range(1, 10) :
                         if combo_count == i+2 : # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i-1].play()
+                if current_time-previous_time > 5000:
+                    previous_time = current_time 
+                    combo_count = 0
 
                 # 지운 블록이 없으면 콤보 -1
  #               if is_bottom(dx, dy, mino, rotation) :
@@ -2136,6 +2157,7 @@ while not done:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if single_button.isOver(pos):
                     ui_variables.click_sound.play()
+                    previous_time = pygame.time.get_ticks()
                     start = True
                     pygame.mixer.music.play(-1)
                 if pvp_button.isOver(pos):
