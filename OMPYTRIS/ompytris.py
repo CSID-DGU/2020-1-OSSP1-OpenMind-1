@@ -95,6 +95,16 @@ class ui_variables:
     red = (204, 22, 22) #rgb(225, 13, 27) # Z
 
     t_color = [grey_2, cyan, blue, orange, yellow, green, pink, red, grey_3]
+    cyan_image = 'assets/block_images/cyan.png'
+    blue_image = 'assets/block_images/blue.png'
+    orange_image = 'assets/block_images/orange.png'
+    yellow_image = 'assets/block_images/yellow.png'
+    green_image = 'assets/block_images/green.png'
+    pink_image = 'assets/block_images/purple.png'
+    red_image = 'assets/block_images/red.png'
+    ghost_image = 'assets/block_images/ghost.png'
+    table_image = 'assets/block_images/background.png'
+    t_block = [table_image,cyan_image,blue_image,orange_image,yellow_image,green_image,pink_image,red_image,ghost_image]
 
 
 class button():
@@ -224,6 +234,9 @@ def draw_block(x, y, color):
         Rect(x, y, block_size, block_size),
         1
     )
+def draw_block_image(x,y,image):
+    draw_image(screen,image,x,y,block_size,block_size)
+    
 
 # Draw game screen
 def draw_board(next, hold, score, level, goal):
@@ -245,8 +258,8 @@ def draw_board(next, hold, score, level, goal):
             dx = int(board_width*0.045)+sidebar_width + block_size * j
             dy = int(board_height*0.3743) + block_size * i
             if grid_n[i][j] != 0:
-                draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]])
-                
+                ##draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]])
+                draw_block_image(dx,dy,ui_variables.t_block[grid_n[i][j]])
 
     # Draw hold mino
     grid_h = tetrimino.mino_map[hold - 1][0]
@@ -257,7 +270,8 @@ def draw_board(next, hold, score, level, goal):
                 dx = int(board_width*0.045) + sidebar_width + block_size * j
                 dy = int(board_height*0.1336) + block_size * i
                 if grid_h[i][j] != 0:
-                    draw_block(dx,dy,ui_variables.t_color[grid_h[i][j]])
+                    ##draw_block(dx,dy,ui_variables.t_color[grid_h[i][j]])
+                    draw_block_image(dx,dy,ui_variables.t_block[grid_h[i][j]])
 
     # Set max score
     if score > 999999:
@@ -288,7 +302,8 @@ def draw_board(next, hold, score, level, goal):
         for y in range(height):
             dx = int(board_width*0.25) + block_size * x
             dy = int(board_height*0.055) + block_size * y
-            draw_block(dx, dy, ui_variables.t_color[matrix[x][y + 1]])
+            ## draw_block(dx, dy, ui_variables.t_color[matrix[x][y + 1]])
+            draw_block_image(dx,dy,ui_variables.t_block[matrix[x][y + 1]])
 def draw_1Pboard(next, hold, score, level, goal):
     sidebar_width = int(board_width*0.2867)
     
@@ -308,8 +323,8 @@ def draw_1Pboard(next, hold, score, level, goal):
             dx = int(board_width*0.045)+sidebar_width + block_size * j
             dy = int(board_height*0.3743) + block_size * i
             if grid_n[i][j] != 0:
-                draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]])
-                
+                ## draw_block(dx,dy,ui_variables.t_color[grid_n[i][j]])
+                draw_block_image(dx,dy,ui_variables.t_block[grid_n[i][j]])
 
     # Draw hold mino
     grid_h = tetrimino.mino_map[hold - 1][0]
