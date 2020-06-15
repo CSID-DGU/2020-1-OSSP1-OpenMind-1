@@ -1167,7 +1167,7 @@ while not done:
                     if keys_pressed[K_DOWN]:
                         pygame.time.set_timer(pygame.USEREVENT, framerate * 1)
                     else:
-                        pygame.time.set_timer(pygame.USEREVENT, framerate * 10)
+                        pygame.time.set_timer(pygame.USEREVENT, framerate * 20)
 
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation)
