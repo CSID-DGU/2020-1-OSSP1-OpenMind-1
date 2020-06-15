@@ -1195,7 +1195,7 @@ while not done:
                         if is_stackable(next_mino):
                             mino = next_mino
                             next_mino = randint(1, 7)
-                            dx, dy = 3, 0
+                            dx, dy = 3, -3
                             rotation = 0
                             hold = False
                         else:
