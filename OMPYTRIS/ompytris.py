@@ -1254,13 +1254,18 @@ while not done:
                     for i in range(1, 11) :
                         if combo_count == i :  # 1 ~ 10 콤보 이미지
                             screen.blit(ui_variables.large_combos[i-1], (board_width*0.27, board_height*0.3))  # blits the combo number
+                            pygame.display.update()
+                            pygame.time.delay(500)
                         elif combo_count > 10 : # 11 이상 콤보 이미지
                             screen.blit(tetris4, (board_width*0.27, board_height*0.3))  # blits the combo number
+                            pygame.display.update()
+
+                            pygame.time.delay(500)
 
                     for i in range(1, 10) :
                         if combo_count == i+2 : # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i-1].play()
-                if current_time-previous_time > 5000:
+                if current_time-previous_time > 11000:
                     previous_time = current_time 
                     combo_count = 0
 
