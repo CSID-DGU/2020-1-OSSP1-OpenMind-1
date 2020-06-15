@@ -749,6 +749,16 @@ ui_variables.intro_sound.play()
 game_status = ''
 ui_variables.break_sound.set_volume(0.2)
 
+def set_volume():
+    ui_variables.click_sound.set_volume(scale.get())
+    print(ui_variables.click_sound.get_volume())
+
+root = Tk()
+text = Label(root,text='Setting Volume!')
+scale = Scale(root, from_ =0.0, to =1.0, orient = HORIZONTAL , resolution = 0.1 )
+tkOkButton = Button(root,width=5,height = 3,text ="OK",command = set_volume)
+
+
 
 while not done:
    
@@ -831,19 +841,18 @@ while not done:
 
                 if volume_icon.isOver(pos):
                     ui_variables.click_sound.play()
-                    root = Tk()
+                    
 
 
                     root.geometry('300x300')
                     root.title("Volume Setting")
-                    text = Label(root,text='Setting Volume!')
-                    text.pack()
+                    
                     
 
-    
-                    scale = Scale(root, from_ =100, to =0, orient = VERTICAL , command = set_vol )
-                    scale.set(50)
+                    text.pack()
+                    print(scale.get())
                     scale.pack()
+                    tkOkButton.pack()
                     root.mainloop()
 
 
@@ -1195,7 +1204,7 @@ while not done:
                         if is_stackable(next_mino):
                             mino = next_mino
                             next_mino = randint(1, 7)
-                            dx, dy = 3, -3
+                            dx, dy = 3, 0
                             rotation = 0
                             hold = False
                         else:
