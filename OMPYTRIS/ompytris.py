@@ -157,6 +157,14 @@ leader_board_image= 'assets/vector/leader_board.png'
 setting_board_image = 'assets/vector/setting_board.png'
 gameover_board_image = 'assets/vector/gameover_board.png'
 
+smallsize_board = 'assets/vector/screensize1.png'
+midiumsize_board = 'assets/vector/screensize2.png'
+bigsize_board = 'assets/vector/screensize3.png'
+
+mute_board = 'assets/vector/mute_button.png'
+number_board = 'assets/vector/number_board.png'
+
+
 
 
 resume_button_image = 'assets/vector/resume_button.png'
@@ -186,6 +194,18 @@ clicked_menu_button_image = 'assets/vector/clicked_menu_button.png'
 ok_button_image = 'assets/vector/ok_button.png'
 clicked_ok_button_image = 'assets/vector/clicked_ok_button.png'
 
+plus_button_image = 'assets/vector/plus_button.png'
+clicked_plus_button_image = 'assets/vector/clicked_plus_button.png'
+
+minus_button_image = 'assets/vector/minus_button.png'
+clicked_minus_button_image = 'assets/vector/clicked_minus_button.png'
+
+check_button_image = 'assets/vector/checkbox_button.png'
+clicked_check_button_image = 'assets/vector/clicked_checkbox_button.png'
+
+
+
+
 
 single_button = button(board_width*0.78, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
 pvp_button = button(board_width*0.78, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),2,pvp_button_image)
@@ -206,10 +226,23 @@ keyboard_icon = button(board_width*0.65, board_height*0.3,int(board_height*0.23)
 ok_button   = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,ok_button_image)
 
 
-
 menu_button         = button(board_width*0.5, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,menu_button_image)
 gameover_quit_button= button(board_width*0.5, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
 volume = 1.0
+
+effect_plus_button = button(board_width*0.4, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+effect_minus_button = button(board_width*0.6, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+sound_plus_button = button(board_width*0.4, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+sound_minus_button = button(board_width*0.6, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+mute_check_button = button(board_width*0.2, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+smallsize_check_button = button(board_width*0.4, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+midiumsize_check_button = button(board_width*0.4, board_height*0.6, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+bigsize_check_button = button(board_width*0.4, board_height*0.8, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+
+
+
 
 tetris3 = pygame.image.load("assets/images/tetris3.png")
 tetris4 = pygame.transform.smoothscale(tetris3, (200, 150))
@@ -1181,8 +1214,9 @@ while not done:
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation)
                 screen.fill(ui_variables.real_white)
-
                 draw_board(next_mino, hold_mino, score, level, goal)
+                pygame.display.update()
+
                 current_time = pygame.time.get_ticks()
                 # Erase a mino
                 if not game_over:
@@ -1201,6 +1235,7 @@ while not done:
                         draw_mino(dx, dy, mino, rotation)
                         screen.fill(ui_variables.real_white)
                         draw_board(next_mino, hold_mino, score, level, goal)
+                        pygame.display.update()
                         if is_stackable(next_mino):
                             mino = next_mino
                             next_mino = randint(1, 7)
@@ -1310,6 +1345,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     screen.fill(ui_variables.real_white)
                     draw_board(next_mino, hold_mino, score, level, goal)
+                    pygame.display.update()
                 # Hold
                 elif event.key == K_LSHIFT or event.key == K_q:
                     if hold == False:
