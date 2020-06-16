@@ -834,20 +834,25 @@ while not done:
                 else :
                     back_button.image = back_button_image
 
-                if volume_icon.isOver(pos):
-                    volume_icon.image = clicked_volume_vector
+                if effect_plus_button.isOver(pos):
+                    effect_plus_button.image = clicked_plus_button_image
                 else :
-                    volume_icon.image = volume_vector
+                    effect_plus_button.image = plus_button_image
 
-                if keyboard_icon.isOver(pos):
-                    keyboard_icon.image = clicked_keyboard_vector
+                if effect_minus_button.isOver(pos):
+                    effect_minus_button.image = clicked_minus_button_image
                 else :
-                    keyboard_icon.image = keyboard_vector
+                    effect_minus_button.image = minus_button_image
 
-                if screen_icon.isOver(pos):
-                    screen_icon.image = clicked_screen_vector
+                if sound_plus_button.isOver(pos):
+                    sound_plus_button.image = clicked_plus_button_image
                 else :
-                    screen_icon.image = screen_vector
+                    sound_plus_button.image = plus_button_image
+
+                if sound_minus_button.isOver(pos):
+                    sound_minus_button.image = clicked_minus_button_image
+                else :
+                    sound_minus_button.image = minus_button_image
                 pygame.display.update()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.isOver(pos):
