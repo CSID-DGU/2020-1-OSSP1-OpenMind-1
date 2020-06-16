@@ -749,6 +749,16 @@ ui_variables.intro_sound.play()
 game_status = ''
 ui_variables.break_sound.set_volume(0.2)
 
+def set_volume():
+    ui_variables.click_sound.set_volume(scale.get())
+    print(ui_variables.click_sound.get_volume())
+
+root = Tk()
+text = Label(root,text='Setting Volume!')
+scale = Scale(root, from_ =0.0, to =1.0, orient = HORIZONTAL , resolution = 0.1 )
+tkOkButton = Button(root,width=5,height = 3,text ="OK",command = set_volume)
+
+
 
 while not done:
    
@@ -831,19 +841,18 @@ while not done:
 
                 if volume_icon.isOver(pos):
                     ui_variables.click_sound.play()
-                    root = Tk()
+                    
 
 
                     root.geometry('300x300')
                     root.title("Volume Setting")
-                    text = Label(root,text='Setting Volume!')
-                    text.pack()
+                    
                     
 
-    
-                    scale = Scale(root, from_ =100, to =0, orient = VERTICAL , command = set_vol )
-                    scale.set(50)
+                    text.pack()
+                    print(scale.get())
                     scale.pack()
+                    tkOkButton.pack()
                     root.mainloop()
 
 
@@ -1254,13 +1263,18 @@ while not done:
                     for i in range(1, 11) :
                         if combo_count == i :  # 1 ~ 10 콤보 이미지
                             screen.blit(ui_variables.large_combos[i-1], (board_width*0.27, board_height*0.3))  # blits the combo number
+                            pygame.display.update()
+                            pygame.time.delay(500)
                         elif combo_count > 10 : # 11 이상 콤보 이미지
                             screen.blit(tetris4, (board_width*0.27, board_height*0.3))  # blits the combo number
+                            pygame.display.update()
+
+                            pygame.time.delay(500)
 
                     for i in range(1, 10) :
                         if combo_count == i+2 : # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i-1].play()
-                if current_time-previous_time > 5000:
+                if current_time-previous_time > 11000:
                     previous_time = current_time 
                     combo_count = 0
 
