@@ -157,6 +157,14 @@ leader_board_image= 'assets/vector/leader_board.png'
 setting_board_image = 'assets/vector/setting_board.png'
 gameover_board_image = 'assets/vector/gameover_board.png'
 
+smallsize_board = 'assets/vector/screensize1.png'
+midiumsize_board = 'assets/vector/screensize2.png'
+bigsize_board = 'assets/vector/screensize3.png'
+
+mute_board = 'assets/vector/mute_button.png'
+number_board = 'assets/vector/number_board.png'
+
+
 
 
 resume_button_image = 'assets/vector/resume_button.png'
@@ -186,6 +194,18 @@ clicked_menu_button_image = 'assets/vector/clicked_menu_button.png'
 ok_button_image = 'assets/vector/ok_button.png'
 clicked_ok_button_image = 'assets/vector/clicked_ok_button.png'
 
+plus_button_image = 'assets/vector/plus_button.png'
+clicked_plus_button_image = 'assets/vector/clicked_plus_button.png'
+
+minus_button_image = 'assets/vector/minus_button.png'
+clicked_minus_button_image = 'assets/vector/clicked_minus_button.png'
+
+check_button_image = 'assets/vector/checkbox_button.png'
+clicked_check_button_image = 'assets/vector/clicked_checkbox_button.png'
+
+
+
+
 
 single_button = button(board_width*0.78, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
 pvp_button = button(board_width*0.78, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),2,pvp_button_image)
@@ -206,10 +226,23 @@ keyboard_icon = button(board_width*0.65, board_height*0.3,int(board_height*0.23)
 ok_button   = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,ok_button_image)
 
 
-
 menu_button         = button(board_width*0.5, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,menu_button_image)
 gameover_quit_button= button(board_width*0.5, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
 volume = 1.0
+
+effect_plus_button = button(board_width*0.43, board_height*0.43, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+effect_minus_button = button(board_width*0.57, board_height*0.43, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+sound_plus_button = button(board_width*0.43, board_height*0.63, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+sound_minus_button = button(board_width*0.57, board_height*0.63, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+mute_check_button = button(board_width*0.2, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+smallsize_check_button = button(board_width*0.4, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+midiumsize_check_button = button(board_width*0.4, board_height*0.6, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+bigsize_check_button = button(board_width*0.4, board_height*0.8, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+
+
+
 
 tetris3 = pygame.image.load("assets/images/tetris3.png")
 tetris4 = pygame.transform.smoothscale(tetris3, (200, 150))
@@ -688,6 +721,9 @@ goal = level * 5
 bottom_count = 0
 hard_drop = False
 
+volume_setting = False
+screen_setting = False
+keyboard_setting = False
 
 
 
@@ -765,8 +801,62 @@ while not done:
 
     # Pause screen
     ui_variables.click_sound.set_volume(volume)
+    if volume_setting:
+        draw_image(screen,setting_board_image, board_width*0.5,board_height*0.5, int(board_height*1.3), board_height)
+        draw_image(screen,mute_board,board_width*0.5,board_height*0.23, int(board_width*0.1875),int(board_height*0.1444))
+        draw_image(screen,number_board,board_width*0.5,board_height*0.43, int(board_width*0.09),int(board_height*0.1444))
+        draw_image(screen,number_board,board_width*0.5,board_height*0.63, int(board_width*0.09),int(board_height*0.1444))
+        bigsize_check_button.draw(screen,(0,0,0))
+        effect_plus_button.draw(screen,(0,0,0))
+        effect_minus_button.draw(screen,(0,0,0))
+        sound_plus_button.draw(screen,(0,0,0))
+        sound_minus_button.draw(screen,(0,0,0))
+        back_button.draw(screen,(0,0,0))
 
-    if setting :
+        for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
+
+            if event.type == QUIT:
+                done = True
+            elif event.type == USEREVENT:
+                pygame.time.set_timer(pygame.USEREVENT, 300)
+                
+                pause_text = ui_variables.h2_b.render("PAUSED", 1, ui_variables.real_white)
+                pause_start = ui_variables.h5.render("Press esc to continue", 1, ui_variables.real_white)
+
+              
+
+                pygame.display.update()
+            
+            elif event.type == pygame.MOUSEMOTION:
+                if back_button.isOver(pos):
+                    back_button.image = clicked_back_button_image
+                else :
+                    back_button.image = back_button_image
+
+                if volume_icon.isOver(pos):
+                    volume_icon.image = clicked_volume_vector
+                else :
+                    volume_icon.image = volume_vector
+
+                if keyboard_icon.isOver(pos):
+                    keyboard_icon.image = clicked_keyboard_vector
+                else :
+                    keyboard_icon.image = keyboard_vector
+
+                if screen_icon.isOver(pos):
+                    screen_icon.image = clicked_screen_vector
+                else :
+                    screen_icon.image = screen_vector
+                pygame.display.update()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    volume_setting = False
+
+                
+
+    elif setting :
         draw_image(screen,background_image,board_width*0.5,board_height*0.5,board_width,board_height)
         single_button.draw(screen,(0,0,0))
         pvp_button.draw(screen,(0,0,0))
@@ -791,6 +881,8 @@ while not done:
         volume_icon.draw(screen,(0,0,0))
 
         back_button.draw(screen,(0,0,0))
+
+        
 
 
 
@@ -842,19 +934,7 @@ while not done:
                 if volume_icon.isOver(pos):
                     ui_variables.click_sound.play()
                     
-
-
-                    root.geometry('300x300')
-                    root.title("Volume Setting")
-                    
-                    
-
-                    text.pack()
-                    print(scale.get())
-                    scale.pack()
-                    tkOkButton.pack()
-                    root.mainloop()
-
+                    volume_setting = True
 
                 if keyboard_icon.isOver(pos):
                     ui_variables.click_sound.play()
@@ -1181,8 +1261,9 @@ while not done:
                 # Draw a mino
                 draw_mino(dx, dy, mino, rotation)
                 screen.fill(ui_variables.real_white)
-
                 draw_board(next_mino, hold_mino, score, level, goal)
+                pygame.display.update()
+
                 current_time = pygame.time.get_ticks()
                 # Erase a mino
                 if not game_over:
@@ -1201,6 +1282,7 @@ while not done:
                         draw_mino(dx, dy, mino, rotation)
                         screen.fill(ui_variables.real_white)
                         draw_board(next_mino, hold_mino, score, level, goal)
+                        pygame.display.update()
                         if is_stackable(next_mino):
                             mino = next_mino
                             next_mino = randint(1, 7)
@@ -1310,6 +1392,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     screen.fill(ui_variables.real_white)
                     draw_board(next_mino, hold_mino, score, level, goal)
+                    pygame.display.update()
                 # Hold
                 elif event.key == K_LSHIFT or event.key == K_q:
                     if hold == False:
