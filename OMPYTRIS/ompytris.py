@@ -1,3 +1,4 @@
+# -*-coding:utf-8-*-
 # PYTRIS Copyright (c) 2017 Jason Kim All Rights Reserved.
 
 import pygame
@@ -5,7 +6,6 @@ import operator
 from mino import *
 from random import *
 from pygame.locals import *
-from tkinter import *
 
 
 # Define
@@ -785,14 +785,14 @@ ui_variables.intro_sound.play()
 game_status = ''
 ui_variables.break_sound.set_volume(0.2)
 
-def set_volume():
-    ui_variables.click_sound.set_volume(scale.get())
-    print(ui_variables.click_sound.get_volume())
+#def set_volume():
+    #ui_variables.click_sound.set_volume(scale.get())
+    #print(ui_variables.click_sound.get_volume())
 
-root = Tk()
-text = Label(root,text='Setting Volume!')
-scale = Scale(root, from_ =0.0, to =1.0, orient = HORIZONTAL , resolution = 0.1 )
-tkOkButton = Button(root,width=5,height = 3,text ="OK",command = set_volume)
+#root = Tk()
+#text = Label(root,text='Setting Volume!')
+#scale = Scale(root, from_ =0.0, to =1.0, orient = HORIZONTAL , resolution = 0.1 )
+#tkOkButton = Button(root,width=5,height = 3,text ="OK",command = set_volume)
 
 
 
@@ -800,7 +800,7 @@ while not done:
    
 
     # Pause screen
-    ui_variables.click_sound.set_volume(volume)
+    #ui_variables.click_sound.set_volume(volume)
     if volume_setting:
         draw_image(screen,setting_board_image, board_width*0.5,board_height*0.5, int(board_height*1.3), board_height)
         draw_image(screen,mute_board,board_width*0.5,board_height*0.23, int(board_width*0.1875),int(board_height*0.1444))
