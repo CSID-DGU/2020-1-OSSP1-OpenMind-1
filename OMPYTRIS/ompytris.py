@@ -725,6 +725,9 @@ volume_setting = False
 screen_setting = False
 keyboard_setting = False
 
+music_volume = 10
+effect_volume = 10
+
 
 
 dx, dy = 3, 0 # Minos location status
@@ -812,6 +815,16 @@ while not done:
         sound_minus_button.draw(screen,(0,0,0))
         back_button.draw(screen,(0,0,0))
 
+        music_volume_text = ui_variables.h5.render('Music Volume', 1, ui_variables.grey_1)
+        effect_volume_tex = ui_variables.h5.render('Effect Volume', 1, ui_variables.grey_1)
+        screen.blit(music_volume_text, (board_width*0.44, board_height*0.3))
+        screen.blit(effect_volume_tex, (board_width*0.44, board_height*0.5))
+
+        music_volume_size_text = ui_variables.h4.render(str(music_volume), 1, ui_variables.grey_1)
+        effect_volume_size_text = ui_variables.h4.render(str(effect_volume) , 1, ui_variables.grey_1)
+        screen.blit(music_volume_size_text, (board_width*0.485, board_height*0.4))
+        screen.blit(effect_volume_size_text, (board_width*0.485, board_height*0.6))
+
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
 
@@ -852,6 +865,31 @@ while not done:
                 if back_button.isOver(pos):
                     ui_variables.click_sound.play()
                     volume_setting = False
+                if effect_plus_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    if music_volume >= 10 :
+                        music_volume = 10
+                    else:
+                        music_volume -= 1
+                if effect_minus_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    if music_volume <= 0 :
+                        music_volume = 0
+                    else:
+                        music_volume -= 1
+                if sound_plus_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    if effect_volume >= 10 :
+                        effect_volume = 10
+                    else:
+                        effect_volume -= 1
+                if sound_minus_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    if effect_volume <= 0 :
+                        effect_volume = 0
+                    else:
+                        effect_volume -= 1
+
 
 
                 
