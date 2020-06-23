@@ -246,6 +246,40 @@ bigsize_check_button = button(board_width*0.5, board_height*0.65, int(board_widt
 
 tetris3 = pygame.image.load("assets/images/tetris3.png")
 tetris4 = pygame.transform.smoothscale(tetris3, (200, 150))
+def set_screen_interface():
+    single_button = button(board_width*0.78, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
+    pvp_button = button(board_width*0.78, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),2,pvp_button_image)
+    help_button = button(board_width*0.78, board_height*0.63,int(board_width*0.3734), int(board_height*0.1777),3,help_button_image)
+    quit_button = button(board_width*0.78, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),4,quit_button_image)
+    setting_icon = button(board_width*0.1, board_height*0.85,int(board_height*0.23), int(board_height*0.23),5,setting_vector)
+    leaderboard_icon = button(board_width*0.1, board_height*0.6,int(board_height*0.23), int(board_height*0.23),6,leaderboard_vector)
+
+    resume_button    = button(board_width*0.5, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,resume_button_image)
+    restart_button   = button(board_width*0.5, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),1,restart_button_image)
+    setting_button   = button(board_width*0.5, board_height*0.63,int(board_width*0.3734), int(board_height*0.1777),1,setting_button_image)
+    pause_quit_button= button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
+
+    back_button      = button(board_width*0.5, board_height*0.9,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
+    volume_icon = button(board_width*0.4, board_height*0.5,int(board_height*0.23), int(board_height*0.23),5,volume_vector)
+    screen_icon = button(board_width*0.6, board_height*0.5,int(board_height*0.23), int(board_height*0.23),6,screen_vector)
+    #keyboard_icon = button(board_width*0.65, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,keyboard_vector)
+    ok_button   = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,ok_button_image)
+
+
+    menu_button         = button(board_width*0.5, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,menu_button_image)
+    gameover_quit_button= button(board_width*0.5, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
+    
+
+    effect_plus_button = button(board_width*0.43, board_height*0.43, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+    effect_minus_button = button(board_width*0.57, board_height*0.43, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+    sound_plus_button = button(board_width*0.43, board_height*0.63, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+    sound_minus_button = button(board_width*0.57, board_height*0.63, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+    mute_check_button = button(board_width*0.2, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+    smallsize_check_button = button(board_width*0.5, board_height*0.25, int(board_width*0.1875),int(board_height*0.1444),1,smallsize_board)
+    midiumsize_check_button = button(board_width*0.5, board_height*0.45, int(board_width*0.1875),int(board_height*0.1444),1,midiumsize_board)
+    bigsize_check_button = button(board_width*0.5, board_height*0.65, int(board_width*0.1875),int(board_height*0.1444),1,bigsize_board)
 
 def set_volume():
     ui_variables.fall_sound.set_volume(effect_volume/10) 
@@ -910,6 +944,15 @@ while not done:
 
                 
     elif screen_setting : 
+        screen.fill(ui_variables.white)
+        draw_image(screen,background_image,board_width*0.5,board_height*0.5,board_width,board_height)
+        single_button.draw(screen,(0,0,0))
+        pvp_button.draw(screen,(0,0,0))
+        help_button.draw(screen,(0,0,0))
+        quit_button.draw(screen,(0,0,0))
+        setting_icon.draw(screen,(0,0,0))
+        leaderboard_icon.draw(screen,(0,0,0))
+
         draw_image(screen,setting_board_image, board_width*0.5,board_height*0.5, int(board_height*1.3), board_height)
         smallsize_check_button.draw(screen,(0,0,0))
         bigsize_check_button.draw(screen,(0,0,0))
@@ -957,10 +1000,10 @@ while not done:
                 if smallsize_check_button.isOver(pos):
 
                     ui_variables.click_sound.play()    
-                    block_size = int(board_height*0.045)
 
                     board_width = 800
                     board_height = 450
+                    block_size = int(board_height*0.045)
                     screen = pygame.display.set_mode((board_width, board_height),pygame.RESIZABLE)
                     single_button = button(board_width*0.78, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
                     pvp_button = button(board_width*0.78, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),2,pvp_button_image)
@@ -974,24 +1017,35 @@ while not done:
                     setting_button   = button(board_width*0.5, board_height*0.63,int(board_width*0.3734), int(board_height*0.1777),1,setting_button_image)
                     pause_quit_button= button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
 
-                    back_button      = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
+                    back_button      = button(board_width*0.5, board_height*0.9,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
                     volume_icon = button(board_width*0.4, board_height*0.5,int(board_height*0.23), int(board_height*0.23),5,volume_vector)
                     screen_icon = button(board_width*0.6, board_height*0.5,int(board_height*0.23), int(board_height*0.23),6,screen_vector)
                     #keyboard_icon = button(board_width*0.65, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,keyboard_vector)
                     ok_button   = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,ok_button_image)
 
 
-
                     menu_button         = button(board_width*0.5, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,menu_button_image)
                     gameover_quit_button= button(board_width*0.5, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
+    
+
+                    effect_plus_button = button(board_width*0.43, board_height*0.43, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+                    effect_minus_button = button(board_width*0.57, board_height*0.43, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+                    sound_plus_button = button(board_width*0.43, board_height*0.63, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+                    sound_minus_button = button(board_width*0.57, board_height*0.63, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+                    mute_check_button = button(board_width*0.2, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+                    smallsize_check_button = button(board_width*0.5, board_height*0.25, int(board_width*0.1875),int(board_height*0.1444),1,smallsize_board)
+                    midiumsize_check_button = button(board_width*0.5, board_height*0.45, int(board_width*0.1875),int(board_height*0.1444),1,midiumsize_board)
+                    bigsize_check_button = button(board_width*0.5, board_height*0.65, int(board_width*0.1875),int(board_height*0.1444),1,bigsize_board)
                     pygame.display.update()
 
                 if midiumsize_check_button.isOver(pos):
                     ui_variables.click_sound.play()                
-                    block_size = int(board_height*0.045)
 
                     board_width = 1200
                     board_height = 675
+                    block_size = int(board_height*0.045)
                     screen = pygame.display.set_mode((board_width, board_height),pygame.RESIZABLE)
                     single_button = button(board_width*0.78, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
                     pvp_button = button(board_width*0.78, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),2,pvp_button_image)
@@ -1005,23 +1059,36 @@ while not done:
                     setting_button   = button(board_width*0.5, board_height*0.63,int(board_width*0.3734), int(board_height*0.1777),1,setting_button_image)
                     pause_quit_button= button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
 
-                    back_button      = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
+                    back_button      = button(board_width*0.5, board_height*0.9,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
                     volume_icon = button(board_width*0.4, board_height*0.5,int(board_height*0.23), int(board_height*0.23),5,volume_vector)
                     screen_icon = button(board_width*0.6, board_height*0.5,int(board_height*0.23), int(board_height*0.23),6,screen_vector)
                     #keyboard_icon = button(board_width*0.65, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,keyboard_vector)
                     ok_button   = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,ok_button_image)
 
 
-
                     menu_button         = button(board_width*0.5, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,menu_button_image)
                     gameover_quit_button= button(board_width*0.5, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
+    
+
+                    effect_plus_button = button(board_width*0.43, board_height*0.43, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+                    effect_minus_button = button(board_width*0.57, board_height*0.43, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+                    sound_plus_button = button(board_width*0.43, board_height*0.63, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+                    sound_minus_button = button(board_width*0.57, board_height*0.63, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+                    mute_check_button = button(board_width*0.2, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+                    smallsize_check_button = button(board_width*0.5, board_height*0.25, int(board_width*0.1875),int(board_height*0.1444),1,smallsize_board)
+                    midiumsize_check_button = button(board_width*0.5, board_height*0.45, int(board_width*0.1875),int(board_height*0.1444),1,midiumsize_board)
+                    bigsize_check_button = button(board_width*0.5, board_height*0.65, int(board_width*0.1875),int(board_height*0.1444),1,bigsize_board)
                     pygame.display.update()
+
                 if bigsize_check_button.isOver(pos):
                     ui_variables.click_sound.play()     
                     block_size = int(board_height*0.045)
 
                     board_width = 1600
                     board_height = 900
+                    block_size = int(board_height*0.045)
                     screen = pygame.display.set_mode((board_width, board_height),pygame.RESIZABLE)
                     single_button = button(board_width*0.78, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
                     pvp_button = button(board_width*0.78, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),2,pvp_button_image)
@@ -1035,16 +1102,27 @@ while not done:
                     setting_button   = button(board_width*0.5, board_height*0.63,int(board_width*0.3734), int(board_height*0.1777),1,setting_button_image)
                     pause_quit_button= button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
 
-                    back_button      = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
+                    back_button      = button(board_width*0.5, board_height*0.9,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
                     volume_icon = button(board_width*0.4, board_height*0.5,int(board_height*0.23), int(board_height*0.23),5,volume_vector)
                     screen_icon = button(board_width*0.6, board_height*0.5,int(board_height*0.23), int(board_height*0.23),6,screen_vector)
                     #keyboard_icon = button(board_width*0.65, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,keyboard_vector)
                     ok_button   = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,ok_button_image)
 
 
-
                     menu_button         = button(board_width*0.5, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,menu_button_image)
                     gameover_quit_button= button(board_width*0.5, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
+    
+
+                    effect_plus_button = button(board_width*0.43, board_height*0.43, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+                    effect_minus_button = button(board_width*0.57, board_height*0.43, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+                    sound_plus_button = button(board_width*0.43, board_height*0.63, int(board_width*0.0625),int(board_height*0.1111),1,plus_button_image)
+                    sound_minus_button = button(board_width*0.57, board_height*0.63, int(board_width*0.0625),int(board_height*0.1111),1,minus_button_image)
+
+                    mute_check_button = button(board_width*0.2, board_height*0.4, int(board_width*0.0625),int(board_height*0.1111),1,check_button_image)
+                    smallsize_check_button = button(board_width*0.5, board_height*0.25, int(board_width*0.1875),int(board_height*0.1444),1,smallsize_board)
+                    midiumsize_check_button = button(board_width*0.5, board_height*0.45, int(board_width*0.1875),int(board_height*0.1444),1,midiumsize_board)
+                    bigsize_check_button = button(board_width*0.5, board_height*0.65, int(board_width*0.1875),int(board_height*0.1444),1,bigsize_board)
                     pygame.display.update()
 
                     
@@ -1140,10 +1218,11 @@ while not done:
                     ui_variables.click_sound.play()    
                     screen_setting = True
             elif event.type == VIDEORESIZE:
-                block_size = int(board_height*0.045)
+                
 
                 board_width = event.w
                 board_height = event.h
+                block_size = int(board_height*0.045)
                 screen = pygame.display.set_mode((board_width, board_height),pygame.RESIZABLE)
                 single_button = button(board_width*0.78, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
                 pvp_button = button(board_width*0.78, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),2,pvp_button_image)
