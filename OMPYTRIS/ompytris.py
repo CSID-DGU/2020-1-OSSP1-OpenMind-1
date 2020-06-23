@@ -159,7 +159,9 @@ smallsize_board = 'assets/vector/screensize1.png'
 midiumsize_board = 'assets/vector/screensize2.png'
 bigsize_board = 'assets/vector/screensize3.png'
 
-mute_board = 'assets/vector/mute_button.png'
+mute_button_image = 'assets/vector/mute_button.png'
+##clicked_mute_button_image = 'assets/vector/clicked_mute_button.png'
+
 number_board = 'assets/vector/number_board.png'
 
 resume_button_image = 'assets/vector/resume_button.png'
@@ -198,9 +200,7 @@ clicked_minus_button_image = 'assets/vector/clicked_minus_button.png'
 check_button_image = 'assets/vector/checkbox_button.png'
 clicked_check_button_image = 'assets/vector/clicked_checkbox_button.png'
 
-
-
-
+mute_button = button(board_width*0.5, board_height*0.23, int(board_width*0.1875),int(board_height*0.1444),1,mute_button_image)
 
 single_button = button(board_width*0.78, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,single_button_image)
 pvp_button = button(board_width*0.78, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),2,pvp_button_image)
@@ -846,9 +846,9 @@ while not done:
     #ui_variables.click_sound.set_volume(volume)
     if volume_setting:
         draw_image(screen,setting_board_image, board_width*0.5,board_height*0.5, int(board_height*1.3), board_height)
-        draw_image(screen,mute_board,board_width*0.5,board_height*0.23, int(board_width*0.1875),int(board_height*0.1444))
         draw_image(screen,number_board,board_width*0.5,board_height*0.43, int(board_width*0.09),int(board_height*0.1444))
         draw_image(screen,number_board,board_width*0.5,board_height*0.63, int(board_width*0.09),int(board_height*0.1444))
+        mute_button.draw(screen,(0,0,0))
         effect_plus_button.draw(screen,(0,0,0))
         effect_minus_button.draw(screen,(0,0,0))
         sound_plus_button.draw(screen,(0,0,0))
@@ -900,6 +900,8 @@ while not done:
                     sound_minus_button.image = clicked_minus_button_image
                 else :
                     sound_minus_button.image = minus_button_image
+                
+                
                 pygame.display.update()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.isOver(pos):
@@ -929,6 +931,11 @@ while not done:
                         effect_volume = 0
                     else:
                         effect_volume -= 1
+                if mute_button.isOver(pos):
+                    ui_variables.click_sound.play()
+                    effect_volume= 0
+                    music_volume = 0
+
                 set_volume()
                 
     elif screen_setting : 
