@@ -104,7 +104,8 @@ class ui_variables:
     red_image = 'assets/block_images/red.png'
     ghost_image = 'assets/block_images/ghost.png'
     table_image = 'assets/block_images/background.png'
-    t_block = [table_image,cyan_image,blue_image,orange_image,yellow_image,green_image,pink_image,red_image,ghost_image]
+    linessent_image = 'assets/block_images/linessent.png'
+    t_block = [table_image,cyan_image,blue_image,orange_image,yellow_image,green_image,pink_image,red_image,ghost_image,linessent_image]
 
 
 class button():
@@ -137,11 +138,8 @@ clicked_single_button_image = 'assets/vector/clicked_single_button.png'
 pvp_button_image = 'assets/vector/pvp_button.png'
 clicked_pvp_button_image = 'assets/vector/clicked_pvp_button.png'
 
-
-
 help_button_image = 'assets/vector/help_button.png'
 clicked_help_button_image = 'assets/vector/clicked_help_button.png'
-
 
 quit_button_image = 'assets/vector/quit_button.png'
 clicked_quit_button_image = 'assets/vector/clicked_quit_button.png'
@@ -163,9 +161,6 @@ bigsize_board = 'assets/vector/screensize3.png'
 
 mute_board = 'assets/vector/mute_button.png'
 number_board = 'assets/vector/number_board.png'
-
-
-
 
 resume_button_image = 'assets/vector/resume_button.png'
 clicked_resume_button_image = 'assets/vector/clicked_resume_button.png'
@@ -222,7 +217,6 @@ pause_quit_button= button(board_width*0.5, board_height*0.83,int(board_width*0.3
 back_button      = button(board_width*0.5, board_height*0.9,int(board_width*0.3734), int(board_height*0.1777),1,back_button_image)
 volume_icon = button(board_width*0.4, board_height*0.5,int(board_height*0.23), int(board_height*0.23),5,volume_vector)
 screen_icon = button(board_width*0.6, board_height*0.5,int(board_height*0.23), int(board_height*0.23),6,screen_vector)
-#keyboard_icon = button(board_width*0.65, board_height*0.3,int(board_height*0.23), int(board_height*0.23),6,keyboard_vector)
 ok_button   = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,ok_button_image)
 
 
@@ -280,6 +274,7 @@ def set_screen_interface():
     smallsize_check_button = button(board_width*0.5, board_height*0.25, int(board_width*0.1875),int(board_height*0.1444),1,smallsize_board)
     midiumsize_check_button = button(board_width*0.5, board_height*0.45, int(board_width*0.1875),int(board_height*0.1444),1,midiumsize_board)
     bigsize_check_button = button(board_width*0.5, board_height*0.65, int(board_width*0.1875),int(board_height*0.1444),1,bigsize_board)
+    
 
 def set_volume():
     ui_variables.fall_sound.set_volume(effect_volume/10) 
@@ -295,6 +290,8 @@ def set_volume():
     ui_variables.GameOver_sound.set_volume(music_volume/10)
     ui_variables.intro_sound.set_volume(music_volume/10)
     pygame.mixer.music.set_volume(music_volume/10)
+    for i in range(1, 10) :
+        ui_variables.combos_sound[i-1].set_volume(effect_volume/10)
 
 def draw_image(window,img_path, x,y,width,height):
     x= x-(width/2)
@@ -427,22 +424,21 @@ def draw_1Pboard(next, hold, score, level, goal):
     # Draw texts
     text_hold = ui_variables.h5.render("HOLD", 1, ui_variables.real_white)
     text_next = ui_variables.h5.render("NEXT", 1, ui_variables.real_white)
-    text_score = ui_variables.h5.render("SCORE", 1, ui_variables.real_white)
-    score_value = ui_variables.h4.render(str(score), 1, ui_variables.real_white)
-    text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.real_white)
-    level_value = ui_variables.h4.render(str(level), 1, ui_variables.real_white)
-    text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.real_white)
-    combo_value = ui_variables.h4.render(str(combo_count), 1, ui_variables.real_white)
+    text_score = ui_variables.h5.render("ATTACK", 1, ui_variables.real_white)
+    score_value = ui_variables.h4.render(str(attack_point), 1, ui_variables.real_white)
+    
+
+    
 
     # Place texts
     screen.blit(text_hold, (int(board_width*0.045)+sidebar_width, int(board_height*0.0374)))
     screen.blit(text_next, (int(board_width*0.045)+sidebar_width , int(board_height*0.2780)))
     screen.blit(text_score, (int(board_width*0.045) + sidebar_width, int(board_height*0.5187)))
     screen.blit(score_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.5614)))
-    screen.blit(text_level, (int(board_width*0.045) + sidebar_width, int(board_height*0.6791)))
-    screen.blit(level_value, (int(board_width*0.055) + sidebar_width , int(board_height*0.7219)))
-    screen.blit(text_combo, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
-    screen.blit(combo_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
+    #screen.blit(text_level, (int(board_width*0.045) + sidebar_width, int(board_height*0.6791)))
+    #screen.blit(level_value, (int(board_width*0.055) + sidebar_width , int(board_height*0.7219)))
+    #screen.blit(text_combo, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
+    #screen.blit(combo_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
 
     # Draw board
     for x in range(width):
@@ -491,8 +487,8 @@ def draw_2Pboard(next, hold, score, level, goal):
 
     text_hold = ui_variables.h5.render("HOLD", 1, ui_variables.real_white)
     text_next = ui_variables.h5.render("NEXT", 1, ui_variables.real_white)
-    text_score = ui_variables.h5.render("SCORE", 1, ui_variables.real_white)
-    score_value = ui_variables.h4.render(str(score), 1, ui_variables.real_white)
+    text_score = ui_variables.h5.render("ATTACK", 1, ui_variables.real_white)
+    score_value = ui_variables.h4.render(str(attack_point_2P), 1, ui_variables.real_white)
     text_level = ui_variables.h5.render("LEVEL", 1, ui_variables.real_white)
     level_value = ui_variables.h4.render(str(level), 1, ui_variables.real_white)
     text_combo = ui_variables.h5.render("COMBO", 1, ui_variables.real_white)
@@ -503,10 +499,10 @@ def draw_2Pboard(next, hold, score, level, goal):
     screen.blit(text_next, (int(board_width*0.045)+sidebar_width , int(board_height*0.2780)))
     screen.blit(text_score, (int(board_width*0.045) + sidebar_width, int(board_height*0.5187)))
     screen.blit(score_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.5614)))
-    screen.blit(text_level, (int(board_width*0.045) + sidebar_width, int(board_height*0.6791)))
-    screen.blit(level_value, (int(board_width*0.055) + sidebar_width , int(board_height*0.7219)))
-    screen.blit(text_combo, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
-    screen.blit(combo_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
+    #screen.blit(text_level, (int(board_width*0.045) + sidebar_width, int(board_height*0.6791)))
+    #screen.blit(level_value, (int(board_width*0.055) + sidebar_width , int(board_height*0.7219)))
+    #screen.blit(text_combo, (int(board_width*0.045) + sidebar_width , int(board_height*0.8395)))
+    #screen.blit(combo_value, (int(board_width*0.055) + sidebar_width, int(board_height*0.8823)))
 
     # Draw board
     for x in range(width):
@@ -776,6 +772,8 @@ keyboard_setting = False
 
 music_volume = 10
 effect_volume = 10
+attack_point = 0
+attack_point_2P = 0
 
 
 
@@ -837,14 +835,7 @@ ui_variables.intro_sound.play()
 game_status = ''
 ui_variables.break_sound.set_volume(0.2)
 
-#def set_volume():
-    #ui_variables.click_sound.set_volume(scale.get())
-    #print(ui_variables.click_sound.get_volume())
 
-#root = Tk()
-#text = Label(root,text='Setting Volume!')
-#scale = Scale(root, from_ =0.0, to =1.0, orient = HORIZONTAL , resolution = 0.1 )
-#tkOkButton = Button(root,width=5,height = 3,text ="OK",command = set_volume)
 
 
 
@@ -939,9 +930,6 @@ while not done:
                     else:
                         effect_volume -= 1
                 set_volume()
-
-
-
                 
     elif screen_setting : 
         screen.fill(ui_variables.white)
@@ -1124,12 +1112,6 @@ while not done:
                     midiumsize_check_button = button(board_width*0.5, board_height*0.45, int(board_width*0.1875),int(board_height*0.1444),1,midiumsize_board)
                     bigsize_check_button = button(board_width*0.5, board_height*0.65, int(board_width*0.1875),int(board_height*0.1444),1,bigsize_board)
                     pygame.display.update()
-
-                    
-                
-
-
-
 
     elif setting :
         draw_image(screen,background_image,board_width*0.5,board_height*0.5,board_width,board_height)
@@ -1628,11 +1610,13 @@ while not done:
                             screen.blit(tetris4, (board_width*0.27, board_height*0.3))  # blits the combo number
                             pygame.display.update()
 
-                            pygame.time.delay(500)
+                            pygame.time.delay(300)
 
-                    for i in range(1, 10) :
+                    for i in range(1, 9) :
                         if combo_count == i+2 : # 3 ~ 11 콤보 사운드
                             ui_variables.combos_sound[i-1].play()
+                        if combo_count > 11:
+                            ui_variables.combos_sound[8].play()
                 if current_time-previous_time > 11000:
                     previous_time = current_time 
                     combo_count = 0
@@ -1796,7 +1780,6 @@ while not done:
                 ok_button   = button(board_width*0.5, board_height*0.83,int(board_width*0.3734), int(board_height*0.1777),1,ok_button_image)
 
 
-
                 menu_button         = button(board_width*0.5, board_height*0.23,int(board_width*0.3734), int(board_height*0.1777),1,menu_button_image)
                 gameover_quit_button= button(board_width*0.5, board_height*0.43,int(board_width*0.3734), int(board_height*0.1777),1,quit_button_image)
 
@@ -1890,8 +1873,9 @@ while not done:
                 erase_count_2P = 0
                 combo_value = 0
                 sent = 0
-                #attack_stack = 0
-
+                
+                attack_stack = 0
+                attack_stack_2P = 0
                 for j in range(21):
                     is_full = True
                     for i in range(10):
@@ -1899,12 +1883,14 @@ while not done:
                             is_full = False
                     if is_full:
                         erase_count += 1
+                        attack_stack +=1
                         #attack_stack += 1
                         k = j
                         combo_value += 1
                         while k > 0:
                             for i in range(10):
                                 matrix[i][k] = matrix[i][k - 1]
+                                
 
                             k -= 1
                 for j in range(21):
@@ -1920,6 +1906,32 @@ while not done:
                             for i in range(10):
                                 matrix_2P[i][k] = matrix_2P[i][k - 1]
                             k -= 1
+                while attack_stack >= 2:
+                    for j in range(20):
+                        for i in range(10):
+                            matrix_2P[i][j] = matrix_2P[i][j+1]
+                            
+                            attack_stack -= 1
+                    for i in range(10):
+                            matrix_2P[i][20] =  9
+                    k = randint(1,10)
+                    matrix_2P[k][20] = 0
+                    attack_point += 1
+
+
+                while attack_stack_2P >= 2:
+                    for j in range(20):
+                        for i in range(10):
+                            matrix[i][j] = matrix[i][j+1]
+                            
+                            attack_stack_2P -= 1
+                    for i in range(10):
+                            matrix[i][20] =  9
+                    k = randint(1,10)
+                    matrix[k][20] = 0
+                    attack_point_2P += 1
+                    
+                    
 
                 # 지운 블록이 없으면 콤보 -1
                 #if erase_count == 0 :
@@ -1956,6 +1968,9 @@ while not done:
                         score += 1000 * level * erase_count + 4 * combo_count
                         sent += 4
                         screen.blit(ui_variables.combo_4ring, (250,160))
+                    
+                    
+
 
                     for i in range(1, 11) :
                         if combo_count == i :  # 1 ~ 10 콤보 이미지
@@ -1988,7 +2003,7 @@ while not done:
                     ui_variables.click_sound.play()
                     pause = True
                 # Hard drop
-                elif event.key == K_SPACE: 
+                elif event.key == K_k: 
                     ui_variables.fall_sound.play()
                     ui_variables.drop_sound.play()
                     while not is_bottom(dx, dy, mino, rotation):
@@ -1998,7 +2013,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     #draw_mino_2P(dx_2P,dy_2P,mino_2P,rotation_2P)
                     #draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
-                elif event.key == K_f:
+                elif event.key == K_g:
                     ui_variables.fall_sound.play()
                     ui_variables.drop_sound.play()
                     while not is_bottom_2P(dx_2P, dy_2P, mino_2P, rotation_2P):
@@ -2009,7 +2024,7 @@ while not done:
                     #draw_mino(dx, dy, mino, rotation)
                     #draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
                 # Hold
-                elif event.key == K_LSHIFT :
+                elif event.key == K_j :
                     if hold == False:
                         ui_variables.move_sound.play()
                         if hold_mino == -1:
@@ -2024,7 +2039,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
                     draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
-                elif event.key == K_q :
+                elif event.key == K_f :
                     if hold_2P == False:
                         ui_variables.move_sound.play()
                         if hold_mino_2P == -1:
@@ -2076,7 +2091,7 @@ while not done:
                     draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
 
 
-                elif event.key == K_x  or event.key == K_w:
+                elif event.key == K_h  or event.key == K_w:
 
                     if is_turnable_r(dx_2P, dy_2P, mino_2P, rotation_2P):
                         ui_variables.move_sound.play()
@@ -2112,7 +2127,7 @@ while not done:
                     draw_mino(dx, dy, mino, rotation)
                     draw_multiboard(next_mino,hold_mino,next_mino_2P,hold_mino_2P,score,level,goal)
                 # Turn left
-                elif event.key == K_z or event.key == K_LCTRL:
+                elif event.key == K_l or event.key == K_LCTRL:
                     if is_turnable_l(dx, dy, mino, rotation):
                         ui_variables.move_sound.play()
                         rotation -= 1
@@ -2388,7 +2403,8 @@ while not done:
                     rotation_2P = 0  #
                     dx_2P , dy_2P = 3, 0 #
                     matrix_2P = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
-
+                    attack_point = 0
+                    ttack_point_2P = 0
 
                     with open('leaderboard.txt') as f:
                         lines = f.readlines()
@@ -2422,6 +2438,17 @@ while not done:
                     name_location = 0
                     name = [65, 65, 65]
                     matrix = [[0 for y in range(height + 1)] for x in range(width)]
+                    hold_mino_2P = -1 #
+                    bottom_count_2P = 0 #
+                    hard_drop_2P = False #
+                    hold_2P = False #
+                    next_mino_2P = randint(1,7) #
+                    mino_2P = randint(1,7) #
+                    rotation_2P = 0  #
+                    dx_2P , dy_2P = 3, 0 #
+                    attack_point = 0
+                    ttack_point_2P = 0
+                    matrix_2P = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
                 if restart_button.isOver(pos):
                     if game_status == 'start':
                         start = True
@@ -2447,7 +2474,17 @@ while not done:
                     name_location = 0
                     name = [65, 65, 65]
                     matrix = [[0 for y in range(height + 1)] for x in range(width)]
-
+                    hold_mino_2P = -1 #
+                    bottom_count_2P = 0 #
+                    hard_drop_2P = False #
+                    hold_2P = False #
+                    next_mino_2P = randint(1,7) #
+                    mino_2P = randint(1,7) #
+                    rotation_2P = 0  #
+                    dx_2P , dy_2P = 3, 0 #
+                    attack_point = 0
+                    ttack_point_2P = 0
+                    matrix_2P = [[0 for y in range(height + 1)] for x in range(width)] # Board matrix
                     pause = False
                     
 
