@@ -247,6 +247,21 @@ bigsize_check_button = button(board_width*0.5, board_height*0.65, int(board_widt
 tetris3 = pygame.image.load("assets/images/tetris3.png")
 tetris4 = pygame.transform.smoothscale(tetris3, (200, 150))
 
+def set_volume():
+    ui_variables.fall_sound.set_volume(effect_volume/10) 
+    ui_variables.click_sound.set_volume(effect_volume/10)
+    ui_variables.break_sound.set_volume(effect_volume/10) 
+    ui_variables.move_sound.set_volume(effect_volume/10) 
+    ui_variables.drop_sound.set_volume(effect_volume/10) 
+    ui_variables.single_sound.set_volume(effect_volume/10)
+    ui_variables.double_sound.set_volume(effect_volume/10)
+    ui_variables.triple_sound.set_volume(effect_volume/10)
+    ui_variables.tetris_sound.set_volume(effect_volume/10)
+    ui_variables.LevelUp_sound.set_volume(effect_volume/10)
+    ui_variables.GameOver_sound.set_volume(music_volume/10)
+    ui_variables.intro_sound.set_volume(music_volume/10)
+    pygame.mixer.music.set_volume(music_volume/10)
+
 def draw_image(window,img_path, x,y,width,height):
     x= x-(width/2)
     y= y-(height/2)
@@ -870,7 +885,7 @@ while not done:
                     if music_volume >= 10 :
                         music_volume = 10
                     else:
-                        music_volume -= 1
+                        music_volume += 1
                 if effect_minus_button.isOver(pos):
                     ui_variables.click_sound.play()
                     if music_volume <= 0 :
@@ -882,13 +897,14 @@ while not done:
                     if effect_volume >= 10 :
                         effect_volume = 10
                     else:
-                        effect_volume -= 1
+                        effect_volume += 1
                 if sound_minus_button.isOver(pos):
                     ui_variables.click_sound.play()
                     if effect_volume <= 0 :
                         effect_volume = 0
                     else:
                         effect_volume -= 1
+                set_volume()
 
 
 
