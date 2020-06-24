@@ -879,7 +879,6 @@ bottom_count_2P = 0
 hard_drop_2P = False
 hold_2P = False
 next_mino1_2P = randint(1, 7)
-next_mino2_2P = randint(1, 7)
 mino_2P = randint(1, 7)
 rotation_2P = 0
 dx_2P, dy_2P = 3, 0
@@ -1474,7 +1473,6 @@ while not done:
                     hard_drop_2P = False  #
                     hold_2P = False  #
                     next_mino1_2P = randint(1, 7)  #
-                    next_mino2_2P = randint(1, 7)
                     mino_2P = randint(1, 7)  #
                     rotation_2P = 0  #
                     dx_2P, dy_2P = 3, 0  #
@@ -2234,8 +2232,8 @@ while not done:
                         if hold_mino == -1:
                             hold_mino = mino
                             mino = next_mino1
-                            next_mino1 = next_mino2
-                            next_mino2 = randint(1, 7)
+                            #next_mino1 = next_mino2
+                            next_mino1 = randint(1, 7)
                         else:
                             hold_mino, mino = mino, hold_mino
                         dx, dy = 3, 0
@@ -2294,7 +2292,7 @@ while not done:
                         rotation = 0
                     draw_mino(dx, dy, mino, rotation)
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
-                    draw_multiboard(next_mino1, next_mino2, hold_mino, next_mino1_2P, next_mino2_2Phold_mino_2P, score,
+                    draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score,
                                     level, goal)
 
 
@@ -2509,7 +2507,6 @@ while not done:
                     rotation = 0  #
                     mino = randint(1, 7)  #
                     next_mino1 = randint(1, 7)  #
-                    next_mino2 = randint(1, 7)
                     hold_mino = -1  #
                     framerate = 30
                     score = 0
@@ -2527,7 +2524,6 @@ while not done:
                     hard_drop_2P = False  #
                     hold_2P = False  #
                     next_mino1_2P = randint(1, 7)  #
-                    next_mino2_2P = randint(1, 7)
                     mino_2P = randint(1, 7)  #
                     rotation_2P = 0  #
                     dx_2P, dy_2P = 3, 0  #
@@ -2601,7 +2597,6 @@ while not done:
                     rotation = 0  #
                     mino = randint(1, 7)  #
                     next_mino1 = randint(1, 7)  #
-                    next_mino2 = randint(1, 7)
                     hold_mino = -1  #
                     framerate = 30
                     score = 0
@@ -2619,7 +2614,6 @@ while not done:
                     hard_drop_2P = False  #
                     hold_2P = False  #
                     next_mino1_2P = randint(1, 7)  #
-                    next_mino2_2P = randint(1, 7)
                     mino_2P = randint(1, 7)  #
                     rotation_2P = 0  #
                     dx_2P, dy_2P = 3, 0  #
@@ -2648,7 +2642,6 @@ while not done:
                     rotation = 0
                     mino = randint(1, 7)
                     next_mino1 = randint(1, 7)
-                    next_mino2 = randint(1, 7)
                     hold_mino = -1
                     framerate = 30
                     score = 0
@@ -2665,7 +2658,6 @@ while not done:
                     hard_drop_2P = False  #
                     hold_2P = False  #
                     next_mino1_2P = randint(1, 7)  #
-                    next_mino2_2P = randint(1, 7)
                     mino_2P = randint(1, 7)  #
                     rotation_2P = 0  #
                     dx_2P, dy_2P = 3, 0  #
@@ -2686,7 +2678,6 @@ while not done:
                     rotation = 0
                     mino = randint(1, 7)
                     next_mino1 = randint(1, 7)
-                    next_mino2 = randint(1, 7)
                     hold_mino = -1
                     framerate = 30
                     score = 0
@@ -2703,7 +2694,6 @@ while not done:
                     hard_drop_2P = False  #
                     hold_2P = False  #
                     next_mino1_2P = randint(1, 7)  #
-                    next_mino2_2P = randint(1, 7)
                     mino_2P = randint(1, 7)  #
                     rotation_2P = 0  #
                     dx_2P, dy_2P = 3, 0  #
