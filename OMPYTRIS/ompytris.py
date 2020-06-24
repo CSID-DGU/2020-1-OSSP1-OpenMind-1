@@ -2294,8 +2294,7 @@ while not done:
                         rotation = 0
                     draw_mino(dx, dy, mino, rotation)
                     draw_mino_2P(dx_2P, dy_2P, mino_2P, rotation_2P)
-                    draw_multiboard(next_mino1, next_mino2, hold_mino, next_mino1_2P, next_mino2_2Phold_mino_2P, score,
-                                    level, goal)
+                    draw_multiboard(next_mino1, hold_mino, next_mino1_2P, hold_mino_2P, score, level, goal)
 
 
                 elif event.key == K_h or event.key == K_w:
