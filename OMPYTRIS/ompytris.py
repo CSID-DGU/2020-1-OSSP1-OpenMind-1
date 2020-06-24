@@ -1907,6 +1907,7 @@ while not done:
                             is_full = False
                     if is_full:
                         erase_count_2P += 1
+                        attack_stack_2P+=1
                         k = j
                         combo_value += 1
                         while k > 0:
