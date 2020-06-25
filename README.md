@@ -10,10 +10,8 @@
 ### 4. 주제
 ### 5. 목표
 ### 6. 세부목표
-### 7. 개발 환경
-### 8. 역할 분담
-### 9. 기대효과
-### 10. 프로젝트 타임라인
+### 7. How to play
+### 8. 프로젝트 타임라인
 ### 부록1. 자료관리 / 코딩 / 커밋 규칙
 ### 부록2. 기능별 Flow Chart 설계
 ### 부록3. Reference
@@ -99,6 +97,16 @@ REASON
     ✓ 언어 : Python 3.7 
     ✓ 툴 : Pycharm or Anaconda 
     ✓ OS : Ubuntu
+    
+## 8. How to play
+    Windows
+        Execute the command below
+        
+        python ompytris.py
+
+#Note. You got to have pygame installed
+Install pygame
+    
 
 
 # ETC
