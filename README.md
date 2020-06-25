@@ -105,7 +105,10 @@ REASON
         python ompytris.py
 
 #Note. You got to have pygame installed
-Install pygame
+Install pygame https://www.pygame.org/wiki/GettingStarted
+        
+        
+        ✓ 게임 시작시 HELP버튼에서 사용키 확인가능
     
 
 
